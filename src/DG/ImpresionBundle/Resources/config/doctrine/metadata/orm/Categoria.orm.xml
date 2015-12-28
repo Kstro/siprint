@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Categoria" table="categoria">
+    <indexes>
+      <index name="fk_categoria_categoria_idx" columns="categoria"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="nombre" type="string" column="nombre" length="200" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="categoria" target-entity="Categoria" fetch="LAZY">
+      <join-columns>
+        <join-column name="categoria" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="parametro" target-entity="Parametro" inversed-by="categoria" fetch="LAZY">
+      <join-table name="categoria_parametro">
+        <join-columns>
+          <join-column name="categoria_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="parametro_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

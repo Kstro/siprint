@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Venta" table="venta">
+    <indexes>
+      <index name="fk_venta_orden1_idx" columns="orden_id"/>
+      <index name="fk_venta_promocion1_idx" columns="promocion_id"/>
+      <index name="fk_venta_persona1_idx" columns="persona_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="fecha" type="datetime" column="fecha" nullable="false"/>
+    <field name="monto" type="float" column="monto" precision="10" scale="0" nullable="false"/>
+    <field name="clienteId" type="integer" column="cliente_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <many-to-one field="promocion" target-entity="Promocion" fetch="LAZY">
+      <join-columns>
+        <join-column name="promocion_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="persona" target-entity="Persona" fetch="LAZY">
+      <join-columns>
+        <join-column name="persona_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="orden" target-entity="Orden" fetch="LAZY">
+      <join-columns>
+        <join-column name="orden_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

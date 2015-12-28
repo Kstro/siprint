@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DetalleParametro" table="detalle_parametro">
+    <indexes>
+      <index name="fk_detalle_parametro_parametro1_idx" columns="parametro"/>
+      <index name="fk_detalle_parametro_tipo_parametro1_idx" columns="tipo_parametro"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="nombre" type="string" column="nombre" length="200" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="valor" type="float" column="valor" precision="10" scale="0" nullable="false"/>
+    <many-to-one field="tipoParametro" target-entity="TipoParametro" fetch="LAZY">
+      <join-columns>
+        <join-column name="tipo_parametro" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="parametro" target-entity="Parametro" fetch="LAZY">
+      <join-columns>
+        <join-column name="parametro" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

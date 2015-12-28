@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Parametro" table="parametro">
+    <indexes>
+      <index name="fk_parametro_tipo_parametro1_idx" columns="tipo_categoria"/>
+      <index name="fk_parametro_parametro1_idx" columns="parametro"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="nombre" type="string" column="nombre" length="200" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="parametro" target-entity="Parametro" fetch="LAZY">
+      <join-columns>
+        <join-column name="parametro" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="tipoCategoria" target-entity="TipoCategoria" fetch="LAZY">
+      <join-columns>
+        <join-column name="tipo_categoria" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="formatoPlantilla" target-entity="FormatoPlantilla" inversed-by="parametro" fetch="LAZY">
+      <join-table name="parametro_formato_plantilla">
+        <join-columns>
+          <join-column name="parametro" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="formato_plantilla" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="categoria" target-entity="Categoria" mapped-by="parametro" fetch="LAZY"/>
+    <many-to-many field="detalleCategoria" target-entity="DetalleCategoria" inversed-by="parametro" fetch="LAZY">
+      <join-table name="detalle_categoria_parametro">
+        <join-columns>
+          <join-column name="parametro_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="detalle_categoria_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>
