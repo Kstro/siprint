@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>FormatoPlantilla</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ formatoPlantilla.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ formatoPlantilla.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Imagen</th>
+                <td>{{ formatoPlantilla.imagen }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if formatoPlantilla.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_formatoplantilla_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_formatoplantilla_edit', { 'id': formatoPlantilla.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

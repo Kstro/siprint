@@ -3,18 +3,21 @@
 security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    
     providers:
+        hwi:
+            id: hwi_oauth.user.provider.entity              
         in_memory:
             memory: ~
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        #dev:
+        #    pattern: ^/(_(profiler|wdt)|css|images|js)/
+        #    security: false
 
-        main:
-            anonymous: ~
+        #main:
+        #    anonymous: ~
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -22,3 +25,26 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+
+#security:
+#    firewalls:
+        secured_area:
+            anonymous: ~
+            oauth:
+                resource_owners:
+                    facebook:           "/login/check-facebook"
+                    #facebook:           "/admin/usuario"
+                    #google:             "/login/check-google"
+                    #my_custom_provider: "/login/check-custom"
+                    #my_github:          "/login/check-github"
+                login_path:        /login
+                default_target_path: /admin/usuario
+                #use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider.entity
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

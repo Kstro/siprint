@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>TipoParametro list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tipoParametro in tipoParametros %}
+            <tr>
+                <td><a href="{{ path('admin_tipoparametro_show', { 'id': tipoParametro.id }) }}">{{ tipoParametro.id }}</a></td>
+                <td>{{ tipoParametro.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_tipoparametro_show', { 'id': tipoParametro.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_tipoparametro_edit', { 'id': tipoParametro.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_tipoparametro_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

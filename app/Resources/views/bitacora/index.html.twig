@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bitacora list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Accion</th>
+                <th>Fechaaccion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bitacora in bitacoras %}
+            <tr>
+                <td><a href="{{ path('admin_bitacora_show', { 'id': bitacora.id }) }}">{{ bitacora.id }}</a></td>
+                <td>{{ bitacora.accion }}</td>
+                <td>{% if bitacora.fechaAccion %}{{ bitacora.fechaAccion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_bitacora_show', { 'id': bitacora.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_bitacora_edit', { 'id': bitacora.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_bitacora_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

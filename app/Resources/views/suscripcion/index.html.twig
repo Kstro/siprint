@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Suscripcion list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Correoelectronico</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for suscripcion in suscripcions %}
+            <tr>
+                <td><a href="{{ path('suscripcion_show', { 'id': suscripcion.id }) }}">{{ suscripcion.id }}</a></td>
+                <td>{{ suscripcion.correoElectronico }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('suscripcion_show', { 'id': suscripcion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('suscripcion_edit', { 'id': suscripcion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('suscripcion_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>DetalleOrden list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for detalleOrden in detalleOrdens %}
+            <tr>
+                <td><a href="{{ path('admin_detalleorden_show', { 'id': detalleOrden.id }) }}">{{ detalleOrden.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_detalleorden_show', { 'id': detalleOrden.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_detalleorden_edit', { 'id': detalleOrden.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_detalleorden_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

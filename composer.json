@@ -20,7 +20,10 @@
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "~2.0"
+        "incenteev/composer-parameter-handler": "~2.0",
+        "paymentsuite/stripe-bundle": "v1.5.3",
+        "hwi/oauth-bundle": "^0.4.0",
+        "stripe/stripe-php": "1.10.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

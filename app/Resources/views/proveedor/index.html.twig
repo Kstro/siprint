@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Proveedor list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Empresa</th>
+                <th>Contacto</th>
+                <th>Telefono</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for proveedor in proveedors %}
+            <tr>
+                <td><a href="{{ path('admin_proveedor_show', { 'id': proveedor.id }) }}">{{ proveedor.id }}</a></td>
+                <td>{{ proveedor.empresa }}</td>
+                <td>{{ proveedor.contacto }}</td>
+                <td>{{ proveedor.telefono }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_proveedor_show', { 'id': proveedor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_proveedor_edit', { 'id': proveedor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_proveedor_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+            
+            {% block content %}
+        <div class="payment-wrapper">
+            {{ stripe_render() }}
+        </div>
+    {% endblock content %}
+
+    {% block foot_script %}
+        {{ parent() }}
+        {{ stripe_scripts() }}
+    {% endblock foot_script %}
+{% endblock %}

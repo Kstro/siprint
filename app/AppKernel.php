@@ -17,6 +17,10 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new DG\ImpresionBundle\DGImpresionBundle(),
+            new PaymentSuite\PaymentCoreBundle\PaymentCoreBundle(),
+            new PaymentSuite\StripeBundle\StripeBundle(),
+            new PaymentBridgeBundle\PaymentBridgeBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

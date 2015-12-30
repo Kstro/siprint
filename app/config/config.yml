@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@PaymentBridgeBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -65,3 +66,58 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+
+stripe:
+
+    # stripe keys
+    public_key: pk_test_5FGIS4dcjWSR0X87vQO744MF
+    private_key: sk_test_Ldec6RvlZ0qdNfhfAO1XhNU7 
+
+    # By default, controller route is /payment/stripe/execute
+    controller_route: /payment/stripe/execute
+
+    # Configuration for payment success redirection
+    #
+    # Route defines which route will redirect if payment success
+    # If order_append is true, Bundle will append cart identifier into route
+    #    taking order_append_field value as parameter name and
+    #    PaymentOrderWrapper->getOrderId() value
+    payment_success:
+        route: admin_proveedor_index
+        order_append: true
+        order_append_field: order_id
+
+    # Configuration for payment fail redirection
+    #
+    # Route defines which route will redirect if payment fails
+    # If cart_append is true, Bundle will append cart identifier into route
+    #    taking cart_append_field value as parameter name and
+    #    PaymentCartWrapper->getCartId() value
+    payment_fail:
+        route: admin_proveedor_error
+        order_append: false
+        order_append_field: order_id
+        
+hwi_oauth:
+    firewall_names: [secured_area]
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           115491022158312
+            client_secret:       863a7552c7c2d4b2e94ce08907760a8e
+            scope:               "email,public_profile"
+            options:
+                csrf: true
+                #display: popup #dialog is optimized for popup window
+                auth_type: rerequest # Re-asking for Declined Permissions
+            
+            infos_url:     "https://graph.facebook.com/me?fields=id,name,email,picture.type(square)"
+            paths:
+                email:          email
+                public_profile: public_profile
+                profilepicture: picture.data.url
+    http_client:
+        verify_peer: false
+            
+            

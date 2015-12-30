@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>FormatoPlantilla list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for formatoPlantilla in formatoPlantillas %}
+            <tr>
+                <td><a href="{{ path('admin_formatoplantilla_show', { 'id': formatoPlantilla.id }) }}">{{ formatoPlantilla.id }}</a></td>
+                <td>{{ formatoPlantilla.nombre }}</td>
+                <td>{{ formatoPlantilla.imagen }}</td>
+                <td>{% if formatoPlantilla.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_formatoplantilla_show', { 'id': formatoPlantilla.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_formatoplantilla_edit', { 'id': formatoPlantilla.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_formatoplantilla_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

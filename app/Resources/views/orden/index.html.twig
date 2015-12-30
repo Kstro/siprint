@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Orden list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombreproyecto</th>
+                <th>Direccionenvio</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for orden in ordens %}
+            <tr>
+                <td><a href="{{ path('orden_show', { 'id': orden.id }) }}">{{ orden.id }}</a></td>
+                <td>{{ orden.nombreProyecto }}</td>
+                <td>{{ orden.direccionEnvio }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('orden_show', { 'id': orden.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('orden_edit', { 'id': orden.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('orden_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

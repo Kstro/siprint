@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>DetalleCategoria list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for detalleCategorium in detalleCategorias %}
+            <tr>
+                <td><a href="{{ path('detallecategoria_show', { 'id': detalleCategorium.id }) }}">{{ detalleCategorium.id }}</a></td>
+                <td>{{ detalleCategorium.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('detallecategoria_show', { 'id': detalleCategorium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('detallecategoria_edit', { 'id': detalleCategorium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('detallecategoria_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Persona list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for persona in personas %}
+            <tr>
+                <td><a href="{{ path('admin_persona_show', { 'id': persona.id }) }}">{{ persona.id }}</a></td>
+                <td>{{ persona.nombres }}</td>
+                <td>{{ persona.apellidos }}</td>
+                <td>{{ persona.direccion }}</td>
+                <td>{{ persona.telefono }}</td>
+                <td>{% if persona.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_persona_show', { 'id': persona.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_persona_edit', { 'id': persona.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_persona_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

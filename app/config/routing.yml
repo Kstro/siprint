@@ -6,3 +6,34 @@ dg_impresion:
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+payment_bridge:
+    resource: "@PaymentBridgeBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
+    
+    
+stripe_payment_routes:
+    resource: .
+    type: stripe
+    
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+    
+facebook_login:
+    path: /login/check-facebook
+
+google_login:
+    path: /login/check-google
+
+custom_login:
+    path: /login/check-custom
+
+github_login:
+    path: /login/check-github

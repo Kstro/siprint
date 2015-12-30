@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>TipoCategoria list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tipoCategorium in tipoCategorias %}
+            <tr>
+                <td><a href="{{ path('admin_tipocategoria_show', { 'id': tipoCategorium.id }) }}">{{ tipoCategorium.id }}</a></td>
+                <td>{{ tipoCategorium.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_tipocategoria_show', { 'id': tipoCategorium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_tipocategoria_edit', { 'id': tipoCategorium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_tipocategoria_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

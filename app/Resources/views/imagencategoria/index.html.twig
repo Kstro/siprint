@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ImagenCategoria list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Idimagencategoria</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imagenCategorium in imagenCategorias %}
+            <tr>
+                <td><a href="{{ path('admin_imagencategoria_show', { 'id': imagenCategorium.idimagenCategoria }) }}">{{ imagenCategorium.idimagenCategoria }}</a></td>
+                <td>{{ imagenCategorium.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_imagencategoria_show', { 'id': imagenCategorium.idimagenCategoria }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_imagencategoria_edit', { 'id': imagenCategorium.idimagenCategoria }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_imagencategoria_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

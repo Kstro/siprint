@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Parametro list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for parametro in parametros %}
+            <tr>
+                <td><a href="{{ path('admin_parametro_show', { 'id': parametro.id }) }}">{{ parametro.id }}</a></td>
+                <td>{{ parametro.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_parametro_show', { 'id': parametro.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_parametro_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
