@@ -14,4 +14,12 @@ class DefaultController extends Controller
     {
         return $this->render('DGImpresionBundle:Default:index.html.twig');
     }
+    
+    /**
+     * @Route("/categories")
+     */
+    public function categoriesAction()
+    {
+        return $this->render('DGImpresionBundle:Default:categories.html.twig');
+    }
 }

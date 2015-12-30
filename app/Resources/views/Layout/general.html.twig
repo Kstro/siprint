@@ -1,0 +1,99 @@
+<html lang="es">
+    <head>
+        {%block head -%} 
+            {% block meta -%}
+                <meta charset="utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+            {% endblock%}
+            
+            {% block title -%}<title>{% block titlename -%} .::: Expressions | Printing & Graphics :::. {% endblock %}</title>{% endblock %}
+
+            <!-- Declaracion de Archivo de Bootstrap -->	
+            {% block css -%}    
+                {# <link rel="stylesheet" href="{{ asset('Resources/bootstrap-3/css/bootstrap.css') }}" />#}
+                <link rel="stylesheet" type="text/css" href="{{ asset('Resources/css/style-main.css') }}"> 
+                
+                <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,700,400' rel='stylesheet' type='text/css'>
+                <link href='https://fonts.googleapis.com/css?family=Arimo:500,300,700,400' rel='stylesheet' type='text/css'>
+                <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:500,300,700,400' rel='stylesheet' type='text/css'>
+            {%- endblock %}
+            {% block estilos -%}    
+            
+            {%- endblock %}
+        {%- endblock%}
+    </head>
+    <body>
+        {% block body -%}  
+            <header>
+                <!--Top Header: Begin-->
+                {% block topheader %}
+                    {% include ':Layout:top_header.html.twig'%}
+                {% endblock %}
+                <!-- Barra de navegacion -->
+                {% block navigation %}
+                    {% include ':Layout:navigation.html.twig'%}
+                {% endblock %}
+            </header>
+            <!--Main index : Begin-->
+            {% block main %}
+            <main class="main category">
+                {% block headerpage %}
+                    <section class="header-page">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-3 hidden-xs">
+                                    <h1 class="mh-title">
+                                    {% block section %}{% endblock %}       
+                                    </h1>
+                                </div>
+                                <div class="breadcrumb-w col-sm-9"> 
+                                    <span>You are here:</span>
+                                    <ul class="breadcrumb">
+                                        <li>
+                                            <a href="/">Home</a>
+                                        </li>
+                                        <li>
+                                            <span>{% block section2 %}{% endblock %}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endblock %}
+                {% block contenido -%}
+                    {% block slider %}
+                        {% include ':Layout:slider.html.twig'%}
+                    {% endblock %}
+                    {% block promotion %}
+                        {% include ':Layout:promotion_product.html.twig'%}
+                    {% endblock %}
+                    {% block newTemplates %}
+                        {% include ':Layout:new_templates.html.twig'%}
+                    {% endblock %}
+                {% endblock %} 
+                <div style="margin-bottom: 25px"></div>
+            </main>
+            {% endblock %}
+            <footer>
+                {% block footer %}
+                    {% include ':Layout:footer.html.twig'%}
+                {% endblock %}
+            </footer>
+        {% endblock %}  
+        
+        
+        
+        {% block javascripts_step %}
+            <script type="text/javascript" src="{{ asset('Resources/js/jquery/jquery-1.11.3.min.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('Resources/js/bootstrap.min.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('Resources/js/owl.carousel.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('Resources/js/Chart.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('Resources/js/doughnutit.js') }}"></script> 
+            <script type="text/javascript" src="{{ asset('Resources/js/slideshow/jquery.themepunch.revolution.js') }}"></script>   
+            <script type="text/javascript" src="{{ asset('Resources/js/slideshow/jquery.themepunch.plugins.min.js') }}"></script>  
+            <script type="text/javascript" src="{{ asset('Resources/js/theme-home.js') }}"></script>  
+        {% endblock %}      
+    </body>
+</html>    

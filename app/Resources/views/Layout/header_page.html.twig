@@ -1,0 +1,24 @@
+<section class="header-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 hidden-xs">
+                <h1 class="mh-title">
+                {% block section %}
+                    Business Cards
+                {% endblock %}       
+                </h1>
+            </div>
+            <div class="breadcrumb-w col-sm-9"> 
+                <span>You are here:</span>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <span>{% block section2 %}Business Cards{% endblock %}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
