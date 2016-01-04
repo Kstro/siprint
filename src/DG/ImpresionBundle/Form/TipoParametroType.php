@@ -15,7 +15,7 @@ class TipoParametroType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
+            ->add('nombre',null, array('required'=>false,'attr'=>array('class'=> 'nombreTipoParametro')))
         ;
     }
     

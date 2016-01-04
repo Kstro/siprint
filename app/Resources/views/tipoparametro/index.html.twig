@@ -1,12 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
-    <h1>TipoParametro list</h1>
-
-    <table>
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Parameter type list</h3>
+        </div>
+        <div class="col-md-7 pull-right" >
+            <a href="{{ path('admin_tipoparametro_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+    </div>
+                
+    
+                
+    <div class="form-edit-info" style="padding-top: 20px;">
+        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
         <thead>
             <tr>
-                <th>Id</th>
+{#                <th>Id</th>#}
                 <th>Nombre</th>
                 <th>Actions</th>
             </tr>
@@ -14,26 +27,133 @@
         <tbody>
         {% for tipoParametro in tipoParametros %}
             <tr>
-                <td><a href="{{ path('admin_tipoparametro_show', { 'id': tipoParametro.id }) }}">{{ tipoParametro.id }}</a></td>
+{#                <td><a href="{{ path('admin_tipoparametro_show', { 'id': tipoParametro.id }) }}">{{ tipoParametro.id }}</a></td>#}
                 <td>{{ tipoParametro.nombre }}</td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('admin_tipoparametro_show', { 'id': tipoParametro.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_tipoparametro_edit', { 'id': tipoParametro.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    {#<a href="{{ path('admin_tipoparametro_show', { 'id': tipoParametro.id }) }}">
+                        <i class="fa fa-edit"></i>
+                    </a>#}
+                    <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_tipoparametro_edit', { 'id': tipoParametro.id }) }}">
+                        <i class="fa fa-edit"></i>
+                    </a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_tipoparametro_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+    
+{% endblock %}
+
+
+{% block javascripts_step %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
+    <script>
+                $(document).ready(function(){
+                    
+                    $('.listados').DataTable({
+                        {#searching:true,#}
+                        "order":[[0,"desc"]],
+                        "columnDefs": [
+                               { "orderable": true, "targets": 0 },
+{#                               { "orderable": false, "targets": 3 }#}
+                               { "orderData": [ 0 ], "targets": 0}
+                            ],
+                        {#"language": {
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "emptyTable": "No se encontraron registros",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"#}
+{#                    },          #}
+
+                    });
+                    $('.dataTables_filter').addClass('pull-right ');
+                    $('.dataTables_filter').children().children().attr('placeholder','');
+                   
+                    
+                    $('.nuevo-registro').on("click",function(){
+                        {#$( "#dialog" ).dialog();
+                        return false;#}
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+ 
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+ 
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Nuevo tipo de parámetro",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.main-header'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.nuevo-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                    $('.edit-registro').on("click",function(){
+                        {#$( "#dialog" ).dialog();
+                        return false;#}
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+                        
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+{#                        return false;#}
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Edit tipo de parámetro",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.main-header'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.edit-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                });
+
+            </script>
+
 {% endblock %}
