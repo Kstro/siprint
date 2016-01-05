@@ -15,6 +15,21 @@
                 
                 <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,700,400' rel='stylesheet' type='text/css'>
                 <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+                <link rel="stylesheet" href="/resources/demos/style.css">
+                <link rel="stylesheet" type="text/css" href="{{ asset('Resources/jqueryui/jquery-ui.css') }}"> 
+                <link rel="stylesheet" type="text/css" href="{{ asset('Resources/jqueryui/jquery-ui.theme.css') }}"> 
+                
+                <link rel="stylesheet" href="{{ asset('Resources/jquery-ui/jquery-ui.css') }}">
+                
+                <link rel="stylesheet" href="/resources/demos/style.css">
+                <link rel="stylesheet" href="{{ asset('Resources/bValidator-0.73/themes/bvalidator.theme.bootstrap.rt.css') }}" />
+                <style>
+                    .listados > thead > tr > th{
+                        font-weight: bold;
+                        text-align: center;
+                    }
+                </style>
+                
             {%- endblock %}
             {% block estilos -%}    
             
@@ -34,7 +49,7 @@
                 {% endblock %}
             </header>
             <!--Main index : Begin-->
-           <main id="main category">
+           <main id="main_category">
                 {% block headerpage %}
                    {# {% include ':Layout:header_page.html.twig'%}#}
                     <section class="header-page">
@@ -96,6 +111,14 @@
             <script type="text/javascript" src="{{ asset('Resources/js/slideshow/jquery.themepunch.revolution.js') }}"></script>   
             <script type="text/javascript" src="{{ asset('Resources/js/slideshow/jquery.themepunch.plugins.min.js') }}"></script>  
             <script type="text/javascript" src="{{ asset('Resources/js/theme-home.js') }}"></script>  
+            
+            <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+            <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
+            <script src="{{ asset('Resources/validar/tipoparametro.js') }}"></script>   
+                       
+            
         {% endblock %}      
     </body>
 </html>

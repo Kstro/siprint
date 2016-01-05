@@ -1,41 +1,111 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
-    <h1>Producto list</h1>
+{% block css -%}
+    {{parent()}}
+    <style>
+        .acc-title.lg > div:nth-child(2)> a:hover >i {
+            color: #000;
+            opacity:0.6;
+        }
+    </style>
+{% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for producto in productos %}
-            <tr>
-                <td><a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">{{ producto.id }}</a></td>
-                <td>{{ producto.nombre }}</td>
-                <td>{% if producto.estado %}Yes{% else %}No{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block contenido %}
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Product list</h3>
+        </div>
+        <div class="col-md-7 pull-right" >
+            <a href="{{ path('admin_producto_new') }}" class="pull-right" style="color:#FFF;">
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+    </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_producto_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+    <div class="form-edit-info" style="padding-top: 20px;">
+        <table class="listados table table-bordered table:hover" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for producto in productos %}
+                <tr>
+                    <td><a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">{{ producto.id }}</a></td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{% if producto.estado %}Yes{% else %}No{% endif %}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">show</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">edit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts_step %}
+    {{parent()}}
+    
+    <script>
+                $(document).ready(function(){
+                    
+                    $('.listados').DataTable({ 
+                        searching:true,
+                        "order":[[0, "desc"],[1,"desc"]],
+                        "columnDefs": [
+                               { "orderable": false, "targets": 0 },
+                               { "orderable": false, "targets": 2 },
+                               { "orderable": false, "targets": 3 }
+                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                            ],
+                        "language": {
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "emptyTable": "No se encontraron registros",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"
+                    },          
+
+                    });
+                    $('.dataTables_filter').addClass('pull-right ');
+                    var  input = $('.dataTables_filter').children('label').children('input');
+                    input.attr('placeholder', 'Buscar...');
+                    $('.dataTables_filter').children('label').html(input);            
+{#                    $('.dataTables_filter').children('label').hide();#}
+                    
+{#                    $('.dataTables_filter').append('<span class="fa fa-search" id="labelid" aria-hidden="true" style="margin-left:10px;margin-top:7px;"></span>');#}
+                    $('#labelid').on('click',function(){
+                        $('.dataTables_filter').children('label').fadeToggle();
+                        
+                    });
+                    $('#filterDatatables1').on('keyup', function(event) {
+                        var filtro = $(this).val(); 
+                        //alert(filtro);
+                        $('#DataTables_Table_0_filter>label>input').val($(this).val());
+                        $('#DataTables_Table_0_filter>label>input').keyup();
+
+                    });
+                    
+                });
+
+            </script>
+
 {% endblock %}

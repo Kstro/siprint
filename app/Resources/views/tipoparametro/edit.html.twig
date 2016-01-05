@@ -1,21 +1,50 @@
-{% extends 'base.html.twig' %}
+<link rel="stylesheet" href="{{ asset('Resources/bValidator-0.73/themes/bvalidator.theme.bootstrap.rt.css') }}" />
 
 {% block body %}
-    <h1>TipoParametro edit</h1>
+    
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+{#    {{ form_start(form) }}#}
+    {{ form_start(edit_form, {'action': path('admin_tipoparametro_edit',{'id':tipoParametro.id})}) }}
+{#<form action="{{ path('admin_tipoparametro_new') }}" method="post" {{ form_enctype(form) }}>#}
+    {{ form_errors(edit_form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-6 text-right">
+                Nombre:
+            </div>
+            <div class="col-md-6">
+                {{ form_widget(edit_form.nombre) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            
+        </div>
+        
+            
+    
+        <input type="submit" value="Save" style="margin-bottom: 10px;" class="btn-edit btn pull-right"/>
+{#</form>#}
     {{ form_end(edit_form) }}
 
-    <ul>
+    {#<ul>
         <li>
             <a href="{{ path('admin_tipoparametro_index') }}">Back to the list</a>
         </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    </ul>#}
+{% endblock %}
+
+
+
+{% block javascripts %}
+    
+    <script>
+                $(document).ready(function(){
+                    validarTipoParametro();
+                    {#$('.btn-edit').on("click",function(){
+                        //$(this).removeClass('btn-edit');
+                    });#}
+                    
+                });
+
+            </script>
+
 {% endblock %}

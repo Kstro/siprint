@@ -50,7 +50,8 @@ class TipoParametroController extends Controller
             $em->persist($tipoParametro);
             $em->flush();
 
-            return $this->redirectToRoute('admin_tipoparametro_show', array('id' => $tipoparametro->getId()));
+//            return $this->redirectToRoute('admin_tipoparametro_show', array('id' => $tipoParametro->getId()));
+            return $this->redirectToRoute('admin_tipoparametro_index');
         }
 
         return $this->render('tipoparametro/new.html.twig', array(
@@ -92,7 +93,8 @@ class TipoParametroController extends Controller
             $em->persist($tipoParametro);
             $em->flush();
 
-            return $this->redirectToRoute('admin_tipoparametro_edit', array('id' => $tipoParametro->getId()));
+//            return $this->redirectToRoute('admin_tipoparametro_edit', array('id' => $tipoParametro->getId()));
+            return $this->redirectToRoute('admin_tipoparametro_index');
         }
 
         return $this->render('tipoparametro/edit.html.twig', array(
