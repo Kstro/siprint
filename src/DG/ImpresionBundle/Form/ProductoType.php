@@ -16,7 +16,7 @@ class ProductoType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('estado')
+//            ->add('estado')
             ->add('proveedor')
         ;
     }

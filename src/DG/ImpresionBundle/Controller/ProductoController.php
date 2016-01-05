@@ -44,13 +44,14 @@ class ProductoController extends Controller
         $producto = new Producto();
         $form = $this->createForm('DG\ImpresionBundle\Form\ProductoType', $producto);
         $form->handleRequest($request);
-
+        $producto->setEstado(true);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($producto);
             $em->flush();
 
-            return $this->redirectToRoute('admin_producto_show', array('id' => $producto->getId()));
+//            return $this->redirectToRoute('admin_producto_show', array('id' => $producto->getId()));
+            return $this->redirectToRoute('admin_producto_index');
         }
 
         return $this->render('producto/new.html.twig', array(
@@ -92,7 +93,8 @@ class ProductoController extends Controller
             $em->persist($producto);
             $em->flush();
 
-            return $this->redirectToRoute('admin_producto_edit', array('id' => $producto->getId()));
+//            return $this->redirectToRoute('admin_producto_edit', array('id' => $producto->getId()));
+            return $this->redirectToRoute('admin_producto_index', array('id' => $producto->getId()));
         }
 
         return $this->render('producto/edit.html.twig', array(

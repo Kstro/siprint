@@ -20,7 +20,7 @@
         <thead>
             <tr>
 {#                <th>Id</th>#}
-                <th>Nombre</th>
+                <th>Name</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -48,7 +48,7 @@
 
 {% block javascripts_step %}
     {{parent()}}
-    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
+    
     <script>
                 $(document).ready(function(){
                     
@@ -100,7 +100,8 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
-                                title: "Nuevo tipo de parámetro",
+                                resizable: false,
+                                title: "New attribute type",
                                 position: { 
                                     my: "center", 
                                     at: "center", 
@@ -137,7 +138,8 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
-                                title: "Edit tipo de parámetro",
+                                resizable: false,
+                                title: "Edit attribute type",
                                 position: { 
                                     my: "center", 
                                     at: "center", 

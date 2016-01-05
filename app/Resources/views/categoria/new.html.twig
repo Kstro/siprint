@@ -1,7 +1,7 @@
-{% extends ':Layout:formularios.html.twig' %}
+
 
 {% block css %}
-    {{parent()}}
+    
     
     <style>
         .parametros input{
@@ -19,13 +19,13 @@
 {% block body %}
     
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'action': path('categoria_new')}) }}
     {{ form_errors(form) }}
         <div >
-            <div class="col-md-6 col-xs-6 text-right">
+            <div class="col-md-5 col-xs-5 text-right">
                 Nombre:
             </div>
-            <div class="col-md-6 col-xs-6">
+            <div class="col-md-7 col-xs-7">
                 {{ form_widget(form.nombre) }}
             </div>
         
@@ -42,14 +42,14 @@
             #}
             
             
-            <div class="col-md-6 col-xs-6 text-right" style="margin-top: 20px;">
+            {#<div class="col-md-5 col-xs-5 text-right" style="margin-top: 20px;">
                 Categoria:
             </div>
-            <div class="col-md-6 col-xs-6" style="margin-top: 20px;">
+            <div class="col-md-7 col-xs-7" style="margin-top: 20px;">
                 {{ form_widget(form.categoria) }}
             </div>
             
-            <div class="clearfix"></div>          
+            <div class="clearfix"></div>          #}
             
             <div class="col-md-12 text-center" style="margin-top: 20px;">
                 Parametros:
@@ -61,6 +61,16 @@
                 {{ form_widget(form.parametro) }}
 
             </div>
+            
+                
+            {#<div class="col-md-6 col-xs-6 text-right" style="margin-top: 20px;">
+                Producto:
+            </div>
+            <div class="col-md-6 col-xs-6" style="margin-top: 20px;">
+                {{ form_widget(form.categoriaproducto) }}
+            </div>
+            
+            <div class="clearfix"></div>   #}
             
             {#<div class="clearfix"></div>#}
             {#<div class="col-md-6 text-right">

@@ -1,16 +1,49 @@
-{% extends 'base.html.twig' %}
+
 
 {% block body %}
-    <h1>Producto creation</h1>
+    
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+    {{ form_start(form, {'action': path('admin_producto_new')}) }}
+        {{ form_errors(form) }}
+        
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-5 text-right">
+                Name:
+            </div>
+            <div class="col-md-7">
+                {{ form_widget(form.nombre) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            
+            <div class="col-md-5 text-right" style="margin-top: 10px;">
+                Provider:
+            </div>
+            <div class="col-md-7" style="margin-top: 10px;">
+                {{ form_widget(form.proveedor) }}
+            </div>
+        
+            <div class="clearfix"></div>
+        </div>
+        
+            
+    
+        <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
+{#</form>#}
     {{ form_end(form) }}
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_producto_index') }}">Back to the list</a>
-        </li>
-    </ul>
+{% block javascripts %}
+    
+    <script>
+                $(document).ready(function(){
+{#                    validarTipoCategoria();#}
+                    {#$('.btn-edit').on("click",function(){
+                        //$(this).removeClass('btn-edit');
+                    });#}
+                    
+                });
+
+            </script>
+
 {% endblock %}

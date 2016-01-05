@@ -13,40 +13,44 @@
 {% block contenido %}
     <div class="acc-title lg">
         <div class="col-md-5 pull-left">
-            <h3 class="" style="color:#FFF;">Product list</h3>
+            <h3 class="" style="color:#FFF;">Raw material</h3>
         </div>
         <div class="col-md-7 pull-right" >
-            <a href="{{ path('admin_producto_new') }}" class="pull-right" style="color:#FFF;">
+            <a href="{{ path('admin_producto_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
                 <i class="fa fa-plus"></i>
             </a>
         </div>
     </div>
-
+    <div id="resultado"></div>
     <div class="form-edit-info" style="padding-top: 20px;">
-        <table class="listados table table-bordered table:hover" style="margin-top: 20px;">
+        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
+{#                    <th>Id</th>#}
+                    <th>Name</th>
+                    <th>Provider</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
             {% for producto in productos %}
                 <tr>
-                    <td><a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">{{ producto.id }}</a></td>
+{#                    <td><a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">{{ producto.id }}</a></td>#}
                     <td>{{ producto.nombre }}</td>
-                    <td>{% if producto.estado %}Yes{% else %}No{% endif %}</td>
+                    <td>{{ producto.proveedor}}</td>
+{#                    <td>{% if producto.estado %}Yes{% else %}No{% endif %}</td>#}
                     <td>
-                        <ul>
+                        {#<ul>
                             <li>
                                 <a href="{{ path('admin_producto_show', { 'id': producto.id }) }}">show</a>
                             </li>
                             <li>
                                 <a href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">edit</a>
                             </li>
-                        </ul>
+                        </ul>#}
+                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -64,14 +68,14 @@
                     
                     $('.listados').DataTable({ 
                         searching:true,
-                        "order":[[0, "desc"],[1,"desc"]],
+                        "order":[0,"desc"],
                         "columnDefs": [
-                               { "orderable": false, "targets": 0 },
-                               { "orderable": false, "targets": 2 },
-                               { "orderable": false, "targets": 3 }
+                               { "orderable": false, "targets": 2 }
+                               {#{ "orderable": false, "targets": 2 },
+                               { "orderable": false, "targets": 3 }#}
                                //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                             ],
-                        "language": {
+                        {#"language": {
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "",
                         "emptyTable": "No se encontraron registros",
@@ -82,17 +86,17 @@
                         "processing": "Procesando petición...",
                         "search": "Buscar registros:",
                         "lengthMenu": "Mostrar _MENU_ registros"
-                    },          
+                    },          #}
 
                     });
                     $('.dataTables_filter').addClass('pull-right ');
-                    var  input = $('.dataTables_filter').children('label').children('input');
+                    {#var  input = $('.dataTables_filter').children('label').children('input');
                     input.attr('placeholder', 'Buscar...');
-                    $('.dataTables_filter').children('label').html(input);            
+                    $('.dataTables_filter').children('label').html(input);            #}
 {#                    $('.dataTables_filter').children('label').hide();#}
                     
 {#                    $('.dataTables_filter').append('<span class="fa fa-search" id="labelid" aria-hidden="true" style="margin-left:10px;margin-top:7px;"></span>');#}
-                    $('#labelid').on('click',function(){
+                    {#$('#labelid').on('click',function(){
                         $('.dataTables_filter').children('label').fadeToggle();
                         
                     });
@@ -102,6 +106,86 @@
                         $('#DataTables_Table_0_filter>label>input').val($(this).val());
                         $('#DataTables_Table_0_filter>label>input').keyup();
 
+                    });#}
+                    
+                    $('.nuevo-registro').on("click",function(){
+                        {#$( "#dialog" ).dialog();
+                        return false;#}
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:30%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
+                        
+                        
+                        var href = $(this).attr('href');
+                        
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+ 
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+ 
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                resizable: false,
+                                title: "New product",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.nuevo-registro').html(mas);
+                            
+                        });
+ 
+                        
+                        return false;
+                    });
+                    
+                    
+                    $(document).on("click", '.edit-registro',function(){
+                        {#$( "#dialog" ).dialog();
+                        return false;#}
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+                        
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+{#                        return false;#}
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                resizable: false,
+                                title: "Edit product",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.edit-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
                     });
                     
                 });

@@ -53,6 +53,13 @@ class Categoria
      */
     private $parametro;
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="CategoriaProducto", mappedBy="categoria", cascade={"persist", "remove"})
+     */
+//    private $categoriaproducto;
+    
+    
     /**
      * Constructor
      */
@@ -153,4 +160,18 @@ class Categoria
     {
         return $this->parametro;
     }
+    
+    public function __toString(){
+        return $this->getNombre();
+    }
+    
+//    function getCategoriaProducto() {
+//        return $this->categoriaproducto;
+//    }
+//
+//    function setCategoriaProducto(\DG\ImpresionBundle\Entity\CategoriaProducto $categoriaproducto = null) {
+//        $this->categoriaproducto= $categoriaproducto;
+//    }
+    
+    
 }
