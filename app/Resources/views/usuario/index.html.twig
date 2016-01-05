@@ -1,6 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
+{% block section %}
+    User
+{% endblock %}
+
+{% block section2 %}
+    User
+{% endblock %}
+
+{% block contenido %}
     <h1>Usuario list</h1>
 
     <table>
@@ -8,8 +16,7 @@
             <tr>
                 <th>Id</th>
                 <th>Username</th>
-                <th>Password</th>
-                <th>Salt</th>
+                <th>Email</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -18,8 +25,7 @@
             <tr>
                 <td><a href="{{ path('admin_usuario_show', { 'id': usuario.id }) }}">{{ usuario.id }}</a></td>
                 <td>{{ usuario.username }}</td>
-                <td>{{ usuario.password }}</td>
-                <td>{{ usuario.salt }}</td>
+                <td>{{ usuario.email }}</td>
                 <td>
                     <ul>
                         <li>

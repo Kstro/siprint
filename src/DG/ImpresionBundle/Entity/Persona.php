@@ -187,4 +187,8 @@ class Persona
     {
         return $this->estado;
     }
+    
+    public function __toString() {
+        return $this->nombres ? $this->nombres.' '.$this->apellidos : '';
+    }
 }
