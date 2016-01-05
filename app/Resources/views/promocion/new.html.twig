@@ -1,16 +1,82 @@
-{% extends 'base.html.twig' %}
+{% block estilos -%}    
+    <style>
+        //Posicion del boton agregar
+        .collection>div:last-child {
+            position:absolute;
+        }
+
+        .collection > div:nth-child(2) > div:nth-child(3) {
+            display: none;
+        }
+        img{
+            width: 100%;
+        }
+
+        .archivo{
+            margin-top:10px;
+        }
+        .addItem{
+            position: absolute;
+            float: right;
+            margin-bottom: 50px;
+            top: 10px;
+            left: -2px;
+        }
+
+        .addItem div {
+            position: absolute;
+        }
+        
+        .col-md-4{
+            padding-top: 40px;
+        }
+
+        .col-md-7{
+            margin-top: -17px;
+            position:relative;
+            margin-left:-30px;
+        }
+        .link{
+            position:absolute;
+            margin-left:-15px;
+            margin-top:-25px;
+        }
+
+        .panel{
+            box-shadow:none;
+        }
+    </style>
+{%- endblock %}
 
 {% block body %}
-    <h1>Promocion creation</h1>
-
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+    {{ form_start(form, {'action': path('admin_promocion_new')}) }}
+        {{ form_errors(form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-3 text-right" style="margin-bottom: 4px;">
+                Name:
+            </div>
+            <div class="col-md-9" style="margin-bottom: 4px;">
+                {{ form_widget(form.nombre) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            <div class="col-md-3 text-right">
+                Percent (%):
+            </div>
+            <div class="col-md-9">
+                {{ form_widget(form.porcentaje) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            <div class="text-center">
+                    <div class="col-md-3 text-right" style="margin-bottom: 4px;">
+                        Photo promotion:
+                    </div>   
+                    <div class="col-md-9 text-left" style=" margin-top: 10px;">
+                        {{ form_widget(form.file) }}
+                    </div>
+                </div>
+        </div>
+        <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
     {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('admin_promocion_index') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}

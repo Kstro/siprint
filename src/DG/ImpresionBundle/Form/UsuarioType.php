@@ -16,10 +16,29 @@ class UsuarioType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('password')
+            ->add('password','repeated', array(
+                    'type' => 'password',
+                    'invalid_message' => 'The password is not the same',
+                    'options' => array('attr' => array('class' => 'password-field')),
+                    'required' => false,
+                    'first_options'  => array('label' => 'Password','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm firstPassword'
+                    )),
+                    'second_options' => array('label' => 'Confirm password','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm secondPassword'
+                    )),
+                ))
             ->add('email')    
             ->add('persona')
-            ->add('user_roles')
+            ->add('user_roles','entity',array('label' => 'Select a role','required'=>false,
+                'class'=>'DGImpresionBundle:Rol','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>'roles'
+                    )))
         ;
     }
     

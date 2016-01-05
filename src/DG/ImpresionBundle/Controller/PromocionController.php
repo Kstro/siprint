@@ -12,7 +12,7 @@ use DG\ImpresionBundle\Form\PromocionType;
 /**
  * Promocion controller.
  *
- * @Route("/admin/promocion")
+ * @Route("/admin/promotions")
  */
 class PromocionController extends Controller
 {
@@ -50,7 +50,24 @@ class PromocionController extends Controller
             $em->persist($promocion);
             $em->flush();
 
-            return $this->redirectToRoute('admin_promocion_show', array('id' => $promocion->getId()));
+            if($promocion->getFile()!=null){
+                $path = $this->container->getParameter('photo.promotion');
+
+                $fecha = date('Y-m-d His');
+                $extension = $promocion->getFile()->getClientOriginalExtension();
+                $nombreArchivo = "promotion_".$fecha.".".$extension;
+                $em->persist($promocion);
+                $em->flush();
+                //var_dump($path.$nombreArchivo);
+
+                $promocion->setImagen($nombreArchivo);
+                $promocion->getFile()->move($path,$nombreArchivo);
+                $em->persist($promocion);
+                $em->flush();
+            }
+            
+            //return $this->redirectToRoute('admin_promocion_show', array('id' => $promocion->getId()));
+            return $this->redirectToRoute('admin_promocion_index');
         }
 
         return $this->render('promocion/new.html.twig', array(
@@ -88,11 +105,26 @@ class PromocionController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            if($promocion->getFile()!=null){
+            $path = $this->container->getParameter('photo.promotion');
+
+            $fecha = date('Y-m-d His');
+            $extension = $promocion->getFile()->getClientOriginalExtension();
+            $nombreArchivo = "promotion_".$fecha.".".$extension;
+
+            //var_dump($path.$nombreArchivo);
+
+            $promocion->setImagen($nombreArchivo);
+
+
+            $promocion->getFile()->move($path,$nombreArchivo);
+        }
             $em = $this->getDoctrine()->getManager();
             $em->persist($promocion);
             $em->flush();
 
-            return $this->redirectToRoute('admin_promocion_edit', array('id' => $promocion->getId()));
+            //return $this->redirectToRoute('admin_promocion_edit', array('id' => $promocion->getId()));
+            return $this->redirectToRoute('admin_promocion_index');
         }
 
         return $this->render('promocion/edit.html.twig', array(

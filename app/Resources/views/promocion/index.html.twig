@@ -1,41 +1,143 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
-    <h1>Promocion list</h1>
+{% block section %}
+    Promotions
+{% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Porcentaje</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for promocion in promocions %}
-            <tr>
-                <td><a href="{{ path('admin_promocion_show', { 'id': promocion.id }) }}">{{ promocion.id }}</a></td>
-                <td>{{ promocion.nombre }}</td>
-                <td>{{ promocion.porcentaje }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('admin_promocion_show', { 'id': promocion.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_promocion_edit', { 'id': promocion.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block section2 %}
+    Promotions
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_promocion_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Promotions list</h3>
+        </div>
+        <div class="col-md-7 pull-right" >
+            <a href="{{ path('admin_promocion_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+    </div>
+
+                
+     <div class="form-edit-info" style="padding-top: 20px;">
+        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Percent (%)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for promocion in promocions %}
+                <tr>
+                    <td>{{ promocion.nombre }}</td>
+                    <td class="text-center">{{ promocion.porcentaje }}</td>
+                    <td>
+                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_promocion_edit', { 'id': promocion.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+     </div>    
+
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
+    <script>
+                $(document).ready(function(){
+                    
+                    $('.listados').DataTable({
+                        "order":[[0,"desc"]],
+                        "columnDefs": [
+                               { "orderable": false, "targets": 2 }
+                              
+                            ],
+                    });
+                    $('.dataTables_filter').addClass('pull-right ');
+                    $('.dataTables_filter').children().children().attr('placeholder','');
+                   
+                    
+                    $('.nuevo-registro').on("click",function(){
+                       
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+ 
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+ 
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Register new promotion",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.nuevo-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                    $('.edit-registro').on("click",function(){
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+                        
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+{#                        return false;#}
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Edit promotion",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.edit-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                });
+
+            </script>
+
 {% endblock %}

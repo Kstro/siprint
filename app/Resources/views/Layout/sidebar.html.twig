@@ -1,7 +1,7 @@
 <aside id="sidebar_cate" class="col-sm-3 hidden-xs">
-    <h3 class="sidebar-title">Category</h3>
+    <h3 class="sidebar-title">DASHBOARD</h3>
     <ul id="cate_list" class="cate_list">
-        <li class="level0 parent">
+        {#<li class="level0 parent">
             <a href="#" title="Business Cards">
                 <span>All Products</span>
                 <i class="fa fa-minus"></i><i class="fa fa-plus"></i>
@@ -62,8 +62,8 @@
                     </a>
                 </li>
             </ul>
-        </li> 
-        <li class="level0 parent">
+        </li> #}
+        {#<li class="level0 parent">
             <a href="#" title="Business Cards">
                 <span>Business Cards</span>
                 <i class="fa fa-minus"></i><i class="fa fa-plus"></i>
@@ -124,47 +124,54 @@
                         </a>
                     </li>
             </ul>
-        </li>
+        </li>#}
         <li class="level0">
-            <a href="#" title="Postcards">
-                    Postcards
-                    <span class="count-item">(81)</span>
-            </a>
-        </li>
-        <li class="level0">
-            <a href="#" title="Carbonless Form">
-                    Carbonless Form
-                    <span class="count-item">(10)</span>
+            <a href="#" title="Orders">
+                <span class="nav-icon"><i class="fa fa-bars"></i></span>
+                <span class="nav-text">Orders</span>
+               {#<span class="count-item">(81)</span>#}
             </a>
         </li>
         <li class="level0">
-            <a href="#" title="Catalogs">
-                    Catalogs
-                    <span class="count-item">(22)</span>
+            <a href="#" title="Products">
+                <span class="nav-icon"><i class="fa fa-photo"></i></span>
+                <span class="nav-text">Products</span>
             </a>
         </li>
-        <li class="level0" title="Counter Cards">
-            <a href="#">
-                    Counter Cards
-                    <span class="count-item">(45)</span>
+        <li class="level0">
+            <a href="#" title="Product categories">
+                <span class="nav-icon"><i class="fa fa-cubes"></i></span>
+                <span class="nav-text">Product categories</span>
             </a>
         </li>
-        <li class="level0" title="Door Hangers">
-            <a href="#">
-                    Door Hangers
-                    <span class="count-item">(30)</span>
+        <li class="level0">
+            <a href="#" title="Product attributes">
+                <span class="nav-icon"><i class="fa fa-check-square-o"></i></span>
+                <span class="nav-text">Product attributes</span>
             </a>
         </li>
-        <li class="level0" title="Envelopes">
-            <a href="#">
-                    Envelopes
-                    <span class="count-item">(25)</span>
+        <li class="level0">
+            <a href="#" title="Sales">
+                <span class="nav-icon"><i class="fa fa-cart-plus"></i></span>
+                <span class="nav-text">Sales</span>
             </a>
         </li>
-        <li class="level0" title="Flyers">
-            <a href="#">
-                    Flyers
-                    <span class="count-item">(6)</span>
+        <li class="level0">
+            <a href="{{path('admin_promocion_index')}}" title="Promotions">
+                <span class="nav-icon"><i class="fa fa-ticket"></i></span>
+                <span class="nav-text">Promotions</span>
+            </a>
+        </li>
+        <li class="level0">
+            <a href="#" title="Providers">
+                <span class="nav-icon"><i class="fa fa-truck"></i></span>
+                <span class="nav-text">Providers</span>
+            </a>
+        </li>
+        <li class="level0">
+            <a href="{{ path('admin_usuario_index') }}" title="Users">
+                <span class="nav-icon"><i class="fa fa-users"></i></span>
+                <span class="nav-text">Users</span>
             </a>
         </li>
     </ul>

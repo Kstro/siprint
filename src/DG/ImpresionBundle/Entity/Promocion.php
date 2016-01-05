@@ -3,6 +3,8 @@
 namespace DG\ImpresionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Promocion
@@ -31,12 +33,22 @@ class Promocion
     /**
      * @var string
      *
-     * @ORM\Column(name="porcentaje", type="string", length=45, nullable=true)
+     * @ORM\Column(name="porcentaje", type="string", length=45, nullable=false)
      */
     private $porcentaje;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imagen", type="string", length=255, nullable=true)
+     */
+    private $imagen;
 
-
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+    
     /**
      * Get id
      *
@@ -93,5 +105,49 @@ class Promocion
     public function getPorcentaje()
     {
         return $this->porcentaje;
+    }
+    
+    /**
+     * Set imagen
+     *
+     * @param string $imagen
+     *
+     * @return Promocion
+     */
+    public function setImagen($imagen)
+    {
+        $this->imagen = $imagen;
+
+        return $this;
+    }
+
+    /**
+     * Get imagen
+     *
+     * @return string
+     */
+    public function getImagen()
+    {
+        return $this->imagen;
+    }
+    
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 }

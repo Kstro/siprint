@@ -1,24 +1,70 @@
-{% extends ':Layout:layout.html.twig' %}
-
-{% block section %}
-    User
+{% block css %}
+    
+    
+    <style>
+        
+        .roles label{
+            width: 145px;
+            margin-left:10px;
+            margin-right:10px;
+        }
+    </style>
+    
 {% endblock %}
 
-{% block section2 %}
-    User
-{% endblock %}
-
-{% block contenido %}
-    <h1>Usuario creation</h1>
-
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+{% block body %}
+    {{ form_start(form, {'action': path('admin_usuario_new')}) }}
+        {{ form_errors(form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Name:
+            </div>
+            <div class="col-md-7" style="margin-bottom: 4px;">
+                {{ form_widget(form.persona) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Username:
+            </div>
+            <div class="col-md-7" style="margin-bottom: 4px;">
+                {{ form_widget(form.username) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Password:
+            </div>
+            <div class="col-md-7" style="margin-bottom: 4px;">
+                {{ form_widget(form.password.first) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Repeat Password:
+            </div>
+            <div class="col-md-7" style="margin-bottom: 4px;">
+                {{ form_widget(form.password.second) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Email:
+            </div>
+            <div class="col-md-7" style="margin-bottom: 4px;">
+                {{ form_widget(form.email) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                User roles:
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 text-center" style="margin-bottom: 4px;">
+                {{ form_widget(form.user_roles) }}
+            </div>
+            <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
     {{ form_end(form) }}
 
-    <ul>
+    {#<ul>
         <li>
             <a href="{{ path('admin_usuario_index') }}">Back to the list</a>
         </li>
-    </ul>
+    </ul>#}
 {% endblock %}

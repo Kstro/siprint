@@ -54,7 +54,8 @@ class UsuarioController extends Controller
             $em->persist($usuario);
             $em->flush();
 
-            return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
+            //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
+            return $this->redirectToRoute('admin_usuario_index');
         }
 
         return $this->render('usuario/new.html.twig', array(
@@ -104,7 +105,8 @@ class UsuarioController extends Controller
             $em->persist($usuario);
             $em->flush();
 
-            return $this->redirectToRoute('admin_usuario_edit', array('id' => $usuario->getId()));
+            //return $this->redirectToRoute('admin_usuario_edit', array('id' => $usuario->getId()));
+            return $this->redirectToRoute('admin_usuario_index');
         }
 
         return $this->render('usuario/edit.html.twig', array(
