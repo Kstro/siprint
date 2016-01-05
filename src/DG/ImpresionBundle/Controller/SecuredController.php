@@ -6,9 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use DG\ImpresionBundle\Entity\Usuario;
+use DG\ImpresionBundle\Controller\UsuarioController;
+
 /**
  * @Route("/secured")
  */
@@ -19,10 +23,13 @@ class SecuredController extends Controller
      * @Route("/login", name="admin_secured_login")
      * @Template()
      */
-    public function loginAction(/*Request $request*/)
+    public function loginAction(Request $request)
     {
-        return $this->render('DGImpresionBundle:Secured:login.html.twig');
-        /*$session = $request->getSession();
+//        $usuario = new Usuario();
+//        $user = new UsuarioController();
+//        $form = $user->createForm('DG\ImpresionBundle\Form\UsuarioType', $usuario);
+        //return $this->render('DGImpresionBundle:Secured:login.html.twig');
+        $session = $request->getSession();
         if (class_exists('\Symfony\Component\Security\Core\Security')) {
             $authErrorKey = Security::AUTHENTICATION_ERROR;
             $lastUsernameKey = Security::LAST_USERNAME;
@@ -50,8 +57,10 @@ class SecuredController extends Controller
         return array(
             'last_username' => $lastUsername,
             'error' => $error,
+//            'usuario' => $usuario,
+//            'form' => $form,
             
-        );*/
+        );
         
     }
 

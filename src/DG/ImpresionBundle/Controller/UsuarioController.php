@@ -2,6 +2,7 @@
 
 namespace DG\ImpresionBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -46,6 +47,9 @@ class UsuarioController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //establecemos la contraseña: --------------------------
+            $this->setSecurePassword($usuario);
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($usuario);
             $em->flush();
@@ -85,10 +89,18 @@ class UsuarioController extends Controller
     {
         $deleteForm = $this->createDeleteForm($usuario);
         $editForm = $this->createForm('DG\ImpresionBundle\Form\UsuarioType', $usuario);
+        
+        //obtiene la contraseña actual -----------------------
+        $current_pass = $usuario->getPassword();
+        
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            //evalua si la contraseña fue modificada: ------------------------
+            if ($current_pass != $usuario->getPassword()) {
+                $this->setSecurePassword($usuario);
+            }
             $em->persist($usuario);
             $em->flush();
 
@@ -137,4 +149,41 @@ class UsuarioController extends Controller
             ->getForm()
         ;
     }
+    
+    private function setSecurePassword(&$entity) {
+        $entity->setSalt(md5(time()));
+        $encoder = new \Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder('sha512', true, 10);
+        $password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
+        $entity->setPassword($password);
+    }
+    
+     /**
+     * Creates a new Usuario entity.
+     *
+     * @Route("/creat", name="admin_usuario_creat")
+     * @Method("POST")
+     * @Template('DGImpresionBundle:Secured:login.html.twig')
+     */
+//    public function createAction(Request $request)
+//    {
+//        var_dump($request);
+//        $entity = new Usuario();
+//        $user = new UsuarioController();
+//       $form = $user->createForm('DG\ImpresionBundle\Form\UsuarioType', $entity);
+//        $form->handleRequest($request);
+//        var_dump($request->request->all());
+//        if ($form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $this->setSecurePassword($entity);
+//            $em->persist($entity);
+//            $em->flush();
+//
+//            return $this->redirect($this->generateUrl('admin_usuario'));
+//        }
+//
+//        return array(
+//            'entity' => $entity,
+//            'form'   => $form->createView(),
+//        );
+//    }
 }

@@ -2,6 +2,7 @@
 
 namespace DG\ImpresionBundle\Entity;
 
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="rol")
  * @ORM\Entity
  */
-class Rol
+class Rol implements RoleInterface
 {
     /**
      * @var integer
@@ -27,22 +28,6 @@ class Rol
      * @ORM\Column(name="nombre", type="string", length=75, nullable=false)
      */
     private $nombre;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Usuario", mappedBy="rol")
-     */
-    private $usuario;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->usuario = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
 
     /**
      * Get id
@@ -78,37 +63,13 @@ class Rol
         return $this->nombre;
     }
 
-    /**
-     * Add usuario
-     *
-     * @param \DG\ImpresionBundle\Entity\Usuario $usuario
-     *
-     * @return Rol
-     */
-    public function addUsuario(\DG\ImpresionBundle\Entity\Usuario $usuario)
-    {
-        $this->usuario[] = $usuario;
-
-        return $this;
+    public function getRole() {
+        return $this->getNombre();
     }
-
-    /**
-     * Remove usuario
-     *
-     * @param \DG\ImpresionBundle\Entity\Usuario $usuario
-     */
-    public function removeUsuario(\DG\ImpresionBundle\Entity\Usuario $usuario)
-    {
-        $this->usuario->removeElement($usuario);
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
+    
+    public function __toString() {
+        return $this->getRole();
+    }   
+     
+   
 }

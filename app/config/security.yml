@@ -1,50 +1,54 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-    
+    encoders:
+        DG\ImpresionBundle\Entity\Usuario:
+            algorithm:        sha512
+            encode-as-base64: true
+            iterations:       10
+#    role_hierarchy:
+#        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]        
     providers:
+        user_db:
+            entity: { class: DG\ImpresionBundle\Entity\Usuario, property: username }
         hwi:
             id: hwi_oauth.user.provider.entity              
         in_memory:
             memory: ~
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        #dev:
-        #    pattern: ^/(_(profiler|wdt)|css|images|js)/
-        #    security: false
-
-        #main:
-        #    anonymous: ~
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
-
-#security:
-#    firewalls:
+        login_:
+            pattern:  ^/secured/login$
+            security: false
+            anonymous: ~
         secured_area:
             anonymous: ~
             oauth:
                 resource_owners:
                     facebook:           "/login/check-facebook"
-                    #facebook:           "/admin/usuario"
-                    #google:             "/login/check-google"
-                    #my_custom_provider: "/login/check-custom"
-                    #my_github:          "/login/check-github"
-                login_path:        /login
+                login_path:          /secured/login
                 default_target_path: /admin/usuario
-                #use_forward:       false
-                failure_path:      /login
+                failure_path:        /secured/login
 
                 oauth_user_provider:
                     service: hwi_oauth.user.provider.entity
+                    
+            pattern: ^/
+            switch_user: { role: ROLE_ADMIN, parameter: _change }
+            form_login:
+                login_path: /secured/login
+                check_path: /secured/login_check
+                default_target_path: /admin/usuario
+                #always_use_default_target_path: true 
+                failure_path:      /secured/login
+                #use_referer:         true
+            logout:
+                path: /secured/logout
+                target: /secured/login        
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/*, role:  ROLE_USER } 
+        - { path: ^/secured/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #Roles admin
+        - { path: ^/admin/*, role:  ROLE_ADMIN }

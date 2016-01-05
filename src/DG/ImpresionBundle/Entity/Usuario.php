@@ -1,23 +1,24 @@
 <?php
 
 namespace DG\ImpresionBundle\Entity;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Usuario
  *
- * @ORM\Table(name="usuario", indexes={@ORM\Index(name="fk_usuario_persona1_idx", columns={"persona"})})
  * @ORM\Entity
+ * @ORM\Table(name="usuario", indexes={@ORM\Index(name="fk_usuario_persona1_idx", columns={"persona"})})
  */
-class Usuario
+class Usuario implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -43,6 +44,13 @@ class Usuario
     private $salt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=100, nullable=false)
+     */
+    private $email;
+    
+    /**
      * @var \Persona
      *
      * @ORM\ManyToOne(targetEntity="Persona")
@@ -52,10 +60,11 @@ class Usuario
      */
     private $persona;
 
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Rol", inversedBy="usuario")
+     * @ORM\ManyToMany(targetEntity="Rol")
      * @ORM\JoinTable(name="rol_usuario",
      *   joinColumns={
      *     @ORM\JoinColumn(name="usuario", referencedColumnName="id")
@@ -65,14 +74,15 @@ class Usuario
      *   }
      * )
      */
-    private $rol;
+    private $user_roles;
 
+    private $isEnabled;// = false; 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->rol = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_roles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -159,6 +169,30 @@ class Usuario
     }
 
     /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Usuario
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    
+    /**
      * Set persona
      *
      * @param \DG\ImpresionBundle\Entity\Persona $persona
@@ -175,7 +209,7 @@ class Usuario
     /**
      * Get persona
      *
-     * @return \DG\ImpresionBundle\Entity\Persona
+     * @return \DG\ImpresionBundle\Entity\Persona 
      */
     public function getPersona()
     {
@@ -185,34 +219,119 @@ class Usuario
     /**
      * Add rol
      *
-     * @param \DG\ImpresionBundle\Entity\Rol $rol
+     * @param \DG\ImpresionBundle\Entity\Rol $userRoles
      *
      * @return Usuario
      */
-    public function addRol(\DG\ImpresionBundle\Entity\Rol $rol)
+    public function addRol(\DG\ImpresionBundle\Entity\Rol $userRoles)
     {
-        $this->rol[] = $rol;
+        $this->user_roles[] = $userRoles;
 
         return $this;
     }
-
+    
     /**
-     * Remove rol
+     * Remove role
      *
-     * @param \DG\ImpresionBundle\Entity\Rol $rol
+     * @param \DG\ImpresionBundle\Entity\Rol $userRoles
      */
-    public function removeRol(\DG\ImpresionBundle\Entity\Rol $rol)
+    public function removeRole(\DG\ImpresionBundle\Entity\Rol $userRoles)
     {
-        $this->rol->removeElement($rol);
+        $this->user_roles->removeElement($userRoles);
+    }
+
+    
+    
+    public function setUserRoles($roles) {
+        $this->user_roles = $roles;
     }
 
     /**
-     * Get rol
+     * Get user_roles
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Doctrine\Common\Collections\Collection
      */
-    public function getRol()
+    public function getUserRoles()
     {
-        return $this->rol;
+        return $this->user_roles;
+    }
+ 
+    /**
+     * Get roles
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getRoles()
+    {
+        return $this->user_roles->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array
+    }
+    
+    /**
+     * Compares this user to another to determine if they are the same.
+     *
+     * @param UserInterface $user The user
+     * @return boolean True if equal, false othwerwise.
+     */
+    public function equals(UserInterface $user) {
+        return md5($this->getUsername()) == md5($user->getUsername());
+ 
+    }
+ 
+    /**
+     * Erases the user credentials.
+     */
+    public function eraseCredentials() {
+ 
+    }
+    
+    /*public function __toString() {
+        return $this->username ? $this->username : '';
+    }*/
+    
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+        ));
+    }
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            ) = unserialize($serialized);
+    }
+    
+    public function isAccountNonExpired()
+    {
+            return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+            return  !$this->isEnabled;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+            return true;
+    }
+
+    public function isEnabled()
+    {
+        //if ((int)$this->estado == 1)
+        $this->isEnabled = true;
+       // else
+        //$this->isEnabled  = false;
+        return  $this->isEnabled;
+    }
+    
+    public function __toString() {
+        return $this->username ? $this->username : '';
     }
 }
