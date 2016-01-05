@@ -125,37 +125,37 @@
                     </li>
             </ul>
         </li>#}
-        <li class="level0">
+        {#<li class="level0">
             <a href="#" title="Orders">
                 <span class="nav-icon"><i class="fa fa-bars"></i></span>
                 <span class="nav-text">Orders</span>
                {#<span class="count-item">(81)</span>#}
-            </a>
-        </li>
+            {#</a>
+        </li>#}
         <li class="level0">
-            <a href="#" title="Products">
+            <a href="{{ path('categoria_index') }}" title="Products">
                 <span class="nav-icon"><i class="fa fa-photo"></i></span>
                 <span class="nav-text">Products</span>
             </a>
         </li>
-        <li class="level0">
+        {#<li class="level0">
             <a href="#" title="Product categories">
                 <span class="nav-icon"><i class="fa fa-cubes"></i></span>
                 <span class="nav-text">Product categories</span>
             </a>
-        </li>
+        </li>#}
         <li class="level0">
-            <a href="#" title="Product attributes">
+            <a href="{{ path('admin_parametro_index') }}" title="Product attributes">
                 <span class="nav-icon"><i class="fa fa-check-square-o"></i></span>
                 <span class="nav-text">Product attributes</span>
             </a>
         </li>
-        <li class="level0">
+        {#<li class="level0">
             <a href="#" title="Sales">
                 <span class="nav-icon"><i class="fa fa-cart-plus"></i></span>
                 <span class="nav-text">Sales</span>
             </a>
-        </li>
+        </li>#}
         <li class="level0">
             <a href="{{path('admin_promocion_index')}}" title="Promotions">
                 <span class="nav-icon"><i class="fa fa-ticket"></i></span>
@@ -163,9 +163,15 @@
             </a>
         </li>
         <li class="level0">
-            <a href="#" title="Providers">
+            <a href="{{ path('admin_proveedor_index') }}" title="Providers">
                 <span class="nav-icon"><i class="fa fa-truck"></i></span>
                 <span class="nav-text">Providers</span>
+            </a>
+        </li>
+        <li class="level0">
+            <a href="{{ path('admin_producto_index') }}" title="Products">
+                <span class="nav-icon"><i class="fa fa-photo"></i></span>
+                <span class="nav-text">Products</span>
             </a>
         </li>
         <li class="level0">
