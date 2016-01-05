@@ -50,7 +50,8 @@ class TipoCategoriaController extends Controller
             $em->persist($tipoCategorium);
             $em->flush();
 
-            return $this->redirectToRoute('admin_tipocategoria_show', array('id' => $tipocategoria->getId()));
+//            return $this->redirectToRoute('admin_tipocategoria_show', array('id' => $tipocategoria->getId()));
+            return $this->redirectToRoute('admin_tipocategoria_index');
         }
 
         return $this->render('tipocategoria/new.html.twig', array(
@@ -92,7 +93,8 @@ class TipoCategoriaController extends Controller
             $em->persist($tipoCategorium);
             $em->flush();
 
-            return $this->redirectToRoute('admin_tipocategoria_edit', array('id' => $tipoCategorium->getId()));
+//            return $this->redirectToRoute('admin_tipocategoria_edit', array('id' => $tipoCategorium->getId()));
+            return $this->redirectToRoute('admin_tipocategoria_index');
         }
 
         return $this->render('tipocategoria/edit.html.twig', array(

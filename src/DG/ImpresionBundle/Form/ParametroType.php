@@ -16,11 +16,11 @@ class ParametroType extends AbstractType
     {
         $builder
             ->add('nombre')
-            ->add('parametro')
+//            ->add('parametro')
             ->add('tipoCategoria')
-            ->add('categoria')
+//            ->add('categoria')
             ->add('detalleCategoria')
-            ->add('formatoPlantilla')
+//            ->add('formatoPlantilla')
         ;
     }
     

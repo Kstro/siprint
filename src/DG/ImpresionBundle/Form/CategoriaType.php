@@ -17,7 +17,14 @@ class CategoriaType extends AbstractType
         $builder
             ->add('nombre')
             ->add('categoria')
-            ->add('parametro')
+            ->add('parametro','entity',array('required'=>false,
+                'class'=>'DGImpresionBundle:Parametro','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                
+                    'attr'=>array(
+                    'class'=>'parametros'
+                    )))
         ;
     }
     

@@ -1,21 +1,76 @@
-{% extends 'base.html.twig' %}
+
 
 {% block body %}
-    <h1>Parametro edit</h1>
+    
+    
+        
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+    {{ form_start(edit_form, {'action': path('admin_parametro_edit',{'id':parametro.id})}) }}
+    {{ form_errors(edit_form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-6 text-right">
+                Nombre:
+            </div>
+            <div class="col-md-6">
+                {{ form_widget(edit_form.nombre) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            
+            {#<div class="col-md-6 text-right">
+                Parametro:
+            </div>
+            <div class="col-md-6">
+                {{ form_widget(edit_form.parametro) }}
+            </div>
+            
+            <div class="clearfix"></div>#}
+            
+            <div class="col-md-6 text-right">
+                Tipo categoria:
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_widget(edit_form.tipoCategoria) }}
+            </div>
+            
+            <div class="clearfix"></div>
+            
+            {#<div class="col-md-6 text-right">
+                Categoria:
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_widget(edit_form.categoria) }}
+            </div>
+            
+            <div class="clearfix"></div>          #}
+            
+            {#<div class="col-md-6 text-right">
+                Formato plantilla:
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_widget(edit_form.formatoPlantilla) }}
+            </div>
+            
+            <div class="clearfix"></div>#}
+            
+            <div class="col-md-6 text-right">
+                Detalle:
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_widget(edit_form.detalleCategoria) }}
+            </div>
+            
+        </div>
+        
+            
+    
+        <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-edit btn pull-right"/>
+
     {{ form_end(edit_form) }}
-
-    <ul>
+    
+    {#<ul>
         <li>
             <a href="{{ path('admin_parametro_index') }}">Back to the list</a>
         </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    </ul>#}
 {% endblock %}

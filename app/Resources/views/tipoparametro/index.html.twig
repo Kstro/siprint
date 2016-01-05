@@ -41,7 +41,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    </div>
     
 {% endblock %}
 
@@ -104,7 +104,7 @@
                                 position: { 
                                     my: "center", 
                                     at: "center", 
-                                    of: '.main-header'
+                                    of: '.modal-center'
                                 },
                                 show: { effect: "fadeIn", duration: 800 }
                             });
@@ -115,7 +115,7 @@
                         return false;
                     });
                     
-                    $('.edit-registro').on("click",function(){
+                    $(document).on("click", '.edit-registro',function(){
                         {#$( "#dialog" ).dialog();
                         return false;#}
                         var mas = $(this).children();
@@ -141,7 +141,7 @@
                                 position: { 
                                     my: "center", 
                                     at: "center", 
-                                    of: '.main-header'
+                                    of: '.modal-center'
                                 },
                                 show: { effect: "fadeIn", duration: 800 }
                             });

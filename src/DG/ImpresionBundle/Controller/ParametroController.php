@@ -50,7 +50,8 @@ class ParametroController extends Controller
             $em->persist($parametro);
             $em->flush();
 
-            return $this->redirectToRoute('admin_parametro_show', array('id' => $parametro->getId()));
+//            return $this->redirectToRoute('admin_parametro_show', array('id' => $parametro->getId()));
+            return $this->redirectToRoute('admin_parametro_index');
         }
 
         return $this->render('parametro/new.html.twig', array(
@@ -92,7 +93,8 @@ class ParametroController extends Controller
             $em->persist($parametro);
             $em->flush();
 
-            return $this->redirectToRoute('admin_parametro_edit', array('id' => $parametro->getId()));
+//            return $this->redirectToRoute('admin_parametro_edit', array('id' => $parametro->getId()));
+            return $this->redirectToRoute('admin_parametro_index');
         }
 
         return $this->render('parametro/edit.html.twig', array(

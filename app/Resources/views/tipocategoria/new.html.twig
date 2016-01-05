@@ -1,16 +1,50 @@
-{% extends 'base.html.twig' %}
+
+
+
 
 {% block body %}
-    <h1>TipoCategoria creation</h1>
+    
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+{#    {{ form_start(form) }}#}
+    {{ form_start(form, {'action': path('admin_tipocategoria_new')}) }}
+{#<form action="{{ path('admin_tipoparametro_new') }}" method="post" {{ form_enctype(form) }}>#}
+    {{ form_errors(form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-6 text-right">
+                Name:
+            </div>
+            <div class="col-md-6">
+                {{ form_widget(form.nombre) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            
+        </div>
+        
+            
+    
+        <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
+{#</form>#}
     {{ form_end(form) }}
 
-    <ul>
+    {#<ul>
         <li>
-            <a href="{{ path('admin_tipocategoria_index') }}">Back to the list</a>
+            <a href="{{ path('admin_tipoparametro_index') }}">Back to the list</a>
         </li>
-    </ul>
+    </ul>#}
+{% endblock %}
+
+{% block javascripts %}
+    
+    <script>
+                $(document).ready(function(){
+                    validarTipoCategoria();
+                    {#$('.btn-edit').on("click",function(){
+                        //$(this).removeClass('btn-edit');
+                    });#}
+                    
+                });
+
+            </script>
+
 {% endblock %}

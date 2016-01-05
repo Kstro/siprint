@@ -16,7 +16,7 @@
         <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
             <thead>
                 <tr>
-                    <th>Id</th>
+{#                    <th>Id</th>#}
                     <th>Nombre</th>
                     <th>Actions</th>
                 </tr>
@@ -24,7 +24,7 @@
             <tbody>
             {% for parametro in parametros %}
                 <tr>
-                    <td><a href="{{ path('admin_parametro_show', { 'id': parametro.id }) }}">{{ parametro.id }}</a></td>
+{#                    <td><a href="{{ path('admin_parametro_show', { 'id': parametro.id }) }}">{{ parametro.id }}</a></td>#}
                     <td>{{ parametro.nombre }}</td>
                     <td>
                         {#<ul>
@@ -35,6 +35,9 @@
                                 <a href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">edit</a>
                             </li>
                         </ul>#}
+                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -53,14 +56,14 @@
                     
                     $('.listados').DataTable({ 
                         searching:true,
-                        "order":[[0, "desc"],[1,"desc"]],
+{#                        "order":[0, "desc"],#}
                         "columnDefs": [
-                               { "orderable": false, "targets": 0 },
-                               { "orderable": false, "targets": 2 }
+                               { "orderable": true, "targets": 0 }
+                               
 {#                               { "orderable": false, "targets": 3 }#}
                                //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                             ],
-                        "language": {
+                        {#"language": {
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "",
                         "emptyTable": "No se encontraron registros",
@@ -71,17 +74,18 @@
                         "processing": "Procesando petición...",
                         "search": "Buscar registros:",
                         "lengthMenu": "Mostrar _MENU_ registros"
-                    },          
+                    },          #}
 
                     });
                     $('.dataTables_filter').addClass('pull-right ');
-                    var  input = $('.dataTables_filter').children('label').children('input');
+                    
+                    {#var  input = $('.dataTables_filter').children('label').children('input');
                     input.attr('placeholder', 'Buscar...');
-                    $('.dataTables_filter').children('label').html(input);            
+                    $('.dataTables_filter').children('label').html(input);        #}    
 {#                    $('.dataTables_filter').children('label').hide();#}
                     
 {#                    $('.dataTables_filter').append('<span class="fa fa-search" id="labelid" aria-hidden="true" style="margin-left:10px;margin-top:7px;"></span>');#}
-                    $('#labelid').on('click',function(){
+                    {#$('#labelid').on('click',function(){
                         $('.dataTables_filter').children('label').fadeToggle();
                         
                     });
@@ -91,7 +95,7 @@
                         $('#DataTables_Table_0_filter>label>input').val($(this).val());
                         $('#DataTables_Table_0_filter>label>input').keyup();
 
-                    });
+                    });#}
                     
                     $('.nuevo-registro').on("click",function(){
                         {#$( "#dialog" ).dialog();
@@ -117,18 +121,55 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
-                                title: "Nuevo parámetro",
+                                title: "New attribute",
                                 position: { 
                                     my: "center", 
                                     at: "center", 
-                                    of: '.main-header'
+                                    of: '.modal-center'
                                 },
                                 show: { effect: "fadeIn", duration: 800 }
                             });
                             $('.nuevo-registro').html(mas);
                             
                         });
+                        
+                        return false;
+                    });
+                    
+                    
+                    $(document).on("click", '.edit-registro',function(){
+                        {#$( "#dialog" ).dialog();
+                        return false;#}
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
  
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+                        
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+{#                        return false;#}
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Edit attribute",
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.edit-registro').html(mas);
+                            
+                        });
                         
                         return false;
                     });

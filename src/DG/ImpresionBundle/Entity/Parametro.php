@@ -279,4 +279,8 @@ class Parametro
     {
         return $this->formatoPlantilla;
     }
+    
+    public function __toString() {
+        return $this->getNombre();
+    }
 }

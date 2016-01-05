@@ -5,7 +5,7 @@
     
         
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'action': path('admin_parametro_new')}) }}
     {{ form_errors(form) }}
         <div class="row" style="margin: 50px 0;">
             <div class="col-md-6 text-right">
@@ -17,14 +17,14 @@
         
             <div class="clearfix"></div>
             
-            <div class="col-md-6 text-right">
+            {#<div class="col-md-6 text-right">
                 Parametro:
             </div>
             <div class="col-md-6">
                 {{ form_widget(form.parametro) }}
             </div>
             
-            <div class="clearfix"></div>
+            <div class="clearfix"></div>#}
             
             <div class="col-md-6 text-right">
                 Tipo categoria:
@@ -35,23 +35,23 @@
             
             <div class="clearfix"></div>
             
-            <div class="col-md-6 text-right">
+            {#<div class="col-md-6 text-right">
                 Categoria:
             </div>
             <div class="col-xs-12 col-sm-4">
                 {{ form_widget(form.categoria) }}
             </div>
             
-            <div class="clearfix"></div>          
+            <div class="clearfix"></div>          #}
             
-            <div class="col-md-6 text-right">
+            {#<div class="col-md-6 text-right">
                 Formato plantilla:
             </div>
             <div class="col-xs-12 col-sm-4">
                 {{ form_widget(form.formatoPlantilla) }}
             </div>
             
-            <div class="clearfix"></div>
+            <div class="clearfix"></div>#}
             
             <div class="col-md-6 text-right">
                 Detalle:
