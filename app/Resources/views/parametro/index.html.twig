@@ -3,7 +3,7 @@
 {% block contenido %}
     <div class="acc-title lg">
         <div class="col-md-5 pull-left">
-            <h3 class="" style="color:#FFF;">Lista de parámetros</h3>
+            <h3 class="" style="color:#FFF;">Attributes list</h3>
         </div>
         <div class="col-md-7 pull-right" >
             <a id="accion" href="{{ path('admin_parametro_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
@@ -17,7 +17,7 @@
             <thead>
                 <tr>
 {#                    <th>Id</th>#}
-                    <th>Nombre</th>
+                    <th>Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -50,7 +50,7 @@
 
 {% block javascripts_step %}
     {{parent()}}
-    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
+    
     <script>
                 $(document).ready(function(){
                     
@@ -121,6 +121,7 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
+                                resizable: false,
                                 title: "New attribute",
                                 position: { 
                                     my: "center", 
@@ -159,6 +160,7 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
+                                resizable: false,
                                 title: "Edit attribute",
                                 position: { 
                                     my: "center", 

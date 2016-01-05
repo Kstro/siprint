@@ -84,7 +84,8 @@ class ProveedorController extends Controller
             $em->persist($proveedor);
             $em->flush();
 
-            return $this->redirectToRoute('admin_proveedor_show', array('id' => $proveedor->getId()));
+//            return $this->redirectToRoute('admin_proveedor_show', array('id' => $proveedor->getId()));
+            return $this->redirectToRoute('admin_proveedor_index');
         }
 
         return $this->render('proveedor/new.html.twig', array(
@@ -126,7 +127,8 @@ class ProveedorController extends Controller
             $em->persist($proveedor);
             $em->flush();
 
-            return $this->redirectToRoute('admin_proveedor_edit', array('id' => $proveedor->getId()));
+//            return $this->redirectToRoute('admin_proveedor_edit', array('id' => $proveedor->getId()));
+            return $this->redirectToRoute('admin_proveedor_index');
         }
 
         return $this->render('proveedor/edit.html.twig', array(

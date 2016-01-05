@@ -125,4 +125,9 @@ class Proveedor
     {
         return $this->telefono;
     }
+    
+    
+    public function __toString(){
+        return $this->getEmpresa();
+    }
 }

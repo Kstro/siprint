@@ -1,21 +1,49 @@
-{% extends 'base.html.twig' %}
+
 
 {% block body %}
-    <h1>Producto edit</h1>
+    
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+    {{ form_start(edit_form, {'action': path('admin_producto_edit',{'id':producto.id})}) }}
+        {{ form_errors(edit_form) }}
+        
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-5 text-right">
+                Name:
+            </div>
+            <div class="col-md-7">
+                {{ form_widget(edit_form.nombre) }}
+            </div>
+        
+            <div class="clearfix"></div>
+            
+            <div class="col-md-5 text-right" style="margin-top: 10px;">
+                Provider:
+            </div>
+            <div class="col-md-7" style="margin-top: 10px;">
+                {{ form_widget(edit_form.proveedor) }}
+            </div>
+        
+            <div class="clearfix"></div>
+        </div>
+        
+            
+    
+        <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
+{#</form>#}
     {{ form_end(edit_form) }}
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_producto_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+{% block javascripts %}
+    
+    <script>
+                $(document).ready(function(){
+{#                    validarTipoCategoria();#}
+                    {#$('.btn-edit').on("click",function(){
+                        //$(this).removeClass('btn-edit');
+                    });#}
+                    
+                });
+
+            </script>
+
 {% endblock %}

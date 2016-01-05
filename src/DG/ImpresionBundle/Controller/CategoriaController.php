@@ -50,7 +50,8 @@ class CategoriaController extends Controller
             $em->persist($categorium);
             $em->flush();
 
-            return $this->redirectToRoute('categoria_show', array('id' => $categoria->getId()));
+//            return $this->redirectToRoute('categoria_show', array('id' => $categorium->getId()));
+            return $this->redirectToRoute('categoria_index');
         }
 
         return $this->render('categoria/new.html.twig', array(
@@ -92,7 +93,8 @@ class CategoriaController extends Controller
             $em->persist($categorium);
             $em->flush();
 
-            return $this->redirectToRoute('categoria_edit', array('id' => $categorium->getId()));
+//            return $this->redirectToRoute('categoria_edit', array('id' => $categorium->getId()));
+            return $this->redirectToRoute('categoria_index');
         }
 
         return $this->render('categoria/edit.html.twig', array(

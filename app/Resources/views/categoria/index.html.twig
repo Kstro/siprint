@@ -15,7 +15,7 @@
     <div id="resultado"></div>
     <div class="acc-title lg">
         <div class="col-md-5 pull-left">
-            <h3 class="" style="color:#FFF;">Lista de categorias</h3>
+            <h3 class="" style="color:#FFF;">Products list</h3>
         </div>
         <div class="col-md-7 pull-right" >
             <a href="{{ path('categoria_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
@@ -30,25 +30,30 @@
         <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
+{#                    <th>Id</th>#}
+                    <th>Name</th>
+                    <th>Attributes</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
             {% for categorium in categorias %}
                 <tr>
-                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>
+{#                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>#}
                     <td>{{ categorium.nombre }}</td>
                     <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('categoria_show', { 'id': categorium.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('categoria_edit', { 'id': categorium.id }) }}">edit</a>
-                            </li>
-                        </ul>
+                        {% for param in categorium.parametro%}
+                            {% if loop.last %}
+                                {{param.nombre}}
+                            {% else %}
+                                {{param.nombre}},
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -61,7 +66,7 @@
 
 {% block javascripts_step %}
     {{parent()}}
-    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
+    
     <script>
                 $(document).ready(function(){
                     
@@ -69,12 +74,12 @@
                         searching:true,
                         "order":[[0, "desc"],[1,"desc"]],
                         "columnDefs": [
-                               { "orderable": false, "targets": 0 },
+                               
                                { "orderable": false, "targets": 2 }
 {#                               { "orderable": false, "targets": 3 }#}
                                //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                             ],
-                        "language": {
+                        {#"language": {
                         "info": "Mostrando página _PAGE_ de _PAGES_",
                         "infoEmpty": "",
                         "emptyTable": "No se encontraron registros",
@@ -85,17 +90,17 @@
                         "processing": "Procesando petición...",
                         "search": "Buscar registros:",
                         "lengthMenu": "Mostrar _MENU_ registros"
-                    },          
+                    },          #}
 
                     });
                     $('.dataTables_filter').addClass('pull-right ');
-                    var  input = $('.dataTables_filter').children('label').children('input');
+                    {#var  input = $('.dataTables_filter').children('label').children('input');
                     input.attr('placeholder', 'Buscar...');
-                    $('.dataTables_filter').children('label').html(input);            
+                    $('.dataTables_filter').children('label').html(input);            #}
 {#                    $('.dataTables_filter').children('label').hide();#}
                     
 {#                    $('.dataTables_filter').append('<span class="fa fa-search" id="labelid" aria-hidden="true" style="margin-left:10px;margin-top:7px;"></span>');#}
-                    $('#labelid').on('click',function(){
+                    {#$('#labelid').on('click',function(){
                         $('.dataTables_filter').children('label').fadeToggle();
                         
                     });
@@ -105,7 +110,7 @@
                         $('#DataTables_Table_0_filter>label>input').val($(this).val());
                         $('#DataTables_Table_0_filter>label>input').keyup();
 
-                    });
+                    });#}
                     
                     $('.nuevo-registro').on("click",function(){
                         {#$( "#dialog" ).dialog();
@@ -131,7 +136,8 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
-                                title: "Nueva categoria",
+                                title: "New product",
+                                resizable: false,
                                 position: { 
                                     my: "center", 
                                     at: "center", 
@@ -170,7 +176,8 @@
                             $(this).dialog({
                                 modal: true, 
                                 width: 600,
-                                title: "Edit category",
+                                title: "Edit product",
+                                resizable: false,
                                 position: { 
                                     my: "center", 
                                     at: "center", 
