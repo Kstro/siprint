@@ -27,7 +27,12 @@ class UsuarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $usuarios = $em->getRepository('DGImpresionBundle:Usuario')->findAll();
+        $dql = "SELECT p, u FROM DGImpresionBundle:Usuario u "
+                . "JOIN u.persona p WHERE p.estado=:estado ";
+        
+        $usuarios = $em->createQuery($dql)
+                   ->setParameter('estado', 1)
+                   ->getResult();
 
         return $this->render('usuario/index.html.twig', array(
             'usuarios' => $usuarios,
@@ -54,6 +59,12 @@ class UsuarioController extends Controller
             $em->persist($usuario);
             $em->flush();
 
+            $persona = $usuario->getPersona()->getId();
+            $entity = $em->getRepository('DGImpresionBundle:Persona')->find($persona);
+            $entity->setEstado(1);
+            $em->merge($entity);
+            $em->flush();
+            
             //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
             return $this->redirectToRoute('admin_usuario_index');
         }
@@ -95,9 +106,14 @@ class UsuarioController extends Controller
         $current_pass = $usuario->getPassword();
         
         $editForm->handleRequest($request);
-
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            //evalua si la contraseña se encuentra vacia
+            if($usuario->getPassword()==""){
+                $usuario->setPassword($current_pass);
+            }
             //evalua si la contraseña fue modificada: ------------------------
             if ($current_pass != $usuario->getPassword()) {
                 $this->setSecurePassword($usuario);

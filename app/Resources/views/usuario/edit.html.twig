@@ -1,21 +1,83 @@
-{% extends 'base.html.twig' %}
+{% block css %}
+    
+    
+    <style>
+        
+        .roles label{
+            width: 145px;
+            margin-left:10px;
+            margin-right:10px;
+        }
+    </style>
+    
+{% endblock %}
 
 {% block body %}
-    <h1>Usuario edit</h1>
-
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
+    {{ form_start(edit_form, {'action': path('admin_usuario_edit',{'id':usuario.id})}) }}
+        {{ form_errors(edit_form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                First Name:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.persona.nombres) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Last Name:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.persona.apellidos) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Username:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.username) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Password:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.password.first) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Repeat Password:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.password.second) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Email:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.email) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Address:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.persona.direccion) }}
+            </div>
+             <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                User roles:
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 text-center" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.user_roles) }}
+            </div>
+            <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
     {{ form_end(edit_form) }}
 
-    <ul>
+    {#<ul>
         <li>
             <a href="{{ path('admin_usuario_index') }}">Back to the list</a>
         </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    </ul>#}
 {% endblock %}

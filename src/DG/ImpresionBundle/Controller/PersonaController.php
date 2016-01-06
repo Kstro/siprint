@@ -44,7 +44,8 @@ class PersonaController extends Controller
         $persona = new Persona();
         $form = $this->createForm('DG\ImpresionBundle\Form\PersonaType', $persona);
         $form->handleRequest($request);
-
+        $persona->setEstado(1);
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($persona);

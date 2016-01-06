@@ -38,25 +38,28 @@ class Persona
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion", type="string", length=300, nullable=false)
+     * @ORM\Column(name="direccion", type="string", length=300, nullable=true)
      */
     private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono", type="string", length=12, nullable=false)
+     * @ORM\Column(name="telefono", type="string", length=12, nullable=true)
      */
     private $telefono;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     * @ORM\Column(name="estado", type="boolean", nullable=true)
      */
     private $estado;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity="Usuario", mappedBy="persona", cascade={"persist", "remove"})
+     */
+    private $usuario;
 
     /**
      * Get id
@@ -188,7 +191,18 @@ class Persona
         return $this->estado;
     }
     
-    public function __toString() {
+    function getUsuario() 
+    {
+        return $this->usuario;
+    }
+
+    function setUsuario($usuario) 
+    {
+        $this->usuario = $usuario;
+    }
+    
+    public function __toString() 
+    {
         return $this->nombres ? $this->nombres.' '.$this->apellidos : '';
     }
 }

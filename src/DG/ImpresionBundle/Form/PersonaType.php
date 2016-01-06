@@ -15,11 +15,23 @@ class PersonaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombres')
-            ->add('apellidos')
-            ->add('direccion')
-            ->add('telefono')
-            ->add('estado')
+            ->add('nombres', null, array(
+                    'attr'=>array(
+                    'class'=>'form-control col-md-8'
+                    )
+                ))
+            ->add('apellidos', null, array(
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
+                    )
+                ))
+            ->add('direccion', null, array(
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
+                    )
+                ))
+            //->add('telefono')
+            //->add('estado')
         ;
     }
     

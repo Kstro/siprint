@@ -12,7 +12,7 @@ use DG\ImpresionBundle\Form\CategoriaType;
 /**
  * Categoria controller.
  *
- * @Route("/categoria")
+ * @Route("/products")
  */
 class CategoriaController extends Controller
 {

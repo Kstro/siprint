@@ -17,41 +17,54 @@
         {{ form_errors(form) }}
         <div class="row" style="margin: 50px 0;">
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                Name:
+                First Name:
             </div>
-            <div class="col-md-7" style="margin-bottom: 4px;">
-                {{ form_widget(form.persona) }}
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(form.persona.nombres) }}
             </div>
-        
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Last Name:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(form.persona.apellidos) }}
+            </div>
             <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 Username:
             </div>
-            <div class="col-md-7" style="margin-bottom: 4px;">
+            <div class="col-md-6" style="margin-bottom: 4px;">
                 {{ form_widget(form.username) }}
             </div>
             <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 Password:
             </div>
-            <div class="col-md-7" style="margin-bottom: 4px;">
+            <div class="col-md-6" style="margin-bottom: 4px;">
                 {{ form_widget(form.password.first) }}
             </div>
             <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 Repeat Password:
             </div>
-            <div class="col-md-7" style="margin-bottom: 4px;">
+            <div class="col-md-6" style="margin-bottom: 4px;">
                 {{ form_widget(form.password.second) }}
             </div>
             <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 Email:
             </div>
-            <div class="col-md-7" style="margin-bottom: 4px;">
+            <div class="col-md-6" style="margin-bottom: 4px;">
                 {{ form_widget(form.email) }}
             </div>
             <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Address:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(form.persona.direccion) }}
+            </div>
+             <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 User roles:
             </div>

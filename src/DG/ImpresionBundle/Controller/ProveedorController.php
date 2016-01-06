@@ -14,7 +14,7 @@ use DG\ImpresionBundle\Form\ProveedorType;
 /**
  * Proveedor controller.
  *
- * @Route("/admin/proveedor")
+ * @Route("/admin/providers")
  */
 class ProveedorController extends Controller
 {

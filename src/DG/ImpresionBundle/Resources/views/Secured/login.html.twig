@@ -14,9 +14,13 @@
             <div class="col-md-9 col-sm-9 col-xs-12">		
                 <div class="col-md-6 col-sm-6 col-xs-12 left">
                     <div id="register-users">
-                        {#<h1>Create an Account</h1>
+                        <h1>Create an Account</h1>
                         <h4>Personal Information</h4>
-                        {{ form_start(form) }}
+                        
+                        {#{% block registerUser %}
+                            {% include ':Usuario:new.html.twig'%}
+                        {% endblock %}#}
+                        {#{{ form_start(form) }}
                         {{ form_widget(form) }}
                             <input type="submit" value="Create" />
                         {{ form_end(form) }}#}
@@ -62,14 +66,14 @@
                         </form>
                     </div>
                     <div class="socail" id="facebook-connect">
-                        {#<h4>Connect with Facebook</h4>
+                        <h4>Connect with Facebook</h4>
                         <p><span>Facebook Users</span></p>
                         <p>Use your Facebook account to login or register within our store.You're just one click away.</p>
                         <div>
                             <form action="http://localhost/siprint/web/app_dev.php/connect/facebook">
                                 <button type="submit" class="connectfa" style="background-color: #3a5795; color: #FFFFFF">Connect with facebook</a></button>
                             </form>    
-                        </div>#}
+                        </div>
                     </div>
 
                 </div>
