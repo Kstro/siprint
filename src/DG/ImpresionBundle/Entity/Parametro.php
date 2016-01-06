@@ -84,7 +84,16 @@ class Parametro
      * )
      */
     private $formatoPlantilla;
+    
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DetalleParametro", mappedBy="parametro", cascade={"persist", "remove"})
+     */
+    private $coleccion;
 
+    
+    
     /**
      * Constructor
      */
@@ -93,9 +102,23 @@ class Parametro
         $this->categoria = new \Doctrine\Common\Collections\ArrayCollection();
         $this->detalleCategoria = new \Doctrine\Common\Collections\ArrayCollection();
         $this->formatoPlantilla = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->coleccion = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
+    public function getColeccion()
+    {
+        return $this->coleccion;
+    }
+    
+    public function setColeccion(\Doctrine\Common\Collections\Collection $coleccion)
+    {
+        $this->coleccion = $coleccion;
+        foreach ($coleccion as $detalle) {
+            $detalle->setParametro($this);
+        }
+    }
+    
     /**
      * Get id
      *
@@ -282,5 +305,14 @@ class Parametro
     
     public function __toString() {
         return $this->getNombre();
+    }
+    
+    
+    function getPaciente() {
+        return $this->paciente;
+    }
+
+    function setPaciente($paciente) {
+        $this->paciente = $paciente;
     }
 }

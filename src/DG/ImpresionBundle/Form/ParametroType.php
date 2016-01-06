@@ -21,6 +21,15 @@ class ParametroType extends AbstractType
 //            ->add('categoria')
             ->add('detalleCategoria')
 //            ->add('formatoPlantilla')
+//            ->add('detalleparametro',new DetalleParametroType())
+                
+            ->add('coleccion','collection',array(
+                'type' => new DetalleParametroType(),
+                'label'=>' ',
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                ))    
         ;
     }
     
