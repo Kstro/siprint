@@ -38,13 +38,6 @@ class Persona
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion", type="string", length=300, nullable=true)
-     */
-    private $direccion;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="telefono", type="string", length=12, nullable=true)
      */
     private $telefono;
@@ -117,30 +110,6 @@ class Persona
     public function getApellidos()
     {
         return $this->apellidos;
-    }
-
-    /**
-     * Set direccion
-     *
-     * @param string $direccion
-     *
-     * @return Persona
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
     }
 
     /**

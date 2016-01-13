@@ -12,7 +12,7 @@ use DG\ImpresionBundle\Form\ProductoType;
 /**
  * Producto controller.
  *
- * @Route("/admin/producto")
+ * @Route("/admin/raw-material")
  */
 class ProductoController extends Controller
 {

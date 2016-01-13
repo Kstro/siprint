@@ -25,12 +25,16 @@ class PersonaType extends AbstractType
                     'class'=>'form-control input-sm'
                     )
                 ))
-            ->add('direccion', null, array(
+//            ->add('direccion', null, array(
+//                    'attr'=>array(
+//                    'class'=>'form-control input-sm'
+//                    )
+//                ))
+            ->add('telefono', null, array(
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control col-md-8'
                     )
                 ))
-            //->add('telefono')
             //->add('estado')
         ;
     }

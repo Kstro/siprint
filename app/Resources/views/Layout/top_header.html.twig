@@ -4,26 +4,14 @@
         <div class="row">
             <div class="top-links col-lg-7 col-md-6 col-sm-5 col-xs-6">
                 <ul>
-                    <li class="visible-md visible-lg">
-                        <a href="#">
-                            <i class="fa fa-lock"></i>
-                            <!-- Account -->
-                        </a>
-                    </li>
                     {#<li class="visible-md visible-lg">
-                        <a href="wishlist.html">
-                            <i class="fa fa-heart"></i>
-                            <!-- Wishlist -->
-                        </a>
-                    </li>
-                    <li>
-                        <a href="login.html">
-                            <i class="fa fa-user"></i>
-                            <!-- Login -->
+                        <a href="{{ path('admin_usuario_index') }}">
+                            <i class="fa fa-lock" title="Account"></i>
+                            <!-- Account -->
                         </a>
                     </li>#}
                     <li class="hidden-xs">
-                        <a href="{{ path('admin_secured_login')}}">
+                        <a href="{{ path('admin_usuario_index')}}" title="Sign Up and Login">
                             <i class="fa fa-user"></i>
                             <!-- Sign Up and Login -->
                         </a>
@@ -39,11 +27,6 @@
                             <i class="fa fa-twitter"></i> 
                         </a>
                     </li>
-                    {#<li class="hidden-xs">
-                        <a href="#">
-                                <i class="fa fa-pinterest"></i> 
-                        </a>
-                    </li> #}
                     <li class="hidden-xs">
                         <a href="#">
                             <i class="fa fa-instagram"></i>
@@ -53,32 +36,34 @@
             </div>
             <div class="top-header-right f-right col-lg-5 col-md-6 col-sm-7 col-xs-6">
                 <div class="w-header-right">
-                    <div class="block-currency">
-                        {#<div class="currency-active">
-                            <span class="currency-name">
-                                currency:<span> usd</span><i class="fa fa-angle-down"></i>
+                    {% if app.user %}
+                        <div class="block-currency">
+                            <div class="currency-active">
+                                <span class="currency-name">
+                                    {{ app.user.persona }} <i class="fa fa-angle-down"></i>
 
-                            </span>
+                                </span>
+                            </div>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('dg_my_account')}}" title="My Account">
+                                        <span>My Account</span>
+                                    </a>
+                                </li>
+                                {#<li>
+                                    <a href="#" title="Select currency japan">
+                                        <span>Change Password</span>
+                                    </a>
+                                </li>#}
+                                <li>
+                                    <a href="{{ path('admin_secured_logout')}}" title="Log Out">
+                                        <span>Log Out</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <ul>
-                            <li>
-                                <a href="#" title="Select currency japan">
-                                    <span>JPY</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="Select currency japan">
-                                    <span>Euro</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="Select currency japan">
-                                    <span>Pound St.</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="language-w clearfix">
+                    {% endif %}
+                    {#<div class="language-w clearfix">
                         <div class="language-active">
                             <span class="language-name">Language: <span>English</span><i class="fa fa-angle-down"></i>
                             </span>
@@ -101,6 +86,7 @@
                             </li>
                         </ul>
                     </div> #}
+                        
                     <div class="th-hotline">
                         <i class="fa fa-phone"></i>
                         <span>1.866.614.8002</span>

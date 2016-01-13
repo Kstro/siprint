@@ -13,8 +13,8 @@
                 <nav id="main-menu" class="main-menu clearfix">
                     <ul>
                         <li class="level0 parent col1 all-product hd-pd">
-                            <a href="#"><span>Services/Products</span><i class="fa fa-chevron-down"></i></a>
-                            <ul class="level0">
+                            <a href="{{ path('products_list')}}"><span>Services/Products</span>{#<i class="fa fa-chevron-down">#}</i></a>
+                            {#<ul class="level0">
                                 <li class="level1">
                                     <span class="menu-title">Most Popular</span>
                                     <ul class="level1">
@@ -291,7 +291,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                            </ul>
+                            </ul>#}
                         </li>
                        <li class="level0 hd-pd">
                             <a href="{{ path('dg_general_tshirt_printing')}}" title="T-Shirt Printing">T-Shirt Printing </a>
@@ -305,6 +305,9 @@
                         <li class="level0 hd-pd" title="Contact Us">
                             <a href="{{ path('dg_general_contact')}}">Contact Us</a>
                         </li>
+                        {#<li class="level0 hd-pd" title="Contact Us">
+                            <a href="{{ path('admin_secured_logout')}}">Log Out</a>
+                        </li>#}
                     </ul>
                 </nav>
             </div>

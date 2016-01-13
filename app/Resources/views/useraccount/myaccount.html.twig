@@ -1,0 +1,136 @@
+{% extends ':Layout:myaccountdashboard.html.twig' %}
+
+{% block section %}My Account{% endblock %}
+{% block section2 %}My Account{% endblock %}
+{% block titleAccount -%}My Dashboard{% endblock %}
+
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="db-hello col-xs-12">
+        <div class="pad-1015">
+            <p class="hello-user">
+                Hello, {{ app.user.persona }}!
+            </p>
+            <p class="hello-par">
+                From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
+            </p>
+        </div>
+    </div>
+    <div class="db-info col-xs-12">
+        <h3 class="acc-sub-tit-i">
+            <i class="fa fa-user"></i>
+            Account Information
+        </h3>
+        {#<div class="row">
+            <div class="col-md-6 col-sm-6 db-contact">
+                <h4 class="acc-title h-icon">
+                    Contact information
+                    <a href="#" class="acc-edit" title="edit information">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                </h4>
+                <div class="acc-info-content pad-1015">
+                    <span class="name">{{ app.user.persona }}</span>
+                    <span class="email">{{ app.user.email }}</span>
+                    <a href="#" title="Change Password">Change Password</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 db-newsletter">
+                <h4 class="acc-title h-icon">
+                    Newsletters
+                    <a href="#" class="acc-edit" title="edit subscription">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                </h4>
+                <div class="acc-info-content pad-1015">
+                    <p>You are currently not subscribed to any newsletter</p>
+                </div>
+            </div>
+        </div>#}
+        <div class="db-address col-xs-12">
+            <h4 class="acc-title">
+                Contact Information
+                {#<a href="#" class="acc-edit" title="edit subscription">
+                    Manage Addresses
+                </a>#}
+                <a href="{{ path('admin_usuario_edit', { 'id': app.user.id }) }}" class="acc-edit edit-registro" title="edit information">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
+            </h4>
+            <div class="row">
+                <div class="bs-address">
+                    
+                    <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
+                        <div style="margin-bottom: 15px"></div>
+                        <span class="nav-icon"><i class="fa fa-user"></i> {{ app.user.persona }}</span>
+                        <span class="nav-icon"><i class="fa fa-envelope-o"></i> {{ app.user.email }}</span>
+                        <span class="nav-icon"><i class="fa fa-phone"></i> {{ app.user.persona.telefono }}</span>
+                        {#<span class="name">{{ app.user.persona }}</span>
+                        <span class="email">{{ app.user.email }}</span>
+                        <span class="name">{{ app.user.persona.telefono }}</span>#}
+                        {#<a href="#" title="Change Password">Change Password</a>#}
+                    </div>
+                    {#<div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="acc-info-content belling-add pad-1015">
+                            <span class="title">Default Belling Address</span>
+                            <span class="name">Le Tuan</span>
+                            <span class="address">91, Nguyen Chi Thanh, Ha Noi</span>
+                            <span class="number-phone">232.555.888</span>
+                            <a href="#" title="Edit addresss">Edit Address</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="acc-info-content pad-1015 shipping-add">
+                            <span class="title">Default Shipping Address</span>
+                            <span class="no-add">You have not set a default shipping address</span>
+                            <a href="#" title="Edit addresss">Edit Address</a>
+                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 40px"></div>
+    </div>
+{% endblock %}    
+{% block javascripts_step %}
+    {{parent()}}
+    <script>
+        $(document).ready(function(){
+            $('.edit-registro').on("click",function(){
+                var mas = $(this).children();
+
+                $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+
+                var href = $(this).attr('href');
+
+                ($('#resultado')) ? $('#resultado').remove():'';
+
+                // crear un elemento para colocar la información
+                var elem = $("<div id='resultado'></div>");
+
+                //Agregar el elemento después de la clase records_list
+                elem.insertAfter($(".db-address"));
+{#                        return false;#}
+                // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                $('#resultado').load(href, function(){
+                    $(this).dialog({
+                        modal: true, 
+                        width: 600,
+                        title: "Edit contact information",
+                        resizable: false,
+                        position: { 
+                            my: "center", 
+                            at: "center", 
+                            of: '.modal-center'
+                        },
+                        show: { effect: "fadeIn", duration: 800 }
+                    });
+                    $('.edit-registro').html(mas);
+
+                });
+
+                return false;
+            });
+         });
+    </script>
+{% endblock %}

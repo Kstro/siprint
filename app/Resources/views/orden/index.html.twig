@@ -1,21 +1,27 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
-    <h1>Orden list</h1>
+{% block section %}
+    Orders
+{% endblock %}
+
+{% block section2 %}
+    Orders
+{% endblock %}
+
+{% block contenido %}
+    <h1>Orders list</h1>
 
     <table>
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Nombreproyecto</th>
-                <th>Direccionenvio</th>
+                <th>Name</th>
+                <th>Address</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for orden in ordens %}
             <tr>
-                <td><a href="{{ path('orden_show', { 'id': orden.id }) }}">{{ orden.id }}</a></td>
                 <td>{{ orden.nombreProyecto }}</td>
                 <td>{{ orden.direccionEnvio }}</td>
                 <td>

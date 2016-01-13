@@ -1,0 +1,104 @@
+{% block css %}
+    
+    
+    <style>
+        
+        .defaultDir label{
+            width: 145px;
+            margin-left:10px;
+            margin-right:10px;
+        }
+    </style>
+    
+{% endblock %}
+{% block body %}
+    
+    {{ form_start(edit_form, {'action': path('admin_address_book_edit',{'id':direccion.id})}) }}
+        {{ form_errors(edit_form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Full Name:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.name) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Phone Number:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.phoneNumber) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Line 1:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.linea1) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Line 2:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.linea2) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                City:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.city) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                State / Province / Region:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.state) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Country:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.country) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Zip Code:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.zipCode) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Security Access Code:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.securityAccessCode) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Default Address:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.defaultDir) }}
+            </div>
+            <div class="clearfix" style="margin-bottom: 10px;"></div>
+            <input type="submit" value="Change Address" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
+        </div>
+        
+    {{ form_end(edit_form) }}
+
+    <ul>
+        {#<li>
+            <a href="{{ path('admin_address_book_index') }}">Back to the list</a>
+        </li>#}
+        {#<li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>#}
+    </ul>
+{% endblock %}

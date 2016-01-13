@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(edit_form, {'action': path('admin_credit_cards_edit', { 'id': tarjetum.id }) }) }}
+        {{ form_errors(edit_form) }}
+        <div class="row" style="margin: 50px 0;">
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Number:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.numero) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Name:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.nombre) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                CVC:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.cvc) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Expiration date:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.expiracion) }}
+            </div>
+            <div class="clearfix" style="margin-bottom: 20px;"></div>
+        <input type="submit" value="Edit Credit Card" style="margin-bottom: 5px;" class="btn-nuevo btn pull-right"/>
+    {{ form_end(edit_form) }}
+
+    <script>
+        $(document).ready(function(){
+            $('.calZebra').Zebra_DatePicker({
+                months:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                format: 'm-Y-d',
+                show_clear_date:false,
+                show_select_today: "Today",
+                //offset: [0,0]
+            });
+          });
+    </script>
+{% endblock %}

@@ -25,6 +25,10 @@ class CategoriaType extends AbstractType
                     'attr'=>array(
                     'class'=>'parametros'
                     )))
+            ->add('file',null, array(
+                    'required' => false,
+                    'attr'=>array('class'=>'Product'
+                 )))    
 //            ->add('categoriaproducto','collection',array(
 //                'type' => new CategoriaProductoType(),
 //                'label'=>' ',

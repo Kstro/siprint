@@ -1,0 +1,139 @@
+{% extends ':Layout:myaccountdashboard.html.twig' %}
+
+{% block section %}Address Book{% endblock %}
+{% block section2 %}Address Book{% endblock %}
+{% block titleAccount -%}Address Book{% endblock %}
+
+{% block iconoPlus -%}
+    <a href="{{ path('admin_address_book_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
+        <i class="fa fa-plus"></i>
+    </a>
+{% endblock %}
+
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="form-edit-info" style="padding-top: 20px;">
+        <div class="listados form-edit-info">
+            {% if direccions %}
+            <div class="row">
+                <h4 class="acc-sub-title">ADDRESSES</h4>
+            </div>
+            <div class="row">
+                {% for direccion in direccions %}
+                <div class="col-md-5 col-md-offset-1" style="margin-bottom: 25px">
+                    <ul>
+                        <li>
+                            <span class="avalue">
+                                {{ direccion.linea1 }}
+                                <a href="{{ path('admin_address_book_edit', { 'id': direccion.id }) }}" class="acc-edit edit-registro pull-right" title="edit information"><i class="fa fa-pencil-square-o"></i></a>
+                            </span>
+                        </li>
+                        <li><span class="avalue">{{ direccion.city }}, {{ direccion.state }}</span></li>
+                        <li><span class="avalue">{{ direccion.phoneNumber }}</span></li>
+                        <li><span class="avalue">{{ direccion.zipCode }}</span></li>
+                        <li><span class="avalue">{{ direccion.country }}</span></li>
+                    </ul>
+                </div>  
+                {% endfor %}
+            </div>    
+             {% else %}
+                <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1" >
+                    <div class="row">
+                        <h4 class="text-center">No addresses were found</h4>
+                    </div>
+                </div>
+            {% endif %}    
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    <script>
+        $(document).ready(function(){
+            $('.calZebra').Zebra_DatePicker({
+                months:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                format: 'm-Y-d',
+                show_clear_date:false,
+                show_select_today: "Today",
+            });
+
+
+            $('.nuevo-registro').on("click",function(){
+
+                var mas = $(this).children();
+
+                $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
+
+                var href = $(this).attr('href');
+
+                ($('#resultado')) ? $('#resultado').remove():'';
+
+                // crear un elemento para colocar la información
+                var elem = $("<div id='resultado'></div>");
+
+                //Agregar el elemento después de la clase records_list
+                elem.insertAfter($(".listados"));
+
+                // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                $('#resultado').load(href, function(){
+                    $(this).dialog({
+                        modal: true, 
+                        width: 600,
+                        title: "Register new address",
+                        resizable: false,
+                        position: { 
+                            my: "center", 
+                            at: "center", 
+                            of: '.modal-center'
+                        },
+                        show: { effect: "fadeIn", duration: 800 }
+                    });
+                    $('.nuevo-registro').html(mas);
+
+                });
+
+                return false;
+            });
+
+            $('.edit-registro').on("click",function(){
+                var mas = $(this).children();
+
+                $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+
+                var href = $(this).attr('href');
+
+                ($('#resultado')) ? $('#resultado').remove():'';
+
+                // crear un elemento para colocar la información
+                var elem = $("<div id='resultado'></div>");
+
+                //Agregar el elemento después de la clase records_list
+                elem.insertAfter($(".listados"));
+{#                        return false;#}
+                // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                $('#resultado').load(href, function(){
+                    $(this).dialog({
+                        modal: true, 
+                        width: 600,
+                        title: "Change Address",
+                        resizable: false,
+                        position: { 
+                            my: "center", 
+                            at: "center", 
+                            of: '.modal-center'
+                        },
+                        show: { effect: "fadeIn", duration: 800 }
+                    });
+                    $('.edit-registro').html(mas);
+
+                });
+
+                return false;
+            });
+
+        });
+
+    </script>
+
+{% endblock %}

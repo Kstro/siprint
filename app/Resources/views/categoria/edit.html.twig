@@ -22,10 +22,10 @@
     {{ form_start(edit_form, {'action': path('categoria_edit',{'id':categorium.id})}) }}
     {{ form_errors(edit_form) }}
         <div >
-            <div class="col-md-5 col-xs-5 text-right">
+            <div class="col-md-3 col-xs-3 text-right">
                 Name:
             </div>
-            <div class="col-md-7 col-xs-7">
+            <div class="col-md-9 col-xs-9">
                 {{ form_widget(edit_form.nombre) }}
             </div>
         
@@ -50,7 +50,15 @@
             </div>
             
             <div class="clearfix"></div>    #}      
-            
+            <div class="text-center">
+                <div class="col-md-3 text-right" style="margin-bottom: 4px;">
+                    Photo product:
+                </div>   
+                <div class="col-md-9 text-left" style=" margin-top: 10px;">
+                    {{ form_widget(edit_form.file) }}
+                </div>
+            </div>
+            <div class="clearfix"></div>    
             <div class="col-md-12 text-center" style="margin-top: 20px;">
                 Attributes:
             </div>

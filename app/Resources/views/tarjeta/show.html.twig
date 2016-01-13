@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tarjeta</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tarjetum.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ tarjetum.numero }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ tarjetum.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Cvc</th>
+                <td>{{ tarjetum.cvc }}</td>
+            </tr>
+            <tr>
+                <th>Expiracion</th>
+                <td>{% if tarjetum.expiracion %}{{ tarjetum.expiracion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_credit_cards_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_credit_cards_edit', { 'id': tarjetum.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Address</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ direccion.name }}</td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>{{ direccion.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Line 1</th>
+                <td>{{ direccion.linea1 }}</td>
+            </tr>
+            <tr>
+                <th>Line 2</th>
+                <td>{{ direccion.linea2 }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ direccion.city }}</td>
+            </tr>
+            <tr>
+                <th>State / Province / Region</th>
+                <td>{{ direccion.state }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ direccion.country }}</td>
+            </tr>
+            <tr>
+                <th>Zip code</th>
+                <td>{{ direccion.zipCode }}</td>
+            </tr>
+            <tr>
+                <th>Security Access code</th>
+                <td>{{ direccion.securityAccessCode }}</td>
+            </tr>
+            <tr>
+                <th>Default Address</th>
+                <td>{% if direccion.defaultDir %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_address-book_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_address-book_edit', { 'id': direccion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

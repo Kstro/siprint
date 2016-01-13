@@ -1,0 +1,38 @@
+<aside class="col-md-3 col-sm-4 col-xs-12 account-sidebar sidebar">
+    <h3 class="acc-title lg">Account</h3>
+    <ul>
+        <li class="active">
+            
+                
+            <a href="{{ path('dg_my_account') }}" title="Account dashboard">
+                <i class="fa fa-bars"></i> Account Dashboard
+            </a>
+        </li>
+        {#<li>
+            <a href="myaccount-information.html" title="account dashboard">Account information</a>
+        </li>#}
+        <li>
+            <a href="{{ path('admin_address_book_index') }}" title="Address Book">
+                <i class="fa fa-book"></i> Address Book
+            </a>
+        </li>
+        <li>
+            <a href="#" title="My Orders">
+                <i class="fa fa-cart-arrow-down"></i> My Orders
+            </a>
+        </li>
+        <li>
+            <a href="#" title="Wishlist">
+                <i class="fa fa-check-square-o"></i> Wishlist
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('admin_credit_cards_index') }}" title="Manage Credit Cards">
+                <i class="fa fa-credit-card"></i> Manage Credit Cards
+            </a>
+        </li>
+        {#<li>
+            <a href="myaccount-newsletter.html" title="account dashboard">Newsletter Subscriptions</a>
+        </li>#}
+    </ul>
+</aside>

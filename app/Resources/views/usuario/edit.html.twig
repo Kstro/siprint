@@ -52,18 +52,25 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                Phone:
+            </div>
+            <div class="col-md-6" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.persona.telefono) }}
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 Email:
             </div>
             <div class="col-md-6" style="margin-bottom: 4px;">
                 {{ form_widget(edit_form.email) }}
             </div>
             <div class="clearfix"></div>
-            <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+            {#<div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 Address:
             </div>
             <div class="col-md-6" style="margin-bottom: 4px;">
                 {{ form_widget(edit_form.persona.direccion) }}
-            </div>
+            </div>#}
              <div class="clearfix"></div>
             <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                 User roles:

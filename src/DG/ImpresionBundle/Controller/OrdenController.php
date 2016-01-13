@@ -12,7 +12,7 @@ use DG\ImpresionBundle\Form\OrdenType;
 /**
  * Orden controller.
  *
- * @Route("/orden")
+ * @Route("/orders")
  */
 class OrdenController extends Controller
 {

@@ -12,7 +12,7 @@ use DG\ImpresionBundle\Form\ParametroType;
 /**
  * Parametro controller.
  *
- * @Route("/admin/parametro")
+ * @Route("/admin/product-attributes")
  */
 class ParametroController extends Controller
 {

@@ -1,0 +1,172 @@
+{% extends ':Layout:myaccountdashboard.html.twig' %}
+
+{% block section %}Credit Cards{% endblock %}
+{% block section2 %}Credit Cards{% endblock %}
+{% block titleAccount -%}Credit Cards{% endblock %}
+
+{% block iconoPlus -%}
+    <a href="{{ path('admin_credit_cards_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
+        <i class="fa fa-plus"></i>
+    </a>
+{% endblock %}
+
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="form-edit-info" style="padding-top: 20px;">
+        <div class="listados form-edit-info">
+            {% if tarjetas %}
+            <div class="row">
+                <h4 class="acc-sub-title">Credit Cards</h4>
+            </div>
+            <div class="row">
+                {% for tarjetum in tarjetas %}
+                <div class="col-md-5 col-md-offset-1" style="margin-bottom: 25px">
+                    <ul>
+                        <li>
+                            <span class="avalue">
+                                {{ tarjetum.numero }}
+                                <a href="{{ path('admin_credit_cards_edit', { 'id': tarjetum.id }) }}" class="acc-edit edit-registro pull-right" title="edit information"><i class="fa fa-pencil-square-o"></i></a>
+                            </span>
+                        </li>
+                        {#<li><span class="avalue">{{ tarjetum.numero }}</span></li>#}
+                        <li><span class="avalue">{{ tarjetum.nombre }}</span></li>
+                        <li><span class="avalue">{{ tarjetum.cvc }}</span></li>
+                        <li><span class="avalue">{% if tarjetum.expiracion %}{{ tarjetum.expiracion|date('m-Y-d') }}{% endif %}</span></li>
+                    </ul>
+                </div>  
+                {% endfor %}
+            </div>    
+             {% else %}
+                <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1" >
+                    <div class="row">
+                        <h4 class="text-center">No credit cards were found</h4>
+                    </div>
+                </div>
+            {% endif %}    
+        </div>
+    </div>
+    {#<h1>Tarjeta list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numero</th>
+                <th>Nombre</th>
+                <th>Cvc</th>
+                <th>Expiracion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tarjetum in tarjetas %}
+            <tr>
+                <td><a href="{{ path('admin_credit_cards_show', { 'id': tarjetum.id }) }}">{{ tarjetum.id }}</a></td>
+                <td>{{ tarjetum.numero }}</td>
+                <td>{{ tarjetum.nombre }}</td>
+                <td>{{ tarjetum.cvc }}</td>
+                <td>{% if tarjetum.expiracion %}{{ tarjetum.expiracion|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_credit_cards_show', { 'id': tarjetum.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_credit_cards_edit', { 'id': tarjetum.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_credit_cards_new') }}">Create a new entry</a>
+        </li>
+    </ul>#}
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    <script>
+                $(document).ready(function(){
+                    
+                    $('.nuevo-registro').on("click",function(){
+                       
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+ 
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+ 
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Register new credit card",
+                                resizable: false,
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.nuevo-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                    $('.edit-registro').on("click",function(){
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+                        
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+{#                        return false;#}
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Edit Credit Card",
+                                resizable: false,
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.edit-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                });
+
+            </script>
+
+{% endblock %}

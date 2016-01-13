@@ -3,6 +3,8 @@
 namespace DG\ImpresionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Categoria
@@ -27,6 +29,18 @@ class Categoria
      * @ORM\Column(name="nombre", type="string", length=200, nullable=false)
      */
     private $nombre;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imagen", type="string", length=255, nullable=true)
+     */
+    private $imagen;
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
 
     /**
      * @var \Categoria
@@ -161,7 +175,52 @@ class Categoria
         return $this->parametro;
     }
     
-    public function __toString(){
+    /**
+     * Set imagen
+     *
+     * @param string $imagen
+     *
+     * @return Categoria
+     */
+    public function setImagen($imagen)
+    {
+        $this->imagen = $imagen;
+
+        return $this;
+    }
+
+    /**
+     * Get imagen
+     *
+     * @return string
+     */
+    public function getImagen()
+    {
+        return $this->imagen;
+    }
+    
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+    
+    public function __toString()
+    {
         return $this->getNombre();
     }
     
@@ -172,6 +231,5 @@ class Categoria
 //    function setCategoriaProducto(\DG\ImpresionBundle\Entity\CategoriaProducto $categoriaproducto = null) {
 //        $this->categoriaproducto= $categoriaproducto;
 //    }
-    
     
 }
