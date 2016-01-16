@@ -217,29 +217,18 @@ class CategoriaController extends Controller
             $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
             
             $rsm = new ResultSetMapping();
-            $sql = "select p.id as idParam "
-                    . "p.nombre as parametro, "
-                    . "dp.nombre as valorParam, "
-                    . "dp.valor as precio "
+            $sql = "select p.id as idParam, "
+                    . "p.nombre as parametro "
                     . "from categoria_parametro cp "
                     . "inner join parametro p on cp.parametro_id = p.id "
-                    . "inner join detalle_parametro dp on p.id = dp.parametro "
                     . "where cp.categoria_id = ? ";
             
             $rsm->addScalarResult('idParam','idParam');
             $rsm->addScalarResult('parametro','parametro');
-            $rsm->addScalarResult('valorParam','valorParam');
-            $rsm->addScalarResult('precio','precio');
             
             $query = $em->createNativeQuery($sql, $rsm);
             $query->setParameter(1, $id);
             $param = $query->getResult();
-             
-            
-//            $idproduct = $cat->getId();
-//            $nombre = $cat->getNombre();
-//            $imagen = $cat->getImagen();
-//            $categoria = $cat->getCategoria()->getNombre();
             
             $response = new JsonResponse();
             $response->setData(array(
@@ -251,6 +240,100 @@ class CategoriaController extends Controller
                     )); 
             
             return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
+    
+    /**
+    * Ajax utilizado para buscar informacion de los atributos del producto
+    *  
+    * @Route("/attributes/get", name="get_attributes_info")
+    */
+    public function attributesInfoAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $id = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
+            
+            $rsm = new ResultSetMapping();
+            $sql = "select dp.parametro as parametro, "
+                    . "dp.id as idValorParam, "
+                    . "dp.nombre as valorParam, "
+                    . "dp.valor as precio, "
+                    . "tp.nombre as tipo "
+                    . "from detalle_parametro dp "
+                    . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
+                    . "where dp.parametro = ? ";
+            
+            $rsm->addScalarResult('parametro','parametro');
+            $rsm->addScalarResult('idValorParam','idValorParam');
+            $rsm->addScalarResult('valorParam','valorParam');
+            $rsm->addScalarResult('precio','precio');
+            $rsm->addScalarResult('tipo','tipo');
+            
+            $query = $em->createNativeQuery($sql, $rsm);
+            $query->setParameter(1, $id);
+            $param = $query->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                           'paramsVal' => $param
+                    )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
+    
+    /**
+    * Ajax utilizado para buscar el precio del atributo seleccionado
+    *  
+    * @Route("/attributes/getPrecio", name="get_attributes_precio")
+    */
+    public function attributesValuesAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $id = $this->get('request')->request->get('id');
+            
+            if($id == 0){
+                $param[0] = 0;
+                $response = new JsonResponse();
+                $response->setData(array(
+                           'flag' => 0
+                    ));    
+                
+                return $response; 
+            } else {
+            
+                $em = $this->getDoctrine()->getManager();            
+                $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
+
+                $rsm = new ResultSetMapping();
+                $sql = "select dp.valor as precio "
+                        . "from detalle_parametro dp "
+                        . "where dp.id = ? ";
+
+                $rsm->addScalarResult('precio','precio');
+
+                $query = $em->createNativeQuery($sql, $rsm);
+                $query->setParameter(1, $id);
+                $param = $query->getResult();
+
+                $response = new JsonResponse();
+                $response->setData(array(
+                               'values' => $param,
+                               'flag' => 1
+                        )); 
+
+                return $response; 
+            }
+            
         } else {    
             return new Response('0');              
         }  

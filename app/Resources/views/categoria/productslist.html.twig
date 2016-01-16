@@ -58,11 +58,7 @@
 
 {% block contenido %}
     <div id="resultado"></div>
-    {#<div class="acc-title lg">
-        <div class="col-md-5 pull-left">
-            <h3 class="" style="color:#FFF;">Products list</h3>
-        </div>
-    </div>#}
+    
     <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto"> 
         <div class="top-toolbar row">
             <div class="col-md-3 col-sm-4 col-xs-4 type-filter">
@@ -93,7 +89,7 @@
             
             {% if registro %}
                 <img src="{{ asset('Photos/promotions/')}}{{ registro.imagen }}" alt="{{ registro.nombre }}">
-                <p>{{ registro.nombre }}</p>
+                <p class="">{{ registro.nombre }}</p>
             {% else %}      
                 <ul>
                     {% for categorium in categorias %}
@@ -128,17 +124,27 @@
 {% endblock %}
 {% block javascripts_step %}
     {{parent()}}
+    <script type="text/javascript" src="{{ asset('Resources/js/jquery.blockUI.js') }}"></script>  
+    
     <script>
-        
+        var total = 0;
         $(document).ready(function () {
+            
+            
             $('.productLink').on('click', function(){
+                $.blockUI(); 
                 var idElem = $(this).attr('id');
                 var idVal = idElem.split('-');
+                var acum_attr = 0;
+                var total_pagar = 0;
+                
                 
                 $.post( "{{path('get_products')}}", { id: idVal[1] }, function( data ) {
-                    
-                    console.log(data);
+                    var parametro = '';
                     var draw = '';
+                    var total_attr = 0;
+                    
+                    $( "#contenidoProducto" ).hide();
                     draw+='<div class="row">';
                     draw+='<div class="col-md-12">';
                     draw+='<h1>' + data.categoria + ' > ' + data.nombre + '</h1>';
@@ -149,27 +155,103 @@
                     draw+='<div class="col-md-6">';
                     draw+='<img src="{{ asset('Photos/promotions/')}}' + data.imagen + '" title="' + data.nombre + '" width="100%">';
                     draw+='</div>';
-                    draw+='<div class="col-md-6 well">';
+                    draw+='<div class="col-md-6 well" id="configure-price">';
                     draw+='<div class="row" id="title-attributes">';
                     draw+='<h4 class="text-center" style="color:#25bce9">CONFIGURE & PRICE</h4>';
                     draw+='</div>';
                     draw+='<hr>';
-                    draw+='<div class="row" id="info-attributes">';
-                    //draw+='<p>Attributes</p>';
-                    draw+='<div class="col-md-5">';
-                    draw+='<p>Attributes</p>';
-                    draw+='</div>';
-                    draw+='<div class="col-md-7">';
-                    draw+='<p>Info Attributes</p>';
-                    draw+='</div>';
-                    draw+='</div>';
-                    draw+='</div>';
-                    draw+='</div>';
-                    document.getElementById('contenidoProducto').innerHTML = draw;    
+                    draw+='<div class="row" id="info-attributes"  style="margin-bottom: 30px">';
+                    total_attr = data.parametros.length;
                     
+                    $.each( data.parametros, function( key, value ) {
+                        draw+='<div class="col-md-5" style="margin-bottom: 3px">';
+                        parametro = value.parametro;
+                        draw+='<p>' + parametro + '</p>';
+                        draw+='</div>';
+                        draw+='<div class="col-md-7" style="margin-bottom: 3px">';
+                        draw+='<select class="attributes-inf form-control" id="attributes-' + value.idParam + '">';
+                        draw+='<option value="0" disabled selected >Select an option ...</option>';
+                        
+                        $.post( "{{path('get_attributes_info')}}", { id: value.idParam }, function( val ) {
+                            $.each( val.paramsVal, function( clave, valor ) {
+                                if(value.idParam === valor.parametro) {
+                                    var opcion = '<option value="' + valor.idValorParam + '">' + valor.valorParam + '</option>';
+                                    //total_pagar+=valor.precio
+                                    $('#attributes-'+ value.idParam ).append(opcion);
+                                }
+                            });
+                            acum_attr++;
+                            if(acum_attr === total_attr) {
+                                $( "#contenidoProducto" ).show();
+                                $(".attributes-inf").select2();
+                                
+                                $(".attributes-inf" ).change(function() {
+                                    total_pagar = 0;
+                                    var acum = 0;
+                                    var total_price = $(".attributes-inf").length;
+                                    //console.log($(".attributes-inf").val());
+                                    $(".attributes-inf").each(function(k, va) {
+                                        var aux = 0;
+                                        if($(this).val() !== null) {
+                                            aux = $(this).val();
+                                        }
+                                        
+                                        $.post( "{{path('get_attributes_precio')}}", { id: aux }, function( det ) {
+                                            acum++;
+                                            //console.log(det.flag);
+                                            if(det.flag === 0) {
+                                                total_pagar+= 0;
+                                            }
+                                            else {
+                                                total_pagar+= parseFloat(det.values[0].precio);
+                                            }    
+                                            total = total_pagar;
+                                            //console.log(total_price+' - '+ acum_attr+ ' - '+ acum+' - '+ k );
+                                            if(total_price === acum )
+                                                $('.printing-cost').children().children().html('$ ' + total.toFixed(2));
+
+                                        });
+                                        
+                                    });
+                                });
+                            }  
+                        });
+                        
+                        draw+='</select>';
+                        draw+='</div>';
+                        draw+='<div class="clearfix"></div>';
+                        
+                    });   
+                    draw+='<div class="col-md-5" style="margin-top: 20px"></div>';
+                    draw+='<div class="col-md-7" style="margin-top: 20px">';
+                    draw+='<div class="row">';
+                    draw+='<div class="col-md-6"><p>Printing Cost:</p></div>';
+                    draw+='<div class="col-md-6 printing-cost"><p class="text-right"><strong>$ ' + total_pagar.toFixed(2) +'</strong></p></div>';
+                    draw+='</div>';
+                    draw+='</div>';
+                    draw+='<div class="clearfix"></div>';
+                    draw+='<hr>';
+                    
+                    draw+='<div class="row">';
+                    draw+='<div class="col-md-8  col-md-offset-2 pull-center">';
+                    draw+='<button class="btn btn-info form-control text-center" id = "order-now" name= "order-now">Order now<button>';
+                    draw+='</div>';
+                    draw+='</div>';
+                    
+                    draw+='</div>';
+                    draw+='</div>';
+                    draw+='</div>';
+                   //document.getElementById('printing-cost').innerHTML = total;                        
+                    document.getElementById('contenidoProducto').innerHTML = draw;                        
                 }, "json"); // Fin de post 
             });
-        });    
-
+            
+        });   
+        
+        
+        
+        $(document).ajaxStop(function(){
+            $.unblockUI();
+        });
     </script>
 {% endblock %}
