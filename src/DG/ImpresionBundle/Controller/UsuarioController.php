@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Usuario;
+use DG\ImpresionBundle\Entity\Persona;
 use DG\ImpresionBundle\Form\UsuarioType;
 
 /**
@@ -204,4 +205,132 @@ class UsuarioController extends Controller
 //            'form'   => $form->createView(),
 //        );
 //    }
+    
+    /**
+     * Creates a new Usuario entity.
+     *
+     * @Route("/registeruser/register", name="admin_usuario_register")
+     * @Method({"GET", "POST"})
+     */
+    public function registerAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $usuario = new Usuario();
+        $persona = new Persona();
+        $form = $this->createForm('DG\ImpresionBundle\Form\UsuarioType', $usuario);
+        $form->handleRequest($request);
+        var_dump($_POST['email']);
+        $usuarioBuscar="";
+        if($_POST['email']!=""){
+            $usuarioBuscar = $em->getRepository('DGImpresionBundle:Usuario')->findBy(array('email'=>$_POST['email']));
+            if(count($usuarioBuscar)==0){
+                //var_dump('usuario no existe,crearlo');
+                $persona->setNombres($_POST['firstname']);
+                $persona->setApellidos($_POST['lastname']);
+
+                $persona->setTelefono(null);
+
+                $persona->setEstado(1);
+
+                //evalua si la contraseña fue modificada: ------------------------
+                $this->setSecurePassword($usuario);
+
+                $usuario->setPersona($persona);
+                //$usuario->setPersona();
+                $usuario->setEmail($_POST['email']);
+                //$usuario->setPassword($_POST['email']);
+
+                $rol = $em->getRepository('DGImpresionBundle:Rol')->find(1);
+
+                $usuario->addRol($rol);
+
+                $usuario->setUsername($_POST['username']);
+
+                $usuario->isEnabled(1);
+                //var_dump($usuario);
+                //var_dump($_POST);
+
+                
+        
+        //if ($form->isSubmitted()) {
+            //establecemos la contraseña: --------------------------
+                        
+            
+                $em->persist($persona);
+                $em->persist($usuario);
+                //$em->persist($usuario);
+                $em->flush();
+                $mensaje="Cuenta creada con éxito";
+                //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
+                //return $this->redirectToRoute('admin_account_created');
+                return $this->render('usuario/accountcreated.html.twig', array(
+                    'mensaje'=>$mensaje,
+                    'redirect'=>'Login',
+                    'header'=>'Account created',
+                ));
+            }
+            else{
+                $mensaje="El correo usado ya existe";
+                return $this->render('usuario/accountcreated.html.twig', array(
+                    'mensaje'=>$mensaje,
+                    'redirect'=>'Login',
+                    'header'=>'Error...',
+                ));
+                var_dump('usuario existe, no se creo usuario');
+            }
+        }
+        else{
+            $mensaje = "Debe ingresar un correo";
+            return $this->render('usuario/accountcreated.html.twig', array(
+                'mensaje'=>$mensaje,
+                'redirect'=>'Try again',
+                'header'=>'Error...',
+            ));
+        }
+        
+        //var_dump($usuarioBuscar);
+        //die();
+        
+        //}
+        //$mensaje=null;
+
+//        return $this->render('DGImpresionBundle:Secured:login.html.twig', array(
+//            'usuario' => $usuario,
+//            'mensaje' => $mensaje,
+//            'form' => $form->createView(),
+//        ));
+    }
+    
+    
+    /**
+     * Creates a new Usuario entity.
+     *
+     * @Route("/account/created", name="admin_account_created")
+     * @Method({"GET"})
+     */
+    public function accountcreatedAction(Request $request)
+    {
+        //die();
+        
+        //if ($form->isSubmitted()) {
+            //establecemos la contraseña: --------------------------                
+            
+            
+        $mensaje="Cuenta creada con éxito";
+            //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
+        //return $this->redirectToRoute('admin_secured_login');
+        //}
+        //$mensaje=null;
+        return $this->render('usuario/accountcreated.html.twig', array(
+            'mensaje'=>$mensaje,
+        ));
+//        return array(
+//            'mensaje'=>$mensaje,
+//        );
+        
+    }
+    
+    
+    
+    
 }

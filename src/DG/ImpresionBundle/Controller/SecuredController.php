@@ -57,6 +57,7 @@ class SecuredController extends Controller
         return array(
             'last_username' => $lastUsername,
             'error' => $error,
+            'mensaje'=>null,
 //            'usuario' => $usuario,
 //            'form' => $form,
             

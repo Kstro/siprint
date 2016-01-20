@@ -1,0 +1,52 @@
+{# empty Twig template #}
+{% spaceless   %}
+             
+                          
+        <div class="row" style="margin-top: 10px;">
+        <div class="col-md-12">         
+            <div class="panel bg-grd-light" data-fill-color="true">
+                <div class="panel-body">
+                        <div class="col-md-12">
+                              {# <p class="text"><i class=""> Tratamiento </i> </p> #}
+                                <div class="col-md-4" style="margin-bottom: 4px;">
+                                    Name:
+                                </div>
+                                <div class="col-md-8" style="margin-bottom: 4px;">
+                                    {{ form_widget(form.nombre) }}
+                                </div>  
+                                <div class="clearfix"></div>
+                                <div class="col-md-4" style="margin-bottom: 4px;">
+                                    Value:
+                                </div>
+                                <div class="col-md-8" style="margin-bottom: 4px;">
+                                    {{ form_widget(form.valor) }}
+                                </div> 
+                                <div class="clearfix"></div>
+                                {#<div class="col-md-4" style="margin-bottom: 4px;">
+                                    Param:
+                                </div>
+                                <div class="col-md-8" style="margin-bottom: 4px;">
+                                    {{ form_widget(form.parametro) }}
+                                </div> 
+                                <div class="clearfix"></div>#}
+                                <div class="col-md-4">
+                                    Type:
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.tipoParametro) }}
+                                </div>
+                            
+                            
+                            
+                        </div>
+                      {#    <div class="col-md-5"> #}
+                           {#   <p class="text"><i class=""> Sesiones </i> </p> #}
+                       {#     {{ form_row(form.fileDespues) }}
+                          </div>  #}
+                </div><!-- /.panel-body -->
+              </div><!-- /.panel -->        
+                          
+           </div>  
+          </div>                
+             
+{% endspaceless   %}

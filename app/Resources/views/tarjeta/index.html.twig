@@ -24,14 +24,20 @@
                     <ul>
                         <li>
                             <span class="avalue">
-                                {{ tarjetum.numero }}
+                                
+                                {% set numerotar = tarjetum.numero|length %}
+                                {% for i in 0..(numerotar-5)%}
+                                    *
+                                {% endfor %}
+                                {{ tarjetum.numero|slice(numerotar-4) }}
+                                
                                 <a href="{{ path('admin_credit_cards_edit', { 'id': tarjetum.id }) }}" class="acc-edit edit-registro pull-right" title="edit information"><i class="fa fa-pencil-square-o"></i></a>
                             </span>
                         </li>
                         {#<li><span class="avalue">{{ tarjetum.numero }}</span></li>#}
                         <li><span class="avalue">{{ tarjetum.nombre }}</span></li>
-                        <li><span class="avalue">{{ tarjetum.cvc }}</span></li>
-                        <li><span class="avalue">{% if tarjetum.expiracion %}{{ tarjetum.expiracion|date('m-Y-d') }}{% endif %}</span></li>
+{#                        <li><span class="avalue">{{ tarjetum.cvc }}</span></li>#}
+                        <li><span class="avalue">{% if tarjetum.expiracion %}{{ tarjetum.expiracion|date('m-Y') }}{% endif %}</span></li>
                     </ul>
                 </div>  
                 {% endfor %}

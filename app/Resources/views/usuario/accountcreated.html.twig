@@ -1,0 +1,129 @@
+{% extends ':Layout:layout.html.twig' %}
+
+{% block section %}
+    Users
+{% endblock %}
+
+{% block sidebar %}
+    
+{% endblock %}
+
+{% block section2 %}
+    Users
+{% endblock %}
+
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">{{header}}</h3>
+        </div>
+        
+    </div>
+
+    <div class="form-edit-info text-center" style="padding-top: 20px;height:500px;">
+        {{mensaje}} <br> <a href="{{path('admin_secured_login')}}" style="color:#25BCE9;"> {{redirect}} </a>
+    </div>
+    
+        {#<ul>
+            <li>
+                <a href="{{ path('admin_usuario_new') }}">Create a new entry</a>
+            </li>
+        </ul>#}
+{% endblock %}
+
+{% block javascripts_step %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
+    <script>
+                $(document).ready(function(){
+                    
+                    $('.listados').DataTable({
+                        "order":[[0,"desc"]],
+                        "columnDefs": [
+                               { "orderable": false, "targets": 2 }
+                              
+                            ],
+                    });
+                    $('.dataTables_filter').addClass('pull-right ');
+                    $('.dataTables_filter').children().children().attr('placeholder','');
+                   
+                    
+                    $('.nuevo-registro').on("click",function(){
+                       
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+ 
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+ 
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Register new user",
+                                resizable: false,
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.nuevo-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                    $('.edit-registro').on("click",function(){
+                        var mas = $(this).children();
+                        
+                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                        
+                        var href = $(this).attr('href');
+                        
+                        ($('#resultado')) ? $('#resultado').remove():'';
+ 
+                        // crear un elemento para colocar la información
+                        var elem = $("<div id='resultado'></div>");
+                        
+                        //Agregar el elemento después de la clase records_list
+                        elem.insertAfter($(".listados"));
+{#                        return false;#}
+                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                        $('#resultado').load(href, function(){
+                            $(this).dialog({
+                                modal: true, 
+                                width: 600,
+                                title: "Edit user information",
+                                resizable: false,
+                                position: { 
+                                    my: "center", 
+                                    at: "center", 
+                                    of: '.modal-center'
+                                },
+                                show: { effect: "fadeIn", duration: 800 }
+                            });
+                            $('.edit-registro').html(mas);
+                            
+                        });
+                        
+                        return false;
+                    });
+                    
+                });
+
+            </script>
+
+{% endblock %}

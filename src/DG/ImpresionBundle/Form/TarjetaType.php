@@ -33,8 +33,8 @@ class TarjetaType extends AbstractType
             ->add('expiracion', null,
                   array('required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-md calZebra'),
-                        'format' => 'MM-yyyy-dd',
+                        'attr'   => array('class' => 'form-control input-sm calZebra'),
+                        'format' => 'MM-dd-yyyy',
                        ))
         //    ->add('usuario')
         ;
