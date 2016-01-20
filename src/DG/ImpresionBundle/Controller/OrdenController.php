@@ -63,16 +63,27 @@ class OrdenController extends Controller
     /**
      * Finds and displays a Orden entity.
      *
-     * @Route("/orders/{id}", name="orden_show")
+     * @Route("/admin/shopping-cart", name="orden_show")
      * @Method("GET")
      */
-    public function showAction(Orden $orden)
+    public function showAction()
     {
-        $deleteForm = $this->createDeleteForm($orden);
+        $em = $this->getDoctrine()->getManager();
+        
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                               'usuario'  => $usuario
+                                                                              ));
 
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
+                                                                              ));
+        
+                                                                              var_dump($products);
+        
         return $this->render('orden/show.html.twig', array(
-            'orden' => $orden,
-            'delete_form' => $deleteForm->createView(),
+            'orden' => $cart,
+            'products' => $products,
         ));
     }
 
@@ -150,19 +161,37 @@ class OrdenController extends Controller
         $orden = new Orden();
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
+        
+        $direccionEnvio = $em->getRepository('DGImpresionBundle:Direccion')->findOneBy(array('defaultDir' => TRUE,
+                                                                                          'usuario'    => $usuario
+                                                                                          ));
+        
+        $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                               'usuario'  => $usuario
+                                                                              ));
+//                                                                              var_dump($cart);
+//                                                                              die();
+                                                                              
         $parameters = $request->request->all();
+        
+        if($cart == NULL) {
+            $orden->setUsuario($usuario);
+            $orden->setDireccionEnvio($direccionEnvio);
+            $orden->setFechaAccion(new \DateTime ('now'));
+            $orden->setEstado('ca');
+            $em->persist($orden);
+            $em->flush();
+        }
+        else {
+            $orden = $cart;
+        }
         
         $path = $this->container->getParameter('photo.promotion');
         $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
         $aux = explode('.', $nombre_archivo);
         $extension = end($aux);
         $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
-        
-        $orden->setUsuario($usuario);
-        $orden->setFechaAccion(new \DateTime ('now'));
-        $orden->setEstado('ca');
-        $em->persist($orden);
-        $em->flush();
+        //var_dump($direccionEnvio);
         
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
         

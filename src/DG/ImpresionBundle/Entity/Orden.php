@@ -29,13 +29,6 @@ class Orden
     private $nombreProyecto;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="direccion_envio", type="string", length=255, nullable=false)
-     */
-    private $direccionEnvio;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_orden", type="datetime", nullable=true)
@@ -59,6 +52,16 @@ class Orden
      */
     private $usuario;
 
+    /**
+     * @var \Direccion
+     *
+     * @ORM\ManyToOne(targetEntity="Direccion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="direccion_envio", referencedColumnName="id")
+     * })
+     */
+    private $direccionEnvio;
+    
     /**
      * Get id
      *
@@ -93,30 +96,6 @@ class Orden
         return $this->nombreProyecto;
     }
 
-    /**
-     * Set direccionEnvio
-     *
-     * @param string $direccionEnvio
-     *
-     * @return Orden
-     */
-    public function setDireccionEnvio($direccionEnvio)
-    {
-        $this->direccionEnvio = $direccionEnvio;
-
-        return $this;
-    }
-
-    /**
-     * Get direccionEnvio
-     *
-     * @return string
-     */
-    public function getDireccionEnvio()
-    {
-        return $this->direccionEnvio;
-    }
-    
     /**
      * Set fechaOrden
      *
@@ -187,5 +166,29 @@ class Orden
     public function getUsuario()
     {
         return $this->usuario;
+    }
+    
+    /**
+     * Set direccionEnvio
+     *
+     * @param \DG\ImpresionBundle\Entity\Direccion $direccionEnvio
+     *
+     * @return Orden
+     */
+    public function setDireccionEnvio(\DG\ImpresionBundle\Entity\Direccion $direccionEnvio = null)
+    {
+        $this->direccionEnvio = $direccionEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionEnvio
+     *
+     * @return \DG\ImpresionBundle\Entity\Direccion
+     */
+    public function getDireccionEnvio()
+    {
+        return $this->direccionEnvio;
     }
 }
