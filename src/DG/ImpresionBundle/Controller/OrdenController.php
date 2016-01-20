@@ -79,7 +79,7 @@ class OrdenController extends Controller
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
                                                                               ));
         
-                                                                              var_dump($products);
+                                                                            //  var_dump($products);
         
         return $this->render('orden/show.html.twig', array(
             'orden' => $cart,
@@ -161,7 +161,6 @@ class OrdenController extends Controller
         $orden = new Orden();
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-        
         $direccionEnvio = $em->getRepository('DGImpresionBundle:Direccion')->findOneBy(array('defaultDir' => TRUE,
                                                                                           'usuario'    => $usuario
                                                                                           ));
@@ -169,11 +168,10 @@ class OrdenController extends Controller
         $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
                                                                                'usuario'  => $usuario
                                                                               ));
-//                                                                              var_dump($cart);
-//                                                                              die();
+
                                                                               
         $parameters = $request->request->all();
-        
+
         if($cart == NULL) {
             $orden->setUsuario($usuario);
             $orden->setDireccionEnvio($direccionEnvio);
@@ -191,7 +189,6 @@ class OrdenController extends Controller
         $aux = explode('.', $nombre_archivo);
         $extension = end($aux);
         $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
-        //var_dump($direccionEnvio);
         
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
         
@@ -204,7 +201,26 @@ class OrdenController extends Controller
         
         $em->persist($detalleorden);
         $em->flush();
-       
+        $total = 0;
+        
+        foreach($parameters as $key => $p){
+            $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
+            
+            $val = explode("-", $key);
+            if($val[0] == 'attributes') {
+                $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($p);
+                $atributo->setDetalleParametro($detalleParametro);
+                $atributo->setDetalleOrden($detalleorden);
+                $em->persist($atributo);
+                $em->flush();
+                
+                $total+=$atributo->getDetalleParametro()->getValor();
+            }    
+        }
+        
+        $detalleorden->setMonto($total);
+        $em->merge($detalleorden);
+        $em->flush();
         
         $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL));
         
