@@ -156,11 +156,13 @@
                     draw+='<img src="{{ asset('Photos/promotions/')}}' + data.imagen + '" title="' + data.nombre + '" width="100%">';
                     draw+='</div>';
                     draw+='<div class="col-md-6 well" id="configure-price">';
+                    
                     draw+='<div class="row" id="title-attributes">';
                     draw+='<h4 class="text-center" style="color:#25bce9">CONFIGURE & PRICE</h4>';
                     draw+='</div>';
                     draw+='<hr>';
-                    draw+='<div class="row" id="info-attributes"  style="margin-bottom: 30px">';
+                    draw+='<form id="fileupload" action="{{ path('admin_carrito_order') }}" method="POST" enctype="multipart/form-data">';
+                    draw+='<div class="row" id="info-attributes"  style="margin-bottom: 15px">';
                     total_attr = data.parametros.length;
                     
                     $.each( data.parametros, function( key, value ) {
@@ -169,7 +171,7 @@
                         draw+='<p>' + parametro + '</p>';
                         draw+='</div>';
                         draw+='<div class="col-md-7" style="margin-bottom: 3px">';
-                        draw+='<select class="attributes-inf form-control" id="attributes-' + value.idParam + '">';
+                        draw+='<select class="attributes-inf form-control" id="attributes-' + value.idParam + '" name="attributes-' + value.idParam + '">';
                         draw+='<option value="0" disabled selected >Select an option ...</option>';
                         
                         $.post( "{{path('get_attributes_info')}}", { id: value.idParam }, function( val ) {
@@ -233,12 +235,27 @@
                     draw+='<hr>';
                     
                     draw+='<div class="row">';
-                    draw+='<div class="col-md-8  col-md-offset-2 pull-center">';
-                    draw+='<button class="btn btn-info form-control text-center" id = "order-now" name= "order-now">Order now<button>';
+                    draw+='<div class="col-md-5" style="margin-top: 20px">';
+                    draw+='<div class="row">';
+                    draw+='<div class="col-md-11 col-md-offset-1">';
+                    draw+='<p>Upload your design</p>';
+                    draw+='</div>';
+                    draw+='</div>';
+                    draw+='</div>';
+                    draw+='<div class="col-md-7" style="margin-top: 20px">';
+                    draw+='<input type="file" name="file-design" id="file-design" />';
+                    draw+='</div>';
+                    draw+='<div class="clearfix"></div>';
+                    draw+='<hr>';
+                    
+                    draw+='<div class="row">';
+                    draw+='<div class="col-md-8  col-md-offset-2 pull-center" style="margin-top: 15px">';
+                    draw+='<button type="submit" value="' + data.idproduct + '" class="btn btn-info form-control text-center" id = "order-now" name= "order-now"><span><i class="fa fa-bars"></i></span> Add Cart<button>';
                     draw+='</div>';
                     draw+='</div>';
                     
                     draw+='</div>';
+                    draw+='</form>';
                     draw+='</div>';
                     draw+='</div>';
                    //document.getElementById('printing-cost').innerHTML = total;                        

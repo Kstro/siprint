@@ -15,8 +15,12 @@ class DetalleOrdenType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categoria')
-            ->add('orden')
+            //->add('categoria')
+            //->add('orden')
+            ->add('file',null, array(
+                    'required' => false,
+                    'attr'=>array('class'=>'Product'
+                 )))      
         ;
     }
     

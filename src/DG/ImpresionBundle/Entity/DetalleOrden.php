@@ -3,6 +3,8 @@
 namespace DG\ImpresionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * DetalleOrden
@@ -20,7 +22,19 @@ class DetalleOrden
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="archivo", type="string", length=255, nullable=true)
+     */
+    private $archivo;
 
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+    
     /**
      * @var \Categoria
      *
@@ -99,5 +113,49 @@ class DetalleOrden
     public function getOrden()
     {
         return $this->orden;
+    }
+    
+    /**
+     * Set archivo
+     *
+     * @param string $archivo
+     *
+     * @return DetalleOrden
+     */
+    public function setArchivo($archivo)
+    {
+        $this->archivo = $archivo;
+
+        return $this;
+    }
+
+    /**
+     * Get archivo
+     *
+     * @return string
+     */
+    public function getArchivo()
+    {
+        return $this->archivo;
+    }
+    
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 }

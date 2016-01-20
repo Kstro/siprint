@@ -50,7 +50,7 @@ class DetalleOrdenController extends Controller
             $em->persist($detalleOrden);
             $em->flush();
 
-            return $this->redirectToRoute('admin_detalleorden_show', array('id' => $detalleorden->getId()));
+            return $this->redirectToRoute('admin_detalleorden_show', array('id' => $detalleOrden->getId()));
         }
 
         return $this->render('detalleorden/new.html.twig', array(

@@ -85,7 +85,7 @@ class CategoriaController extends Controller
 
                 $fecha = date('Y-m-d His');
                 $extension = $categorium->getFile()->getClientOriginalExtension();
-                $nombreArchivo = "promotion_".$fecha.".".$extension;
+                $nombreArchivo = "product_".$fecha.".".$extension;
                 $em->persist($categorium);
                 $em->flush();
                 //var_dump($path.$nombreArchivo);

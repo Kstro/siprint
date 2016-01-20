@@ -12,14 +12,14 @@ use DG\ImpresionBundle\Form\OrdenType;
 /**
  * Orden controller.
  *
- * @Route("/orders")
+ * @Route("/")
  */
 class OrdenController extends Controller
 {
     /**
      * Lists all Orden entities.
      *
-     * @Route("/", name="orden_index")
+     * @Route("/orders", name="orden_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -36,7 +36,7 @@ class OrdenController extends Controller
     /**
      * Creates a new Orden entity.
      *
-     * @Route("/new", name="orden_new")
+     * @Route("/orders/new", name="orden_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -45,6 +45,7 @@ class OrdenController extends Controller
         $form = $this->createForm('DG\ImpresionBundle\Form\OrdenType', $orden);
         $form->handleRequest($request);
 
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($orden);
@@ -62,7 +63,7 @@ class OrdenController extends Controller
     /**
      * Finds and displays a Orden entity.
      *
-     * @Route("/{id}", name="orden_show")
+     * @Route("/orders/{id}", name="orden_show")
      * @Method("GET")
      */
     public function showAction(Orden $orden)
@@ -78,7 +79,7 @@ class OrdenController extends Controller
     /**
      * Displays a form to edit an existing Orden entity.
      *
-     * @Route("/{id}/edit", name="orden_edit")
+     * @Route("/admin/orders/{id}/edit", name="orden_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Orden $orden)
@@ -105,7 +106,7 @@ class OrdenController extends Controller
     /**
      * Deletes a Orden entity.
      *
-     * @Route("/{id}", name="orden_delete")
+     * @Route("/admin/orders/{id}", name="orden_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Orden $orden)
@@ -136,5 +137,59 @@ class OrdenController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+     * Creates a new Order entity.
+     *
+     * @Route("/admin/create", name="admin_carrito_order")
+     * @Method("POST")
+     */
+    public function createAction(Request $request)
+    {
+        $orden = new Orden();
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $parameters = $request->request->all();
+        
+        $path = $this->container->getParameter('photo.promotion');
+        $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
+        $aux = explode('.', $nombre_archivo);
+        $extension = end($aux);
+        $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
+        
+        $orden->setUsuario($usuario);
+        $orden->setFechaAccion(new \DateTime ('now'));
+        $orden->setEstado('ca');
+        $em->persist($orden);
+        $em->flush();
+        
+        $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
+        
+        $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['order-now']);
+        $detalleorden->setArchivo($archivo_subir);
+        move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
+
+        $detalleorden->setCategoria($product);
+        $detalleorden->setOrden($orden);
+        
+        $em->persist($detalleorden);
+        $em->flush();
+       
+        
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->getResult();
+        
+        return $this->render('categoria/productslist.html.twig', array(
+            'types' => $types,
+            'categorias' => $categorias,
+            'registro'=>null
+        ));
     }
 }
