@@ -1,4 +1,32 @@
+{% block css %}
 
+    <style>
+        
+        
+        
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -50px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        #coleccionNew{
+            overflow-y: auto;
+            max-height: 540px; 
+            width: 100%;
+        }    
+    </style>
+    
+    
+{% endblock %}
 
 {% block body %}
     
@@ -8,10 +36,10 @@
     {{ form_start(form, {'action': path('admin_parametro_new')}) }}
     {{ form_errors(form) }}
         <div class="row" style="margin: 50px 0;">
-            <div class="col-md-6 text-right">
+            <div class="col-md-5 col-sm-5 text-right" style="margin-bottom: 4px;">
                 Name:
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                 {{ form_widget(form.nombre) }}
             </div>
         
@@ -26,10 +54,10 @@
             
             <div class="clearfix"></div>#}
             
-            <div class="col-md-6 text-right">
+            <div class="col-md-5 col-sm-5 text-right">
                 Attribute type:
             </div>
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-md-4 col-sm-4">
                 {{ form_widget(form.tipoCategoria) }}
             </div>
             
@@ -53,21 +81,25 @@
             
             <div class="clearfix"></div>#}
             
-            <div class="col-md-6 text-right">
+            {#<div class="col-md-12 text-left">
                 Detail:
-            </div>
+            </div>#}
             {#<div class="col-xs-12 col-sm-4">
                 {{ form_widget(form.detalleCategoria) }}
             </div>#}
-            
-            <div id="listadoa">
-                <div class="listado col-md-6">          
-                    <div class="coleccion" data-prototype="{% filter escape %}  {% include 'DGImpresionBundle:Prototype:coleccion.html.twig' with { 'form': form.coleccion.vars.prototype} %}   {% endfilter  %}"> 
-                        {{ form_widget(form.coleccion) }}
+            {#<div class="col-md-6 text-right">
+                Detail:
+            </div>#}
+            <div id="coleccionNew">
+                <div id="listadoa" style="margin-top:70px;">
+                    <div class="listado col-md-12">          
+                        <div class="coleccion" data-prototype="{% filter escape %}  {% include 'DGImpresionBundle:Prototype:detalleparametro.html.twig' with { 'form': form.coleccion.vars.prototype} %}   {% endfilter  %}"> 
+                            {{ form_widget(form.coleccion) }}
+                        </div>
                     </div>
                 </div>
             </div>
-            
+                        
         </div>
         
             
@@ -93,7 +125,8 @@
         var collectionHolder = $('div.coleccion');
         var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
         // setup an "add a tag" link
-        var $addTagLink = $('<div class="row"><div class="col-md-12"><a href="#" class="add_placa_link btn btn-primary">Agregar detalle</a></div></div>');
+        var $addTagLink = $('<div class="row"><div class="col-md-12"><a href="#" class="add_placa_link btn btn-primary">Add detail</a></div></div>');
+        {#var $addTagLink = $('<div class="row"><div class="col-md-12"><a href="#" class="add_detail add_placa_link btn btn-primary">Add detail</a></div></div>');#}
         var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
         var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
         var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
@@ -147,7 +180,7 @@
         collectionHolder.data('index', index + 1);
 
         // Display the form in the page in an li, before the "Add a tag" link li
-        var $newFormLi = $('<div class="col-md-12"></div>').append(newForm);
+        var $newFormLi = $('<div class="col-md-4"></div>').append(newForm);
         $newLinkLi.before($newFormLi);
 
         // add a delete link to the new form

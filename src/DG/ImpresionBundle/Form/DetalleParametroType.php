@@ -15,10 +15,10 @@ class DetalleParametroType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('valor')
-            ->add('parametro')
-            ->add('tipoParametro')
+            ->add('nombre',null, array('attr'=>array('class'=>'input-sm form-control')))
+            ->add('valor',null, array('attr'=>array('class'=>'input-sm form-control')))
+//            ->add('parametro',null, array('attr'=>array('class'=>'input-sm form-control')))
+            ->add('tipoParametro',null, array('attr'=>array('class'=>'input-sm form-control')))    
         ;
     }
     

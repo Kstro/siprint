@@ -24,7 +24,10 @@
                         {{ form_widget(form) }}
                             <input type="submit" value="Create" />
                         {{ form_end(form) }}#}
-                        
+                        {{mensaje}}
+                        {% if mensaje %}
+                            {{mensaje}}
+                        {% endif %}
                         <form id="register-form" class="form-validate form-horizontal" method="post" action="{% block form_action1 %}{{ path("admin_usuario_register") }}{% endblock %}">
                             <p>First Name <span class="star">*</span></p>
                             <input name="firstname" class="firstname" type="text" >

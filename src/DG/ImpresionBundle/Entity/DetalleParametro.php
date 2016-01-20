@@ -38,7 +38,7 @@ class DetalleParametro
     /**
      * @var \Parametro
      *
-     * @ORM\ManyToOne(targetEntity="Parametro", inversedBy="coleccion")
+     * @ORM\ManyToOne(targetEntity="Parametro", inversedBy="coleccion", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parametro", referencedColumnName="id")
      * })

@@ -47,6 +47,13 @@ class DetalleParametroController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            
+            
+            
+            
+            
+            
             $em->persist($detalleParametro);
             $em->flush();
 

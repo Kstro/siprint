@@ -28,3 +28,14 @@ and open the template in the editor.
     right:calc((100% - 100px)/2);
     right:-moz-calc((100% - 100px)/2);
 }
+
+
+.ui-dialog-titlebar {
+    border:0px solid;
+    border-radius: 0px;
+}
+
+.ui-dialog{
+    border:0px solid;
+    border-radius: 0px;
+}
