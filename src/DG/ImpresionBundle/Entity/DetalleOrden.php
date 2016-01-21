@@ -62,6 +62,12 @@ class DetalleOrden
      */
     private $orden;
 
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AtributoProductoOrden", mappedBy="detalleOrden", cascade={"persist", "remove"})
+     */
+    private $atributoProductoOrden;
 
 
     /**
@@ -189,4 +195,31 @@ class DetalleOrden
     {
         return $this->monto;
     }
+    
+    
+    
+    /**
+     * Set atributoProductoOrden
+     *
+     * @param \DG\ImpresionBundle\Entity\AtributoProductoOrden $atributoProductoOrden
+     *
+     * @return Orden
+     */
+    public function setAtributoProductoOrden(\DG\ImpresionBundle\Entity\AtributoProductoOrden $atributoProductoOrden = null)
+    {
+        $this->atributoProductoOrden = $atributoProductoOrden;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionEnvio
+     *
+     * @return \DG\ImpresionBundle\Entity\AtributoProductoOrden
+     */
+    public function getAtributoProductoOrden()
+    {
+        return $this->atributoProductoOrden;
+    }
+    
 }

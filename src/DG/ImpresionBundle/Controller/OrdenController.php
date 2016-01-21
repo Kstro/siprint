@@ -26,21 +26,27 @@ class OrdenController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        //$user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $ordens = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('usuario'=>$user));
         
+        $dql = "SELECT o FROM DGImpresionBundle:Orden o "
+                . "WHERE o.usuario=:usuario AND o.estado <> 'ca' ORDER BY o.id DESC";
         
-        $cart = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'ca',
-                                                                               'usuario'  => $user
-                                                                              ));
+        $cart = $em->createQuery($dql)
+                ->setParameters(array('usuario'=>$user->getId()))
+                ->getResult();
+        
+//        $cart = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'ca',
+//                                                                               'usuario'  => $user
+//                                                                              ));
 
-        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
-                                                                              ));
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
         
-                                                                              //var_dump($products);
+        //var_dump($products);
         
-                                                                              //var_dump($cart);
+        //var_dump($products[0]->getAtributoProductoOrden()[0]->getDetalleParametro());        
+        //var_dump($cart);
         return $this->render('orden/index.html.twig', array(
             'orden' => $cart,
             'products' => $products,

@@ -101,7 +101,7 @@
         
         
         {% block javascripts_step %}
-            {% block javascripts %}{% endblock %}      
+            
             
             <script type="text/javascript" src="{{ asset('Resources/js/jquery/jquery-1.11.3.min.js') }}"></script> 
             <script type="text/javascript" src="{{ asset('Resources/js/bootstrap.min.js') }}"></script> 
@@ -123,6 +123,7 @@
             <script src="{{ asset('Resources/validar/tipocategoria.js') }}"></script>   
             <script src="{{ asset('Resources/select2/dist/js/select2.min.js') }}"></script>   
             
+            {% block javascripts %}{% endblock %}      
         {% endblock %}      
     </body>
 </html>

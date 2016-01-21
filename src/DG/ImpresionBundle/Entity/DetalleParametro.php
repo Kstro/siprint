@@ -162,4 +162,8 @@ class DetalleParametro
     {
         return $this->tipoParametro;
     }
+    
+    public function __toString() {
+        return $this->nombre;
+    }
 }
