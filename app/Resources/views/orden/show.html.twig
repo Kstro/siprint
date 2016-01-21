@@ -10,27 +10,16 @@
             {% for product in products %}
                 <li class="pro-item row">
                     <div class="product-image-action col-sm-4 col-xs-12">
-                        {#<a href="#" title="{{ product.categoria }}">
-                            <img src="images/product/263x263/cate-list-business-card-01.jpg" alt="Grouper Business card">
-                        </a>#}
                         <img src="{{ asset('Photos/promotions/')}}{{ product.categoria.imagen }}" alt="{{ product.categoria.nombre }}">
                     </div>
                     <div class="product-info col-sm-8 col-xs-12">
                         <div class="pro-name-rate clearfix">
                             <h3 class="product-name">
-                                {#<a title="{{ product.categoria }}">{{ product.categoria }}</a>#}
                                 {{ product.categoria }}
                             </h3>
-                            {#<div class="rating-box">  
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>#}
                         </div>
                         <div class="price-box">
-                            <span class="normal-price">$ {{ product.monto }}</span>
+                            <span class="normal-price">$ {{ product.monto | number_format(2, '.', ',') }}</span>
                         </div>
                         <div class="short-description">
                             <p class="visible-md visible-lg">
@@ -40,21 +29,7 @@
                                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt...
                             </p>
                         </div>
-                        {#<div class="action">
-                            <button type="button" class="add-to-cart gbtn" title="Add to cart">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>Add to cart</span>
-                            </button>
-                            <a href="#" title="Add to Wishlist" class="add-to-wishlist">
-                                <i class="fa fa-heart"></i>
-                            </a>
-                            <a class="add-to-compare" title="add-to-compare">
-                                <i class="fa fa-refresh"></i> 
-                            </a>
-                            <a class="quick-view" title="">
-                                <i class="fa fa-eye"></i>
-                            </a>
-                        </div>#}
+                        
                     </div>
                 </li>
             {% endfor %}
