@@ -48,7 +48,7 @@ class DetalleOrden
     /**
      * @var \Orden
      *
-     * @ORM\ManyToOne(targetEntity="Orden")
+     * @ORM\ManyToOne(targetEntity="Orden",inversedBy="detalleOrden")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="orden", referencedColumnName="id")
      * })

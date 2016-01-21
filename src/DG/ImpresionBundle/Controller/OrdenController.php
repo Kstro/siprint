@@ -26,11 +26,30 @@ class OrdenController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $ordens = $em->getRepository('DGImpresionBundle:Orden')->findAll();
+        $user = $this->get('security.context')->getToken()->getUser();
+        //$user = $this->get('security.token_storage')->getToken()->getUser();
+        $ordens = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('usuario'=>$user));
+        
+        
+        $cart = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'ca',
+                                                                               'usuario'  => $user
+                                                                              ));
 
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
+                                                                              ));
+        
+                                                                              //var_dump($products);
+        
+                                                                              //var_dump($cart);
         return $this->render('orden/index.html.twig', array(
-            'ordens' => $ordens,
+            'orden' => $cart,
+            'products' => $products,
+            'usuario' => $user,
         ));
+        //var_dump($ordens);
+//        return $this->render('orden/index.html.twig', array(
+//            'ordens' => $ordens,
+//        ));
     }
 
     /**

@@ -62,6 +62,21 @@ class Orden
      */
     private $direccionEnvio;
     
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="DetalleOrden", mappedBy="orden", cascade={"persist", "remove"})
+     */
+    private $detalleOrden;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id_pago", type="string", length=255, nullable=false)
+     */
+    private $idPago;
+    
     /**
      * Get id
      *
@@ -190,5 +205,57 @@ class Orden
     public function getDireccionEnvio()
     {
         return $this->direccionEnvio;
+    }
+    
+    
+    
+    /**
+     * Set direccionEnvio
+     *
+     * @param \DG\ImpresionBundle\Entity\DetalleOrden $detalleOrden
+     *
+     * @return Orden
+     */
+    public function setDetalleOrden(\DG\ImpresionBundle\Entity\DetalleOrden $detalleOrden = null)
+    {
+        $this->detalleOrden = $detalleOrden;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionEnvio
+     *
+     * @return \DG\ImpresionBundle\Entity\DetalleOrden
+     */
+    public function getDetalleOrden()
+    {
+        return $this->detalleOrden;
+    }
+    
+    
+    
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return Orden
+     */
+    public function setIdPago($idPago)
+    {
+        $this->idPago= $idPago;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getIdPago()
+    {
+        return $this->idPago;
     }
 }
