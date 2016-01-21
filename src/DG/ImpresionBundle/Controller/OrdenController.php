@@ -2,12 +2,15 @@
 
 namespace DG\ImpresionBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Orden;
 use DG\ImpresionBundle\Form\OrdenType;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Orden controller.
@@ -98,7 +101,7 @@ class OrdenController extends Controller
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
                                                                               ));
         
-                                                                            //  var_dump($products);
+                                                                            
         
         return $this->render('orden/show.html.twig', array(
             'orden' => $cart,
@@ -255,5 +258,48 @@ class OrdenController extends Controller
             'categorias' => $categorias,
             'registro'=>null
         ));
+    }
+    
+    /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/admin/show-cart", name="show-cart")
+    */
+    public function showCartAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            //$id = $this->get('request')->request->get('id');
+             $usuario = $this->get('security.token_storage')->getToken()->getUser();
+            $em = $this->getDoctrine()->getManager();            
+            //$cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
+            
+            $rsm = new ResultSetMapping();
+            $sql = "select ca.nombre as product, "
+                    . "ca.imagen as image, "
+                    . "do.monto as monto "
+                    . "from orden ord "
+                    . "inner join detalle_orden do on ord.id = do.orden "
+                    . "inner join categoria ca on do.categoria = ca.id "
+                    . "where ord.usuario = ? "
+                    . "and ord.estado = 'ca' ";
+            
+            $rsm->addScalarResult('product','product');
+            $rsm->addScalarResult('image','image');
+            $rsm->addScalarResult('monto','monto');
+            
+            $query = $em->createNativeQuery($sql, $rsm);
+            $query->setParameter(1, $usuario->getId());
+            $param = $query->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'cart' => $param
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
     }
 }
