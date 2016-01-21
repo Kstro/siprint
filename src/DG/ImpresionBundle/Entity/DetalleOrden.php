@@ -36,6 +36,13 @@ class DetalleOrden
     private $file;
     
     /**
+     * @var float
+     *
+     * @ORM\Column(name="monto", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $monto;
+    
+    /**
      * @var \Categoria
      *
      * @ORM\ManyToOne(targetEntity="Categoria")
@@ -157,5 +164,29 @@ class DetalleOrden
     public function getFile()
     {
         return $this->file;
+    }
+    
+    /**
+     * Set monto
+     *
+     * @param float $monto
+     *
+     * @return DetalleOrden
+     */
+    public function setMonto($monto)
+    {
+        $this->monto = $monto;
+
+        return $this;
+    }
+
+    /**
+     * Get monto
+     *
+     * @return float
+     */
+    public function getMonto()
+    {
+        return $this->monto;
     }
 }
