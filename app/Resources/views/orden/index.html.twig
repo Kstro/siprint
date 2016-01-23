@@ -1,30 +1,36 @@
 {% extends ':Layout:myaccountdashboard.html.twig' %}
 
-{% block section %}
-    Orders
-{% endblock %}
 
-{% block section2 %}
-    Orders
-{% endblock %}
 
 {% block titleAccount -%}My Orders{% endblock %}
 
 {% block contenido %}
     
     {% for ord in orden %}
+        {% set total = 0 %}
         <div class="db-address col-xs-12" style="margin-top: 20px;">
             <h4 class="acc-title">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     Order #{{ord.id}}
                 </div>
-                <div class="col-md-6 text-right">
-                    <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>
+                <div class="col-md-4 text-right">
+                    {% for product in products %}
+                        {% if product.orden.id == ord.id %}
+                            {% set total=total+product.monto %}
+                        {% endif %}
+                    {% endfor%}
+                    Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
                 </div>
+{#                {% if #}
+                    <div class="col-md-5 text-right">
+                        <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>
+                    </div>
+{#                %}#}
             </h4>
             <div class="row">
                 <div class="bs-address">
-                    <ul>
+                    
+                    <ul id="pagination-demo" class="pagination-sm">
                         {% for row in ord.detalleOrden %}
                             <li class="pro-item row">
                                 <div class="col-sm-4 col-xs-12">
@@ -39,12 +45,15 @@
                                         </h3>
                                     </div>
                                     <div class="price-box text-left" style="width: 100%">
-                                        <span class="normal-price">$ {#{{ord.idPago}}#}</span>
+                                        <span class="normal-price">$ {{row.monto|number_format('2','.',',')}}</span>
+                                        
                                     </div>
                                     <div class="short-description">
-                                        <p class="visible-md visible-lg text-justify" style="padding-right: 15px; margin-top: 10px;">
-                                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-                                        </p>
+                                        {% for r in row.atributoProductoOrden %}
+                                            <div style="cursor: default;" class=" fa fa-check-square-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
+                                                {{ r.detalleParametro }}
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </li>
@@ -55,6 +64,33 @@
         </div>
         
     {% endfor %}
+    {#<script src="http://code.jquery.com/jquery-1.11.3.js"></script>            
+    {% block content %}
+        <div class="payment-wrapper">
+            {{ stripe_render() }}
+        </div>
+    {% endblock content %}
+
+    {% block foot_script %}
+        {{ parent() }}
+        {{ stripe_scripts() }}
+    {% endblock foot_script %}
+    #}
+    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>            
+    <script>
+            $(document).ready(function () {                
                 
-                
+                $(".idpago").on("click",function(){
+                    var href = $(this).attr('href');
+                    //alert (href);
+                    window.open(href,'_blank');
+                    return false;
+                });
+                    
+                    
+            });
+    </script>    
+    
 {% endblock %}
+
+

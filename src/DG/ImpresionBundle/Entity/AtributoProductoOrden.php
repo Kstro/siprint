@@ -35,7 +35,7 @@ class AtributoProductoOrden
     /**
      * @var \DetalleOrden
      *
-     * @ORM\ManyToOne(targetEntity="DetalleOrden")
+     * @ORM\ManyToOne(targetEntity="DetalleOrden", inversedBy="atributoProductoOrden")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="detalle_orden", referencedColumnName="id")
      * })

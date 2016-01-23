@@ -29,21 +29,27 @@ class OrdenController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        //$user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $ordens = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('usuario'=>$user));
         
+        $dql = "SELECT o FROM DGImpresionBundle:Orden o "
+                . "WHERE o.usuario=:usuario AND o.estado <> 'ca' ORDER BY o.id DESC";
         
-        $cart = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'ca',
-                                                                               'usuario'  => $user
-                                                                              ));
+        $cart = $em->createQuery($dql)
+                ->setParameters(array('usuario'=>$user->getId()))
+                ->getResult();
+        
+//        $cart = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'ca',
+//                                                                               'usuario'  => $user
+//                                                                              ));
 
-        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
-                                                                              ));
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
         
-                                                                              //var_dump($products);
+        //var_dump($products);
         
-                                                                              //var_dump($cart);
+        //var_dump($products[0]->getAtributoProductoOrden()[0]->getDetalleParametro());        
+        //var_dump($cart);
         return $this->render('orden/index.html.twig', array(
             'orden' => $cart,
             'products' => $products,
@@ -97,14 +103,19 @@ class OrdenController extends Controller
         $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
                                                                                'usuario'  => $usuario
                                                                               ));
-
+        //var_dump($cart);
+        $noOrden=false;
+        if($cart==null){
+            $noOrden=true;
+        }
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
                                                                               ));
         
                                                                             
-        
+        //var_dump($cart);
         return $this->render('orden/show.html.twig', array(
-            'orden' => $cart,
+            'ord' => $cart,
+            'noOrden'=>$noOrden,
             'products' => $products,
         ));
     }
@@ -302,4 +313,158 @@ class OrdenController extends Controller
             return new Response('0');              
         }  
     }
+    
+    
+    
+    //Realiza el checkout de la orden
+    /**
+     * Displays a form to edit an existing Orden entity.
+     *
+     * @Route("/admin/orders/{orden}/edit/checkout", name="orden_checkout")
+     * @Method({"GET"})
+     */
+    public function checkoutAction(Request $request, $orden)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        //var_dump($user->getId());
+        $em = $this->getDoctrine()->getManager();
+        $registro = $em->getRepository('DGImpresionBundle:Orden')->find($orden);
+        
+        $direcciones = $em->getRepository('DGImpresionBundle:Direccion')->findBy(array('usuario'=>$user->getId()),array('defaultDir' => 'DESC'));
+        $tarjetas = $em->getRepository('DGImpresionBundle:Tarjeta')->findBy(array('usuario'=>$user->getId()));
+        //var_dump($tarjetas);
+        
+        
+        
+        $totalOrden = 0;
+        foreach ($registro->getDetalleOrden() as $row){
+            $totalOrden=$totalOrden+$row->getMonto();
+        }
+        //var_dump($totalOrden);
+        //var_dump($direcciones);
+
+        return $this->render('orden/checkout.html.twig', array(
+            'ord' => $registro,
+            'ordenId'=>$orden,
+            'tarjetas'=>$tarjetas,
+            'direcciones' => $direcciones,
+            'totalOrden' => $totalOrden,
+        ));
+    }
+    
+    
+    
+    
+    
+    /**
+     * Displays a form to edit an existing Orden entity.
+     *
+     * @Route("/admin/orders/delete/deletedetalle", name="orden_delete")
+     */
+    public function deleteDetalleAction()
+    {
+        
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        //var_dump($isAjax);
+        $response = new JsonResponse();
+        //if($isAjax){
+            $detalleId = $this->get('request')->request->get('detalleId');
+            $ordenId = $this->get('request')->request->get('ordenId');
+            //var_dump($id);
+            $em = $this->getDoctrine()->getManager();
+            $detalleOrden = $em->getRepository('DGImpresionBundle:DetalleOrden')->find($detalleId);
+            
+            
+            //var_dump($detalleOrden);
+            $em->remove($detalleOrden);
+            $em->flush();
+            
+            $detalleOrdenRecalc = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'=>$ordenId));
+            
+            //var_dump(count($detalleOrdenRecalc));
+            $total=0;
+            if(count($detalleOrdenRecalc)!=0){
+                foreach ($detalleOrdenRecalc as $row){
+                    $total=$total+$row->getMonto();
+                }
+            }
+            //var_dump($total);
+            $response->setData(array(
+                            'flag' => 0,
+                            'monto'=>$total,
+                    ));    
+            return $response; 
+        /*} else {    
+            $response->setData(array(
+                           'flag' => 1
+                    ));
+            return $response; 
+            
+        }*/
+        
+        
+        
+        
+    }
+    
+    
+    
+    /**
+     * @Route("/orden/get/payment/address", name="get_pago")
+     */
+    public function datosTarjetaAction(Request $request) {
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $direccionId = $this->get('request')->request->get('direccionId');
+        $tarjetaId = $this->get('request')->request->get('tarjetaId');
+        
+        //var_dump($direccionId);
+        //var_dump($tarjetaId);
+        $response = new JsonResponse();
+        $address = $em->getRepository('DGImpresionBundle:Direccion')->find($direccionId);
+        $card = $em->getRepository('DGImpresionBundle:Tarjeta')->find($tarjetaId);
+        
+        //var_dump($card->getExpiracion()->format('m-Y'));
+        if(count($address)!=0 && count($card)!=0){
+            
+            $numero = $card->getNumero();
+            $cvc = $card->getCvc();
+            $expiracion = $card->getExpiracion()->format('m-Y');
+            list($dia, $anio) = explode("-", $expiracion);
+            //var_dump($dia);
+            //var_dump($anio);
+        }
+        else{
+            $numero = 0;
+            $cvc = 0;
+            $expiracion = 0;
+            $dia = 0;
+            $anio = 0;
+        }
+        
+        $response->setData(array(
+                            'numero' => $numero,
+                            'cvc' => $cvc,
+                            'expiracion' => $expiracion,
+                            'dia' => $dia,
+                            'anio' => $anio,
+                    ));    
+        return $response; 
+                 
+        //var_dump($cita);
+        
+        //var_dump($cita['regs'][0]["primerNombre"]);
+        //var_dump($cita);
+        
+        //return new Response(json_encode($cita));
+    }
+    
+            
+
+        
+        
+
+        
+    
 }
