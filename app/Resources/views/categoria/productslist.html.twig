@@ -191,6 +191,8 @@
                                     total_pagar = 0;
                                     var acum = 0;
                                     var total_price = $(".attributes-inf").length;
+                                    
+                                    $('.printing-cost').children().children().html('<img style="width:35%; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
                                     //console.log($(".attributes-inf").val());
                                     $(".attributes-inf").each(function(k, va) {
                                         var aux = 0;

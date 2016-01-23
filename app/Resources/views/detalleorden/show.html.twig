@@ -1,28 +1,141 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:myaccountdashboard.html.twig' %}
 
-{% block body %}
-    <h1>DetalleOrden</h1>
+{% block section %} {{ detalleOrden.categoria }} {% endblock %}
+{% block section2 %}Shopping Cart / {{ detalleOrden.categoria }} {% endblock %}
+{% block titleAccount -%} {{ detalleOrden.categoria }} {% endblock %}
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ detalleOrden.id }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="row">
+        <div class="detail-design tab-content clearfix">
+            <div role="tabpanel" class="tab-pane active" id="features">
+                <div class="product-image v-middle">
+                    <div class="col-sm-11 col-sm-offset-1 col-xs-12" style="margin-top: 50px; width: 450px;">
+                        <img src="{{ asset('Photos/promotions/')}}{{ detalleOrden.categoria.imagen }}" alt="{{ detalleOrden.categoria.nombre }}">
+                    </div>
+                </div>
+                    <div class="product-shortdescript v-middle">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="v-middle">
+                            <h3 style="font-size: 1.3em; font-weight: bold;"> {{ detalleOrden.categoria }} </h3>
+                            <hr>
+                            <ul>
+                                {% for attribute in attributes %}
+                                    <li><i class="fa fa-check"></i> 
+                                        <span style="font-size: 1.14em;  font-weight: bold;">{{ attribute.detalleParametro.parametro }}:</span>
+                                        <span style="font-size: 1.14em;"> {{ attribute.detalleParametro.nombre }}.</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <br>
+                            <div style="background-color: #25bce9; padding-top: 7px; padding-bottom: 7px;">
+                                <h3 class="text-center" style="font-size: 1.5em; color: #FFF"> Printing Cost: $ {{ detalleOrden.monto  | number_format(2, '.', ',') }} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>            
+            <div class="row" style="margin-top: 50px; margin-left: 45px; padding-bottom: 15px">
+                <div class="col-sm-6 col-xs-12">
+                    <h3 style="font-size: 1.3em; font-weight: bold;"> Information </h3>
+                    <hr>
+                    <ul>
+                        <li><span class="avalue" style="font-size: 1.14em;">Client name: {{ detalleOrden.orden.usuario.persona }}</span></li>
+                        <li><span class="avalue" style="font-size: 1.14em;">Email: {{ detalleOrden.orden.usuario.email }}</span></li>
+                        <li><span class="avalue" style="font-size: 1.14em;">Address: {{ detalleOrden.orden.direccionEnvio.linea1 }}, {{ detalleOrden.orden.direccionEnvio.city }}, {{ detalleOrden.orden.direccionEnvio.state }}.</span></li>
+                        <li><span class="avalue" style="font-size: 1.14em;">Phone number: {{ detalleOrden.orden.direccionEnvio.phoneNumber }}</span></li>
+                    </ul>
+                </div>
+                    <div class="col-sm-4 col-sm-offset-1 col-xs-12 v-middle">
+                        <h3 style="font-size: 1.3em; font-weight: bold;"> Download design </h3>
+                    <hr>
+                    <ul>
+                        <li><span class="avalue" style="font-size: 1em;">File: {{ detalleOrden.archivo }}</span></li>
+                    </ul>
+                    <br>
+                        <a href="{{ asset('Photos/promotions/')}}{{ detalleOrden.archivo }}" download><button class="form-control"><i class="fa fa-download"></i> Download</button></a>
+                    </div> 
+                   
+            </div> 
+            <div class="clearfix"></div>
+            <div class="row" style="margin-bottom: 50px;">
+                <div class="col-sm-12 col-xs-12" style="margin-left: 55px;">
+                    <hr style="width: 750px">
+                    <div class="text-center col-sm-3 col-sm-offset-2 col-xs-9" style="margin-top: 15px;">
+                        <button type="button" class="form-control" value="{{ detalleOrden.id }}" id="accept-file" name="accept-file">
+                            <i class="fa fa-check"></i>
+                            Accept design
+                        </button>
+                    </div>
+                    <div class="text-center col-sm-3 col-xs-9" style="margin-top: 15px;">
+                        <a href="{{ path('admin_disapprovedesign_new', { 'id': detalleOrden.id }) }}" class="disapprove">
+                            <button value="{{ detalleOrden.id }}" class="form-control" id="disapprove-file" name="disapprove-file">
+                                <i class="fa fa-times"></i>
+                                Disapprove design
+                            </button>
+                        </a>    
+                    </div>
+                </div>    
+            </div>
+        </div> 
+    </div>    
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    
+    <script>
+         $(document).ready(function(){
+             // Al hacer click que se acepta el diseño que el cliente ha subido para su impresion
+            $('#accept-file').on("click",function(){
+                var detalle = $(this).val();
+                
+                $.post( "{{path('set_accept_design')}}", { id: detalle }, function( data ) {
+                    if(data.accept === 1){
+                        alertify.success('Accept design');
+                    } else {
+                        alertify.error('Design has accepted');
+                    }    
+                }, "json"); // Fin de post 
+            }); 
+            
+            // Al hacer click que no se aprueba el diseño que el cliente ha subido para su impresion
+            $('.disapprove').on("click",function(){
+                //var detalle = $(this).val();
+                
+                var href = $(this).attr('href');
+                        
+                ($('#resultado')) ? $('#resultado').remove():'';
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_detalleorden_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('admin_detalleorden_edit', { 'id': detalleOrden.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                // crear un elemento para colocar la información
+                var elem = $("<div id='resultado'></div>");
+
+                //Agregar el elemento después de la clase records_list
+                elem.insertAfter($(".detail-design"));
+
+                // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                $('#resultado').load(href, function(){
+                    $(this).dialog({
+                        modal: true, 
+                        width: 600,
+                        title: "Disapprove design",
+                        resizable: false,
+                        position: { 
+                            my: "center", 
+                            at: "center", 
+                            of: '.modal-center'
+                        },
+                        show: { effect: "fadeIn", duration: 800 }
+                    });
+                   
+                });
+
+                return false;
+                
+                {#$.post( "{{path('set_disapprove_design')}}", { id: detalle }, function( data ) {
+                    
+                }, "json");#} // Fin de post 
+            }); 
+         });
+    </script>
 {% endblock %}

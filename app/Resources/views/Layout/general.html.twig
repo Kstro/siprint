@@ -101,6 +101,59 @@
             <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
             <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
             
+            <script>
+                $(document).ready(function () {
+                    //if ( $("#show-cart") ) {
+                        $.post( "{{path('show-cart')}}", function( data ) {
+                            //alert('aqui');
+                            var draw = '';
+                            draw+='<span class="mcart-icon dropdowSCIcon"><i class="fa fa-shopping-cart"></i><span class="mcart-dd-qty">' + data.cart.length + '</span></span>';
+                            draw+='<div class="mcart-dd-content dropdowSCContent clearfix">';
+                            
+                            
+                            $.each( data.cart, function( key, value ) { 
+                                if(key <= 2) {
+                                    if(key === 0) {
+                                        draw+='<div class="mcart-item-w clearfix1">';
+                                        draw+='<ul>';
+                                        draw+= '<li class="mcart-item">';
+                                        
+                                    } else {
+                                        draw+='<div class="mcart-item-w clearfix">';
+                                        draw+='<ul>';
+                                        draw+= '<li class="mcart-item iteam2">';
+                                    }    
+                                    
+                                    draw+='<div class="row" style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;">';
+                                    //draw+='<div class="col-md-4"style="margin-top: 5px">';
+                                    draw+='<img src="{{ asset('Photos/promotions/')}}' + value.image + '" alt="' + value.product + '" width="50px" height="50px">';
+                                    //draw+='</div>';
+                                    draw+='<div class="mcart-info">';
+                                    draw+='<span class="mcart-name">' + value.product + '</span>';
+                                    draw+='<br>';
+                                    draw+='<span class="mcart-price">$ ' + parseFloat(value.monto).toFixed(2) + '</span>';
+                                    //draw+='<span class="mcart-remove-item"><i class="fa fa-times-circle"></i></span>';
+                                    draw+='</div>';
+                                    draw+='</div>';
+                                    draw+='</li>';
+                                    draw+='</ul>';
+                                    draw+='</div>';
+                                }
+                            });
+                            
+                            draw+='<div style="margin-top: 15px"></div>';
+                            draw+='<div class="mcart-links buttons-set clearfix pull-right">';
+                            draw+='<a href="{{ path('orden_show') }}" class="gbtn mcart-link-cart">View Cart</a>';
+                            draw+='</div>';
+                        
+                            
+                            draw+='</div>';
+                            
+                            document.getElementById('show-cart').innerHTML = draw;                        
+                        });
+                    //}
+                });
+            </script>  
             
                 
         {% endblock %}      

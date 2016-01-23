@@ -2,17 +2,20 @@
 
 namespace DG\ImpresionBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\DetalleOrden;
+use DG\ImpresionBundle\Entity\RechazoArchivo;
 use DG\ImpresionBundle\Form\DetalleOrdenType;
 
 /**
  * DetalleOrden controller.
  *
- * @Route("/admin/detalleorden")
+ * @Route("/admin/detail-order")
  */
 class DetalleOrdenController extends Controller
 {
@@ -67,11 +70,16 @@ class DetalleOrdenController extends Controller
      */
     public function showAction(DetalleOrden $detalleOrden)
     {
-        $deleteForm = $this->createDeleteForm($detalleOrden);
-
+        $em = $this->getDoctrine()->getManager();
+        
+        $attributes = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array('detalleOrden'   => $detalleOrden
+                                                                              ));
+        
+        
+        
         return $this->render('detalleorden/show.html.twig', array(
             'detalleOrden' => $detalleOrden,
-            'delete_form' => $deleteForm->createView(),
+            'attributes' => $attributes,
         ));
     }
 
@@ -136,5 +144,72 @@ class DetalleOrdenController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+    * Ajax utilizado para cambiar estado del producto a aprobado
+    *  
+    * @Route("/design/accept/set", name="set_accept_design")
+    */
+    public function setAcceptDesignAction()
+    {
+        
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $aux = 1;
+            
+            $id = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $det = $em->getRepository('DGImpresionBundle:DetalleOrden')->find($id);
+            
+            if($det->getEstado() != 'ap' ) {
+                $det->setEstado('ap');
+                $em->merge($det);
+                $em->flush();
+            } else {
+                $aux = 0;
+            }
+            
+            $response = new JsonResponse(); 
+            $response->setData(array(
+                           'accept' => $aux
+                    )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
+    
+    /**
+    * Ajax utilizado para para cambiar estado del producto a no aprobado y envio de email al cliente
+    *  
+    * @Route("/design/disapprove/set", name="set_disapprove_design")
+    */
+    public function setDisapproveDesignAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $aux = 0;
+            
+            $id = $this->get('request')->request->get('id');
+            var_dump($id); 
+            $em = $this->getDoctrine()->getManager();            
+            $det = $em->getRepository('DGImpresionBundle:DetalleOrden')->find($id);
+            var_dump($det);
+            if($det->getId() == 'df' ) {
+                $aux = 1;
+            } 
+            
+            $response = new JsonResponse(); 
+            $response->setData(array(
+                           'disapprove' => $aux
+                    )); 
+            
+            return $response;  
+        } else {    
+            return new Response('0');              
+        }  
     }
 }
