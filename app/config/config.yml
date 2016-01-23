@@ -85,7 +85,7 @@ stripe:
     #    taking order_append_field value as parameter name and
     #    PaymentOrderWrapper->getOrderId() value
     payment_success:
-        route: admin_proveedor_index
+        route: orden_index
         order_append: true
         order_append_field: order_id
 

@@ -1,12 +1,6 @@
 {% extends ':Layout:myaccountdashboard.html.twig' %}
 
-{% block section %}
-    Orders
-{% endblock %}
 
-{% block section2 %}
-    Orders
-{% endblock %}
 
 {% block titleAccount -%}My Orders{% endblock %}
 
@@ -27,9 +21,11 @@
                     {% endfor%}
                     Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
                 </div>
-                <div class="col-md-5 text-right">
-                    <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>
-                </div>
+{#                {% if #}
+                    <div class="col-md-5 text-right">
+                        <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>
+                    </div>
+{#                %}#}
             </h4>
             <div class="row">
                 <div class="bs-address">
@@ -68,6 +64,33 @@
         </div>
         
     {% endfor %}
+    {#<script src="http://code.jquery.com/jquery-1.11.3.js"></script>            
+    {% block content %}
+        <div class="payment-wrapper">
+            {{ stripe_render() }}
+        </div>
+    {% endblock content %}
+
+    {% block foot_script %}
+        {{ parent() }}
+        {{ stripe_scripts() }}
+    {% endblock foot_script %}
+    #}
+    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>            
+    <script>
+            $(document).ready(function () {                
                 
-                
+                $(".idpago").on("click",function(){
+                    var href = $(this).attr('href');
+                    //alert (href);
+                    window.open(href,'_blank');
+                    return false;
+                });
+                    
+                    
+            });
+    </script>    
+    
 {% endblock %}
+
+

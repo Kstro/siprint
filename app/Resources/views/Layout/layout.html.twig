@@ -29,7 +29,45 @@
                 <link rel="stylesheet" href="{{ asset('Resources/css/redmond/jquery-ui-1.10.4.custom.css') }}" />
             {%- endblock %}
             {% block estilos -%}    
-            
+                {# Estilo de modal #}
+                <style>
+                    .ui-dialog{
+                        border-radius: 0px;
+                        border:0px;
+                        padding:0px;
+                    }
+                    
+                    .ui-dialog-titlebar{
+                        border-radius: 0px;
+                        border:0px;
+                        background: #25BCE9;
+                        padding:0px;
+                    }
+                    .ui-widget-overlay{
+                        background:#111;
+                    }
+                    
+                    
+                    .ui-dialog-titlebar-close{
+                        border:0px;
+                        border-radius: 0px;
+                        background: #FFF;
+                        color:#000;
+                        
+                    }
+                    
+                    .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close{
+                        background:#FFF;
+                        color:#FFF;
+                        border:0px;
+                    }
+                    
+                    .ui-widget-overlay{
+                        background: #222222;
+                        opacity: 0.9;
+                    }
+                </style>
+                
             {%- endblock %}
         {%- endblock%}
     </head>

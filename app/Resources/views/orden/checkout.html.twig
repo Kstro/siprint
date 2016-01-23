@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        #formCheckout span{
+            display:none;
+        }
+        
+            #payment-submit{
+                float: right;
+                background: #25BCE9;
+                color: #FFF;
+                border:0px;
+                border-radius: 0px;
+                margin-bottom: 10px;
+            }
+            
+            #payment-submit:hover{
+                opacity: 0.7;
+                
+            }
+            .form-row{
+                width:100%;
+            }
+        {##labelMonto{
+            display: block;
+        }#}
+    </style>
+    <div class="container-fluid" style="margin-top:20px;">
+        {% if direcciones|length!=0 %}
+            <div class="col-md-6"><label>Shipping address: </label> </div>
+            <div class="col-md-6">
+                <select id="selectDirecciones" class="form-control input-sm">
+                {% for dir in direcciones %}
+                    <option value="{{dir.id}}"> {{dir.linea1}}, {{dir.linea2}}, {{dir.city}} {{dir.country}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        {% else %}
+            <div class="col-md-6" style="margin-top:20px;"><label>Shipping address: </label> </div>
+            <div class="col-md-6" style="margin-top:20px;">
+                <span>No credits cards</span>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+        {% if tarjetas|length!=0 %}
+            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;"><label>Payment method: </label> </div>
+            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;">
+                <select id="selectTarjetas" class="form-control input-sm">
+                {% for tar in tarjetas %}
+                    <option value="{{tar.id}}">ending in:{% set numerotar = tar.numero|length %}{% for i in 0..(numerotar-5)%}{% endfor %}{{ tar.numero|slice(numerotar-4) }},{{tar.nombre}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        {% else %}
+            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;"><label>Payment method: </label> </div>
+            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;">
+                <span>No credits cards</span>
+            </div>
+        {% endif %}
+        <div id="formCheckout" class="col-md-12 pull-right">
+            {% block content %}
+                <div class="payment-wrapper">
+                    {{ stripe_render() }}
+                </div>
+            {% endblock content %}
+
+            {% block foot_script %}
+                {{ parent() }}
+    {#            {{ stripe_scripts() }}#}
+            {% endblock foot_script %}
+        </div>
+    </div>
+    
+{#    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>#}
+    
+    
+    
+{#
+<form action="http://localhost/sistemaimpresion/web/app_dev.php/payment/stripe/execute" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_5FGIS4dcjWSR0X87vQO744MF"
+    data-amount="{{monto}}"
+    data-name="Demo Site"
+    data-description="2 widgets (${{(monto/100)|number_format(2, '.', ',') }})"
+    data-image="/128x128.png"
+    data-locale="auto">
+  </script>
+</form>
+#}
+
+
+{#<script src="http://code.jquery.com/jquery-1.11.3.js"></script>#}
+{#<script src="https://checkout.stripe.com/checkout.js"></script>
+
+<button id="customButton">Purchase</button>
+
+<script>
+  var handler = StripeCheckout.configure({
+    key: 'pk_test_5FGIS4dcjWSR0X87vQO744MF',
+    image: '/img/documentation/checkout/marketplace.png',
+    locale: 'auto',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+    }
+  });
+
+  $('#customButton').on('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: 'Demo Site',
+      description: '2 widgets',
+      amount: 2000
+    });
+    e.preventDefault();
+  });
+
+  // Close Checkout on page navigation
+  $(window).on('popstate', function() {
+    handler.close();
+  });
+</script>
+
+#}
+
+{# Esto permite que al cargar el modal, se carga el form de stripe con los datos de la tarjeta #}
+<script>
+    $(document).ready(function(){
+        direccionId= $('#selectDirecciones').val();   
+        tarjetaId= $('#selectTarjetas').val();
+        console.log(direccionId + '-' + tarjetaId);
+        buscar(direccionId,tarjetaId);
+        
+{#        $('#formCheckout').hide();#}
+        
+        $('#stripe_view_credit_cart').hide();
+        $('#stripe_view_credit_cart_security').hide();
+        $('#stripe_view_credit_cart_expiration_month').hide();
+        $('#stripe_view_credit_cart_expiration_year').hide();
+        $('#payment-submit').addClass('btn btn-success');
+        $('#stripe_view_amount').val({{totalOrden*100}});
+        $('#stripe_view_order').val({{ordenId}});
+    });
+</script>
+{% endblock %}
