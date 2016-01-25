@@ -2,6 +2,9 @@
 
 {% block section %} {{ detalleOrden.categoria }} {% endblock %}
 {% block section2 %}Shopping Cart / {{ detalleOrden.categoria }} {% endblock %}
+{% block accountSidebar -%}
+    {% include ':Layout:sidebar.html.twig'%}
+{% endblock %}
 {% block titleAccount -%} {{ detalleOrden.categoria }} {% endblock %}
 
 {% block contenido %}
@@ -86,13 +89,25 @@
     
     <script>
          $(document).ready(function(){
+             var detacc = $('#accept-file').val();
+             
+            $.post( "{{path('search_accept_design')}}", { id: detacc }, function( data ) { 
+                console.log(data.search);
+                if( data.search === 1 || data.search === 2 ){
+                    $('#accept-file').hide();
+                    $('.disapprove').hide();
+                }   
+            }, "json"); // Fin de post 
+        
              // Al hacer click que se acepta el diseño que el cliente ha subido para su impresion
             $('#accept-file').on("click",function(){
                 var detalle = $(this).val();
-                
+                //console.log(detalle);
                 $.post( "{{path('set_accept_design')}}", { id: detalle }, function( data ) {
+                    console.log(data);
                     if(data.accept === 1){
-                        alertify.success('Accept design');
+                        alertify.success('The design has been accepted');
+                        $('#accept-file').hide();
                     } else {
                         alertify.error('Design has accepted');
                     }    

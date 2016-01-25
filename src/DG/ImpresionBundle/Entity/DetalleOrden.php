@@ -229,4 +229,27 @@ class DetalleOrden
         return $this->atributoProductoOrden;
     }
     
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return DetalleOrden
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
 }

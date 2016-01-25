@@ -159,7 +159,7 @@ class DetalleOrdenController extends Controller
             $aux = 1;
             
             $id = $this->get('request')->request->get('id');
-             
+            //var_dump($id); 
             $em = $this->getDoctrine()->getManager();            
             $det = $em->getRepository('DGImpresionBundle:DetalleOrden')->find($id);
             
@@ -208,6 +208,40 @@ class DetalleOrdenController extends Controller
                     )); 
             
             return $response;  
+        } else {    
+            return new Response('0');              
+        }  
+    }
+    
+    /**
+    * Ajax utilizado para buscar el estado del producto 
+    *  
+    * @Route("/design/accept/search", name="search_accept_design")
+    */
+    public function setSearchDesignAction()
+    {
+        
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+        $aux = 0;
+            
+            $id = $this->get('request')->request->get('id');
+            //var_dump($id); 
+            $em = $this->getDoctrine()->getManager();            
+            $det = $em->getRepository('DGImpresionBundle:DetalleOrden')->find($id);
+            
+            if($det->getEstado() == 'ap') {
+                $aux = 1;
+            } else if($det->getEstado() == 'df' ) {
+                $aux = 2;
+            }
+            
+            $response = new JsonResponse(); 
+            $response->setData(array(
+                           'search' => $aux
+                    )); 
+            
+            return $response; 
         } else {    
             return new Response('0');              
         }  
