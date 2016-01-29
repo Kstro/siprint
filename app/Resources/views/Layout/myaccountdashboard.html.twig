@@ -23,6 +23,13 @@
                 <link rel="stylesheet" href="{{ asset('Resources/jquery-ui/jquery-ui.css') }}">
                 <link rel="stylesheet" href="{{ asset('Resources/css/customcss.css') }}" />
                 
+                {# ########################################################################################################## #}
+                
+                <link rel="stylesheet" type="text/css" href="{{ asset('Resources/js/alertifyjs/css/alertify.min.css') }}"> 
+                <link rel="stylesheet" type="text/css" href="{{ asset('Resources/js/alertifyjs/css/alertify.rtl.min.css') }}">
+                
+                {# ########################################################################################################## #}
+                
                 <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
             {%- endblock %}
             {% block estilos -%}    
@@ -57,7 +64,7 @@
                                     <span>You are here:</span>
                                     <ul class="breadcrumb">
                                         <li>
-                                            <a href="/">Account</a>
+                                            <a href="{{ path('dg_my_account') }}">Account</a>
                                         </li>
                                         <li>
                                             <span>{% block section2 %}{% endblock %}</span>
@@ -75,6 +82,12 @@
                             <div class="row acc-dashboard">
                                 {% block accountSidebar -%}
                                     {% include ':Layout:accountsidebar.html.twig'%}
+                                        <div class="category-left-banner">
+                                            <a href="#" title="category left banner">
+                                                    {% block img_prom %}{% endblock %}
+                                            </a>
+                                        </div>
+                                    </aside>
                                 {% endblock %}
                                 <section class="account-main col-md-9 col-sm-8 col-xs-12">
                                     <div class="acc-title lg">
@@ -117,6 +130,10 @@
             <script type="text/javascript" src="{{ asset('Resources/jquery-ui/jquery-ui.js') }}"></script>
             
             <script type="text/javascript" src="{{ asset('Resources/zebra/js/zebra_datepicker.js')}}" ></script>
+            <script type="text/javascript" src="{{ asset('Resources/js/alertifyjs/alertify.min.js') }}"></script>  
+            
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
             
             <script>
                 $(document).ready(function () {
@@ -126,11 +143,21 @@
                             var draw = '';
                             draw+='<span class="mcart-icon dropdowSCIcon"><i class="fa fa-shopping-cart"></i><span class="mcart-dd-qty">' + data.cart.length + '</span></span>';
                             draw+='<div class="mcart-dd-content dropdowSCContent clearfix">';
-                            draw+='<ul>';
+                            
                             
                             $.each( data.cart, function( key, value ) { 
                                 if(key <= 2) {
-                                    draw+= '<li class="mcart-item">';
+                                    if(key === 0) {
+                                        draw+='<div class="mcart-item-w clearfix1">';
+                                        draw+='<ul>';
+                                        draw+= '<li class="mcart-item">';
+                                        
+                                    } else {
+                                        draw+='<div class="mcart-item-w clearfix">';
+                                        draw+='<ul>';
+                                        draw+= '<li class="mcart-item iteam2">';
+                                    }    
+                                    
                                     draw+='<div class="row" style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;">';
                                     //draw+='<div class="col-md-4"style="margin-top: 5px">';
                                     draw+='<img src="{{ asset('Photos/promotions/')}}' + value.image + '" alt="' + value.product + '" width="50px" height="50px">';
@@ -139,14 +166,21 @@
                                     draw+='<span class="mcart-name">' + value.product + '</span>';
                                     draw+='<br>';
                                     draw+='<span class="mcart-price">$ ' + parseFloat(value.monto).toFixed(2) + '</span>';
-                                    draw+='<span class="mcart-remove-item"><i class="fa fa-times-circle"></i></span>';
+                                    //draw+='<span class="mcart-remove-item"><i class="fa fa-times-circle"></i></span>';
                                     draw+='</div>';
                                     draw+='</div>';
                                     draw+='</li>';
+                                    draw+='</ul>';
+                                    draw+='</div>';
                                 }
                             });
                             
-                            draw+='</ul>';
+                            draw+='<div style="margin-top: 15px"></div>';
+                            draw+='<div class="mcart-links buttons-set clearfix pull-right">';
+                            draw+='<a href="{{ path('orden_show') }}" class="gbtn mcart-link-cart">View Cart</a>';
+                            draw+='</div>';
+                        
+                            
                             draw+='</div>';
                             
                             document.getElementById('show-cart').innerHTML = draw;                        

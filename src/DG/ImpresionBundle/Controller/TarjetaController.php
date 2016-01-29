@@ -25,11 +25,18 @@ class TarjetaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        
+        $tarjetas = $em->getRepository('DGImpresionBundle:Tarjeta')->findBy(array(
+                                                                                'usuario' => $usuario
+                                                                            ));
 
-        $tarjetas = $em->getRepository('DGImpresionBundle:Tarjeta')->findAll();
-
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('tarjeta/index.html.twig', array(
             'tarjetas' => $tarjetas,
+            'promotion' => $promotion,
+            'usuario' => $usuario,
         ));
     }
 

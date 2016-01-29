@@ -56,6 +56,11 @@ class DetalleParametro
     private $tipoParametro;
 
 
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AtributoProductoOrden", mappedBy="detalleParametro", cascade={"persist", "remove"})
+     */
+    private $atributProductOrden;
 
     /**
      * Get id
@@ -161,6 +166,30 @@ class DetalleParametro
     public function getTipoParametro()
     {
         return $this->tipoParametro;
+    }
+    
+    /**
+     * Set atributoProductoOrden
+     *
+     * @param \DG\ImpresionBundle\Entity\AtributoProductoOrden $atributoProductoOrden
+     *
+     * @return Orden
+     */
+    public function setAtributoProductoOrden(\DG\ImpresionBundle\Entity\AtributoProductoOrden $atributoProductoOrden = null)
+    {
+        $this->atributoProductoOrden = $atributoProductoOrden;
+
+        return $this;
+    }
+
+    /**
+     * Get atributoProductoOrden
+     *
+     * @return \DG\ImpresionBundle\Entity\AtributoProductoOrden
+     */
+    public function getAtributoProductoOrden()
+    {
+        return $this->atributoProductoOrden;
     }
     
     public function __toString() {

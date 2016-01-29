@@ -43,6 +43,13 @@ class DetalleOrden
     private $monto;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=3, nullable=false)
+     */
+    private $estado;
+    
+    /**
      * @var \Categoria
      *
      * @ORM\ManyToOne(targetEntity="Categoria")
@@ -222,4 +229,27 @@ class DetalleOrden
         return $this->atributoProductoOrden;
     }
     
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return DetalleOrden
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
 }

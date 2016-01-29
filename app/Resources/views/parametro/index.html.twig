@@ -8,6 +8,10 @@
     Product attributes
 {% endblock %}
 
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
+
 {% block contenido %}
     <div class="acc-title lg">
         <div class="col-md-5 pull-left">

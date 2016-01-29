@@ -2,6 +2,9 @@
 
 {% block section %}Credit Cards{% endblock %}
 {% block section2 %}Credit Cards{% endblock %}
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
 {% block titleAccount -%}Credit Cards{% endblock %}
 
 {% block iconoPlus -%}

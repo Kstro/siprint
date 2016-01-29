@@ -62,6 +62,36 @@ class OrdenController extends Controller
     }
 
     /**
+     * Lists all Orden entities.
+     *
+     * @Route("/admin/orders", name="admin_view_orders_")
+     * @Method("GET")
+     */
+    public function viewOrdersAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $dql = "SELECT o FROM DGImpresionBundle:Orden o "
+                . "WHERE o.estado <> 'ca' ORDER BY o.id DESC";
+        
+        $cart = $em->createQuery($dql)
+                ->getResult();
+        
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('orden/view_order.html.twig', array(
+            'orders' => $cart,
+            'products' => $products,
+            'usuario' => $user,
+            'promotion' => $promotion,
+        ));
+
+    }
+    
+    /**
      * Creates a new Orden entity.
      *
      * @Route("/orders/new", name="orden_new")
@@ -119,6 +149,27 @@ class OrdenController extends Controller
             'products' => $products,
         ));
     }
+    
+    /**
+     * Finds and displays a Orden entity.
+     *
+     * @Route("/admin/order/{id}", name="admin_orden_show")
+     * @Method("GET")
+     */
+    public function showOrderAction(Orden $orden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $orden,
+                                                                                ));
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('orden/show_order.html.twig', array(
+            'promotion' => $promotion,
+            'ord' => $orden,
+            'products' => $products,
+        ));
+    }
 
     /**
      * Displays a form to edit an existing Orden entity.
@@ -150,7 +201,7 @@ class OrdenController extends Controller
     /**
      * Deletes a Orden entity.
      *
-     * @Route("/admin/orders/{id}", name="orden_delete")
+     * @Route("/admin/order/{id}", name="orden_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Orden $orden)

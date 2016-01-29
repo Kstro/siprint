@@ -30,40 +30,14 @@ class ProveedorController extends Controller
 
         $proveedors = $em->getRepository('DGImpresionBundle:Proveedor')->findAll();
 
-        
-        
-        
-//        $order = array(
-//          "items" => array(
-//            array(
-//              "type" => "sku",
-//              "parent" => "sku_7cJ3QDfIk3Mkkk"
-//            )
-//          ),
-//          "currency" => "usd",
-//          "shipping" => array(
-//            "name" => "Jenny Rosen",
-//            "address" => array(
-//              "line1" => "1234 Main Street",
-//              "city" => "Anytown",
-//              "country" => "US",
-//              "postal_code" => "123456"
-//            )
-//          ),
-//          "email" => "jenny@ros.en"
-//        );
-//        //$order = new Response(json_encode($order));
-//        $this->get('payment.bridge')->setOrder($order);
-        
-        
-        
-        
+        $promotion = $this->get('promotion_img')->searchPromotion();
         
         $monto = 100;
         
         $this->get('payment.bridge')->setAmount($monto);
         return $this->render('proveedor/index.html.twig', array(
             'proveedors' => $proveedors,
+            'promotion' => $promotion,
         ));
     }
 

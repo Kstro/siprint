@@ -8,6 +8,10 @@
     Promotions
 {% endblock %}
 
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
+
 {% block contenido %}
     <div id="resultado"></div>
     <div class="acc-title lg">

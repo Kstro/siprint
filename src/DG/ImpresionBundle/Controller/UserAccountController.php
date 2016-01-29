@@ -18,6 +18,24 @@ class UserAccountController extends Controller{
      */
     public function MyAccountAction()
     {
-        return $this->render(':useraccount:myaccount.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        
+        $dql = "SELECT d FROM DGImpresionBundle:Direccion d "
+                . "WHERE d.usuario=:usuario "
+                . "AND d.defaultDir=:dir "
+                . "ORDER BY d.defaultDir DESC, d.name";
+        
+        $direccions = $em->createQuery($dql)
+                   ->setParameter('usuario', $usuario)
+                   ->setParameter('dir', TRUE)
+                   ->getResult();
+           
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render(':useraccount:myaccount.html.twig', array(
+            'direccion' => $direccions,
+            'promotion' => $promotion,
+        ));
     }
 }

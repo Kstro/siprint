@@ -1,0 +1,141 @@
+{% extends ':Layout:layout.html.twig' %}
+
+{% block section %}Order Information{% endblock %}
+{% block section2 %}Order Information{% endblock %}
+{% block accountSidebar -%}
+    {% include ':Layout:sidebar.html.twig'%}
+{% endblock %}
+{#{% block titleAccount -%}
+    
+    <div class="col-md-6 text-left">Order Information</div>
+    
+{% endblock %}#}
+
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
+
+{% block contenido %}
+    <div id="resultado">
+    </div>
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Order Information</h3>
+        </div>
+    </div>
+    {% if ord %}
+        {% set total = 0 %}
+        <div class="form-edit-info" style="padding-top: 20px;">
+            <div class="row">
+                <div class="bs-address">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <h3 class="acc-sub-tit-i" style=" color: #25bce9; font-size: 1.19em;">
+                            <strong>
+                            <i class="fa fa-user"></i>
+                            Customer Information
+                            </strong>
+                        </h3>
+                    </div>    
+                    <br>
+                     <ul id="pagination-demo" class="pagination-sm" style="margin-left: 10px; margin-top: 20px">
+                            <li class="pro-item row">
+                                <div class=" acc-info-content pad-1015 col-sm-10 col-sm-offset-2  col-xs-12">
+                                    <ul>
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Name: {{ ord.usuario.persona }}</li>
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: {% if ord.direccionEnvio.linea1 %} {{ ord.direccionEnvio.linea1 }}{% endif %}
+                                                                                {% if ord.direccionEnvio.linea2 %} {{ ord.direccionEnvio.linea2 }}{% endif %}, 
+                                                                                {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
+                                        </li>
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Total amount: $ 
+                                            {% set total = 0 %}
+                                            {% for product in products %}
+                                                {% if product.orden.id == ord.id %}
+                                                    {% set total=total+product.monto %}
+                                                {% endif %}
+                                            {% endfor%}
+                                            {{total|number_format('2','.',',')}}        
+                                        </li>
+                                    </ul>
+                                    
+                                </div> 
+                            </li> 
+                            
+                     </ul> 
+                </div>            
+                </div>
+                <div class="col-sm-10">
+                    <h3 class="acc-sub-tit-i" style=" color: #25bce9; font-size: 1.55em;">
+                        <strong>
+                        <i class="fa fa-bars"></i>
+                        Detail order
+                        </strong>
+                    </h3>
+                </div>
+                <br>
+                <hr>
+                {% for row in ord.detalleOrden | reverse %}
+                    <div class="acc-info-content pad-1015 col-xs-12 col-sm-12" style=" margin-bottom: 5px;">
+                    
+                    <ul id="pagination-demo" class="pagination-sm">
+                        {#{% for row in ord.detalleOrden | reverse %}#}
+                            <li class="pro-item row">
+                                <div class="col-sm-4 col-xs-12">
+                                    <img src="{{ asset('Photos/promotions/')}}{{ row.categoria.imagen }}" alt="{{ row.categoria.nombre }}" height="100%">
+                                </div>
+                                <div class="product-info col-sm-8 col-xs-12">
+                                    <div class="pro-name-rate clearfix">
+                                        <h3 class="product-name text-left" style="font-size: 1.19em;">
+                                            <strong>{{ row.categoria }}</strong>
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_detalleorden_show',{id:row.id})}}" class="acc-edit borrarDetalle pull-right" title="edit information">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </h3>
+                                    </div>
+                                    <div class="price-box text-left" style="width: 100%; margin-bottom: 10px">
+                                        <span class="normal-price">$ {{row.monto|number_format('2','.',',')}}</span>
+                                        
+                                    </div>
+                                    <div class="short-description">
+                                        {% for r in row.atributoProductoOrden %}
+                                            <div style="cursor: default;" class=" fa fa-check-square-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
+                                                <span style="font-size: 1.14em;"><strong>{{ r.detalleParametro.parametro }}: </strong>{{ r.detalleParametro }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    
+                                    
+                                    <div class="short-description">
+                                        <div style="cursor: default; margin-top: 10px;" class="fa fa-file-image-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
+                                            <strong>Design: </strong>{#<a id="designU" href="{{ asset('Photos/promotions/')}}{{ row.archivo}}">#}{{ row.archivo}}{#</a>#}
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                    
+                            </li>
+                        {#{% endfor %}#}
+                    </ul>
+                    <hr>
+                </div>
+                  {% endfor %}  
+            </div>
+        </div>
+    
+    
+    {% else %}
+    
+        <div class="col-md-12 text-center" style="margin:50px 0;">
+            No items
+        </div>
+        
+    {% endif %}
+    
+    
+    
+        
+    
+    
+{% endblock %}
+
+

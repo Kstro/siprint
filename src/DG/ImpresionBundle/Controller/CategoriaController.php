@@ -32,8 +32,11 @@ class CategoriaController extends Controller
 
         $categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
 
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('categoria/index.html.twig', array(
             'categorias' => $categorias,
+            'promotion' => $promotion,
         ));
     }
     
@@ -56,9 +59,12 @@ class CategoriaController extends Controller
         $categorias = $em->createQuery($dql)
                    ->getResult();
         
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('categoria/productslist.html.twig', array(
             'types' => $types,
             'categorias' => $categorias,
+            'promotion' => $promotion,
             'registro'=>null
         ));
     }

@@ -1,0 +1,101 @@
+{% extends ':Layout:layout.html.twig' %}
+
+{% block css -%}
+    {{parent()}}
+    <style>
+        .acc-title.lg > div:nth-child(2)> a:hover >i {
+            color: #000;
+            opacity:0.6;
+        }
+    </style>
+{% endblock %}
+
+{% block section %}
+    Orders
+{% endblock %}
+
+{% block section2 %}
+    Orders
+{% endblock %}
+
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Orders list</h3>
+        </div>
+    </div>
+    <div class="form-edit-info" style="padding-top: 20px;">
+        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Date order</th>
+                    <th>State</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.usuario.persona }}</td>
+                    <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
+                    <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>
+                    <td>
+                        <div class=" pull-right">
+                            <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
+                            <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
+                                
+                                    <i class="fa fa-info-circle"></i>
+                               
+                            </button>
+                             </a> 
+                            <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
+                                <a  class="export"  href="" style="margin-top: 3px;">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </a>
+                            </button>        
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>            
+                
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    
+    <script>
+        $(document).ready(function(){
+
+            $('.listados').DataTable({ 
+                searching:true,
+                "order":[[0, "desc"],[1,"desc"]],
+                "columnDefs": [
+
+                       { "orderable": false, "targets": 1 }
+                ]
+            });
+            $('.dataTables_filter').addClass('pull-right ');
+
+        });
+
+    </script>
+
+    <script>  
+        $(document).ready(function(){          
+            $('.opciones').click(function(){
+                    var id = $(this).val();
+                    var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                    window.open(url,'_blank');
+                
+                
+                });    
+        });//Fin document ready        
+    </script>
+{% endblock %}
