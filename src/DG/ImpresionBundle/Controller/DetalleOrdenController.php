@@ -87,6 +87,28 @@ class DetalleOrdenController extends Controller
     /**
      * Finds and displays a DetalleOrden entity.
      *
+     * @Route("/show-detail-design/{id}", name="admin_detail_design_show")
+     * @Method("GET")
+     */
+    public function showDetailDesignAction(DetalleOrden $detalleOrden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $attributes = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array('detalleOrden'   => $detalleOrden
+                                                                              ));
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('detalleorden/show_detail_design.html.twig', array(
+            'detalleOrden' => $detalleOrden,
+            'attributes' => $attributes,
+            'promotion' => $promotion,
+        ));
+    }
+    
+    /**
+     * Finds and displays a DetalleOrden entity.
+     *
      * @Route("/edit-design/{id}", name="admin_edit_design")
      * @Method("GET")
      */
@@ -102,6 +124,31 @@ class DetalleOrdenController extends Controller
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('detalleorden/edit_features_design.html.twig', array(
+            'detalleOrden' => $detalleOrden,
+            'attributes' => $attributes,
+            'promotion' => $promotion,
+            'features' => $features,
+        ));
+    }
+    
+    /**
+     * Finds and displays a DetalleOrden entity.
+     *
+     * @Route("/design/{id}/edit", name="admin_design_edit")
+     * @Method("GET")
+     */
+    public function editDesignAction(DetalleOrden $detalleOrden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $attributes = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array('detalleOrden'   => $detalleOrden
+                                                                              ));
+        
+        $features = $em->getRepository('DGImpresionBundle:DetalleParametro')->findAll();
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('detalleorden/edit_design.html.twig', array(
             'detalleOrden' => $detalleOrden,
             'attributes' => $attributes,
             'promotion' => $promotion,

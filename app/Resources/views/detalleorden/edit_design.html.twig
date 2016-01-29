@@ -4,7 +4,7 @@
 {% block section2 %}Edit / {{ detalleOrden.categoria }} {% endblock %}
 
 {% block sidebar %}
-    {% include ':Layout:accountsidebar.html.twig'%}
+    {% include ':Layout:sidebar.html.twig'%}
         <div class="category-left-banner">
             <a href="#" title="category left banner">
                     {% block img_prom %}
@@ -30,7 +30,7 @@
             </div>
             <div class="col-md-6 well" id="configure-price">
                 <div class="row" id="title-attributes">
-                    <h4 class="text-center" style="color:#25bce9">EDIT CONFIGURE DESIGN</h4>
+                    <h4 class="text-center" style="color:#25bce9">EDIT DESIGN</h4>
                 </div>
                 <hr>
                 <form id="fileupload" action="{{ path('admin_update_detail_order') }}" method="POST" enctype="multipart/form-data">
