@@ -6,6 +6,10 @@
             display:none;
         }
         
+        #formCheckout label{
+            display:none;
+        }
+        
             #payment-submit{
                 float: right;
                 background: #25BCE9;
@@ -22,42 +26,194 @@
             .form-row{
                 width:100%;
             }
-        {##labelMonto{
+        #labelMonto{
             display: block;
-        }#}
+        }
     </style>
-    <div class="container-fluid" style="margin-top:20px;">
-        {% if direcciones|length!=0 %}
-            <div class="col-md-6"><label>Shipping address: </label> </div>
+    <div class="container-fluid" style="margin-top:10px;">
+        
+            <div class="col-md-5"><label>Shipping address: </label> </div>
             <div class="col-md-6">
                 <select id="selectDirecciones" class="form-control input-sm">
+                    <option value="0">New address...</option>
                 {% for dir in direcciones %}
                     <option value="{{dir.id}}"> {{dir.linea1}}, {{dir.linea2}}, {{dir.city}} {{dir.country}}</option>
                 {% endfor %}
                 </select>
             </div>
-        {% else %}
-            <div class="col-md-6" style="margin-top:20px;"><label>Shipping address: </label> </div>
-            <div class="col-md-6" style="margin-top:20px;">
-                <span>No credits cards</span>
+        
+            
+            
+             
+                
+            <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute">
+        
+            <div id="formnewaddress" class="row" style="margin: 50px 0;">
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Full Name:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Phone Number:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_phoneNumber" name="direccion[phoneNumber]" maxlength="25" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Line 1:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_linea1" name="direccion[linea1]" maxlength="150" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Line 2:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_linea2" name="direccion[linea2]" maxlength="150" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    City:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_city" name="direccion[city]" maxlength="150" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    State / Province / Region:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_state" name="direccion[state]" maxlength="150" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Country:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_country" name="direccion[country]" maxlength="100" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Zip Code:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_zipCode" name="direccion[zipCode]" maxlength="20" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Security Access Code:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="direccion_securityAccessCode" name="direccion[securityAccessCode]" maxlength="255" class="form-control input-sm" type="text">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                    Save address:
+                </div>
+                <div class="col-md-6" style="margin-bottom: 4px;">
+                    <input id="opcionguardaraddress" name="direccion[opcionguardar]" class="form-control" value="1" type="checkbox">
+                </div>
+                <div class="clearfix"></div>
+                
             </div>
-        {% endif %}
+
+            </form>    
+            
+                
+                
+                
+            </div>
+        
         <div class="clearfix"></div>
-        {% if tarjetas|length!=0 %}
-            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;"><label>Payment method: </label> </div>
+        
+            <div class="col-md-5" style="margin-top:20px;margin-bottom:20px;"><label>Payment method: </label> </div>
             <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;">
                 <select id="selectTarjetas" class="form-control input-sm">
+                    <option value="0">New card...</option>
                 {% for tar in tarjetas %}
-                    <option value="{{tar.id}}">ending in:{% set numerotar = tar.numero|length %}{% for i in 0..(numerotar-5)%}{% endfor %}{{ tar.numero|slice(numerotar-4) }},{{tar.nombre}}</option>
+                    <option value="{{tar.id}}">Card ending in:{% set numerotar = tar.numero|length %}{% for i in 0..(numerotar-5)%}{% endfor %}{{ tar.numero|slice(numerotar-4) }},{{tar.nombre}}</option>
                 {% endfor %}
                 </select>
             </div>
-        {% else %}
-            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;"><label>Payment method: </label> </div>
-            <div class="col-md-6" style="margin-top:20px;margin-bottom:20px;">
-                <span>No credits cards</span>
-            </div>
-        {% endif %}
+        
+            
+
+                <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute">
+
+                <div id="formnewcard" class="row" style="margin: 50px 0;">
+                    <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                        Number:
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 4px;">
+                        <input id="tarjeta_numero" name="tarjeta[numero]" maxlength="20" class="form-control input-sm" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                        Name:
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 4px;">
+                        <input id="tarjeta_nombre" name="tarjeta[nombre]" maxlength="200" class="form-control input-sm" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                        CVC:
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 4px;">
+                        <input id="tarjeta_cvc" name="tarjeta[cvc]" required="required" maxlength="4" class="form-control input-sm" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                        Expiration date:
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 4px;">
+                        <input readonly="readonly" id="tarjeta_expiracion" name="tarjeta[expiracion]" class="form-control input-sm calZebra" type="text">
+                    </div>
+                    <div class="clearfix" style=""></div>
+                    
+                    <div class="col-md-5 text-right" style="margin-bottom: 4px;">
+                        Save payment method:
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 4px;">
+                        <input id="opcionguardarcard" name="tarjeta[payment]" class="form-control" value="1" type="checkbox">
+                    </div>
+                    
+                    <script>
+                        $(document).ready(function(){
+                            $('.calZebra').Zebra_DatePicker({
+                                format: 'm-Y',
+                                show_clear_date:false,
+                                direccion: 1,
+                                show_select_today: "Today",
+                                show_icon:false,
+                                onSelect: function(){
+                                    var expiracion = $('#tarjeta_expiracion').val();
+                                    //alert(expiracion);
+                                    var fecha = expiracion.split("-");
+                                    //alert(fecha[0]);
+                                    var dia=0;
+                                    if(fecha[0]<10){
+                                        dia= parseInt(fecha[0]);
+                                        $('#stripe_view_credit_cart_expiration_month').val(dia);
+                                    }
+                                    else{
+                                        $('#stripe_view_credit_cart_expiration_month').val(fecha[0]);
+                                    }
+                                    $('#stripe_view_credit_cart_expiration_year').val(fecha[1]);
+                                },
+                                //offset: [0,0]
+                            });
+                        });
+                    </script>
+
+                </div>
+            </form>
+            
+        
         <div id="formCheckout" class="col-md-12 pull-right">
             {% block content %}
                 <div class="payment-wrapper">
@@ -70,6 +226,8 @@
     {#            {{ stripe_scripts() }}#}
             {% endblock foot_script %}
         </div>
+        
+        
     </div>
     
 {#    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>#}
@@ -133,8 +291,56 @@
         console.log(direccionId + '-' + tarjetaId);
         buscar(direccionId,tarjetaId);
         
+        
+        $('#selectTarjetas').on('change',function(){
+            var idTar=$(this).val();
+            var idDir=$('#selectDirecciones').val();
+            if(idTar==0){
+                $('#formnewcard').show();
+            }
+            else{
+                $( "input" ).each(function() {
+                    $( this ).val( "" );
+                });
+                $('#formnewcard').hide();
+            }
+            $('#stripe_view_address_new_address').val(idDir);
+            $('#stripe_view_card_new_card').val(idTar);
+        });
+        
+        
+        $('#selectDirecciones').on('change',function(){
+            var idDir=$(this).val();
+            var idTar=$('#selectTarjetas').val();
+            if(idDir==0){
+                $('#formnewaddress').show();
+            }
+            else{
+                $( "input" ).each(function() {
+                    $( this ).val( "" );
+                });
+                $('#formnewaddress').hide();
+            }
+            $('#stripe_view_address_new_address').val(idDir);
+            $('#stripe_view_card_new_card').val(idTar);
+            
+        });
+        
+        if($('#selectDirecciones').val()==0){
+            $('#formnewaddress').show();    
+            $('#stripe_view_address_new_address').val($('#selectDirecciones').val());
+        }
+        
+        if($('#selectTarjetas').val()==0){
+            $('#formnewcard').show();
+            $('#stripe_view_card_new_card').val($('#selectTarjetas').val());
+        }
+        
+        
 {#        $('#formCheckout').hide();#}
         
+        $('#stripe_view_card_new_card').hide();
+        $('#stripe_view_address_new_address').hide();
         $('#stripe_view_credit_cart').hide();
         $('#stripe_view_credit_cart_security').hide();
         $('#stripe_view_credit_cart_expiration_month').hide();
@@ -142,6 +348,108 @@
         $('#payment-submit').addClass('btn btn-success');
         $('#stripe_view_amount').val({{totalOrden*100}});
         $('#stripe_view_order').val({{ordenId}});
+        
+        
+{#      Campos de direccion  #}
+        $(document).on('keyup','#direccion_name',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_full_name').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_phoneNumber',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_phone_number').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_linea1',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_line1').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_linea2',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_line2').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_city',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_city').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_state',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_region').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_country',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_country').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_zipCode',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_zip_code').val(num);
+        });
+        
+        $(document).on('keyup','#direccion_securityAccessCode',function(){
+            var num = $(this).val();
+            $('#stripe_view_address_security_code').val(num);
+        });
+        
+        $(document).on('click','#opcionguardaraddress',function(){
+            var num = $(this).is(':checked');
+            $('#stripe_view_address_save_address').prop('checked',num);
+        });
+        
+        
+        $(document).on('click','#opcionguardarcard',function(){
+            var num = $(this).is(':checked');
+            $('#stripe_view_card_save_card').prop('checked',num);
+        });
+        
+        
+        $('#stripe_view_address_full_name').hide();
+        $('#stripe_view_address_phone_number').hide();
+        $('#stripe_view_address_full_name').hide();
+        $('#stripe_view_address_line1').hide();
+        $('#stripe_view_address_line2').hide();
+        $('#stripe_view_address_city').hide();
+        $('#stripe_view_address_region').hide();
+        $('#stripe_view_address_country').hide();
+        $('#stripe_view_address_security_code').hide();
+        $('#stripe_view_address_zip_code').hide();
+        $('#stripe_view_address_save_address').hide();
+        
+{#      Campos de pago  #}
+        $(document).on('keyup','#tarjeta_numero',function(){
+            var num = $(this).val();
+            $('#stripe_view_card_number').val(num);
+            $('#stripe_view_credit_cart').val(num);
+        });
+        
+        $(document).on('keyup','#tarjeta_nombre',function(){
+            var num = $(this).val();
+            $('#stripe_view_card_full_name').val(num);
+        });
+        
+        $(document).on('keyup','#tarjeta_cvc',function(){
+            var cvc = $(this).val();
+            $('#stripe_view_card_cvc').val(cvc);
+            $('#stripe_view_credit_cart_security').val(cvc);
+        });
+        $('#stripe_view_card_full_name').hide(); 
+        $('#stripe_view_card_number').hide(); 
+        $('#stripe_view_card_cvc').hide(); 
+        $('#stripe_view_card_fecha').hide();
+        
+        $('#stripe_view_card_save_card').hide();
+        
+        //$('#formnewcard').hide();
+        //$('#formnewaddress').hide();
+        
+        
+        
+        
     });
 </script>
 {% endblock %}

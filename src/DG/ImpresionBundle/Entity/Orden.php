@@ -86,6 +86,31 @@ class Orden
      */
     private $idPago;
     
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tarjeta_pago", type="string", length=20, nullable=false)
+     */
+    private $tarjetaPago;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="direccion_envio_guardar", type="string", length=1000, nullable=false)
+     */
+    private $direccionEnvioGuardar;
+    
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_pago", type="datetime", nullable=true)
+     */
+    private $fechaPago;
+    
+    
     /**
      * Get id
      *
@@ -268,7 +293,96 @@ class Orden
         return $this->idPago;
     }
     
+    
+    
+    
     /**
+     * Set fechaPago
+     *
+     * @param \DateTime $fechaPago
+     *
+     * @return Orden
+     */
+    public function setFechaPago($fechaPago)
+    {
+        $this->fechaPago= $fechaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaPago()
+    {
+        return $this->fechaPago;
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Set estado
+     *
+     * @param string $direccionEnvioGuardar
+     *
+     * @return Orden
+     */
+    public function setDireccionEnvioGuardar($direccionEnvioGuardar)
+    {
+        $this->direccionEnvioGuardar = $direccionEnvioGuardar;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getDireccionEnvioGuardar()
+    {
+        return $this->direccionEnvioGuardar;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Set estado
+     *
+     * @param string $tarjetaPago
+     *
+     * @return Orden
+     */
+    public function setTarjetaPago($tarjetaPago)
+    {
+        $this->tarjetaPago = $tarjetaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getTarjetaPago()
+    {
+        return $this->tarjetaPago;
+    }
+    
+     /**
      * Set persona
      *
      * @param \DG\ImpresionBundle\Entity\Persona $cliente
