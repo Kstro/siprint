@@ -46,7 +46,6 @@
                                     </div>
                                     <div class="price-box text-left" style="width: 100%">
                                         <span class="normal-price">$ {{row.monto|number_format('2','.',',')}}</span>
-                                        
                                     </div>
                                     <div class="short-description">
                                         {% for r in row.atributoProductoOrden %}
@@ -78,17 +77,15 @@
     #}
     <script src="http://code.jquery.com/jquery-1.11.3.js"></script>            
     <script>
-            $(document).ready(function () {                
-                
-                $(".idpago").on("click",function(){
-                    var href = $(this).attr('href');
-                    //alert (href);
-                    window.open(href,'_blank');
-                    return false;
-                });
-                    
-                    
-            });
+        $(document).ready(function () {
+
+            $(".idpago").on("click",function(){
+                var href = $(this).attr('href');
+                //alert (href);
+                window.open(href,'_blank');
+                return false;
+            });  
+        });
     </script>    
     
 {% endblock %}
