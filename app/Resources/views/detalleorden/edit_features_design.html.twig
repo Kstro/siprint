@@ -1,0 +1,132 @@
+{% extends ':Layout:layout.html.twig' %}
+
+{% block section %} {{ detalleOrden.categoria }} {% endblock %}
+{% block section2 %}Edit / {{ detalleOrden.categoria }} {% endblock %}
+
+{% block sidebar %}
+    {% include ':Layout:accountsidebar.html.twig'%}
+        <div class="category-left-banner">
+            <a href="#" title="category left banner">
+                    {% block img_prom %}
+
+                    {% endblock %}
+            </a>
+        </div>
+    </aside>
+{% endblock %}
+
+{% block contenido %}
+    <div id="resultado"></div>
+    <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ detalleOrden.categoria.categoria }} > {{ detalleOrden.categoria }}</h1>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ asset('Photos/promotions/')}}{{ detalleOrden.categoria.imagen }}" alt="{{ detalleOrden.categoria.nombre }}">
+            </div>
+            <div class="col-md-6 well" id="configure-price">
+                <div class="row" id="title-attributes">
+                    <h4 class="text-center" style="color:#25bce9">EDIT CONFIGURE DESIGN</h4>
+                </div>
+                <hr>
+                <form id="fileupload" action="{{ path('admin_update_detail_order') }}" method="POST" enctype="multipart/form-data">
+                    <div class="row" id="info-attributes"  style="margin-bottom: 15px">
+                        {% for attr in detalleOrden.atributoProductoOrden %}
+                            <div class="col-md-5" style="margin-bottom: 3px">
+                                <p>{{ attr.detalleParametro.parametro }}</p>
+                            </div>   
+                            <div class="col-md-7" style="margin-bottom: 3px">
+                                <select class="attributes-inf form-control" id="{{ 'attributes-' ~ attr.detalleParametro.id  }}" name="{{ 'attributes-' ~ attr.detalleParametro.id  }}">
+                                    <option value="0" disabled >Select an option ...</option>
+                                    {% for feature in features %}
+                                        {% if feature.parametro.id == attr.detalleParametro.parametro.id %}
+                                            <option value="{{ feature.id }}"  {% if feature.id == attr.detalleParametro.id %} selected {% endif %}>{{ feature.nombre }}</option>
+                                        {% endif %}            
+                                    {% endfor %}        
+                                </select>
+                            </div>
+                            <div class="clearfix"></div>  
+                            
+                        {% endfor %}    
+                        
+                        <div class="col-md-5" style="margin-top: 20px"></div>
+                        <div class="col-md-7" style="margin-top: 20px">
+                            <div class="row">
+                                <div class="col-md-6"><p>Printing Cost:</p></div>
+                                <div class="col-md-6 printing-cost"><p class="text-right"><strong>$ {{ detalleOrden.monto  | number_format(2, '.', ',') }}</strong></p></div>
+                            </div>    
+                        </div> 
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-5" style="margin-top: 20px">
+                                <div class="row">
+                                    <div class="col-md-11 col-md-offset-1">
+                                        <p>Upload your design</p>
+                                    </div>    
+                                </div>    
+                            </div>   
+                            <div class="col-md-7" style="margin-top: 20px">
+                                <input type="file" name="file-design" id="file-design" />
+                            </div>  
+                            <div class="clearfix"></div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-8  col-md-offset-2 pull-center" style="margin-top: 15px">
+                                    <button type="submit" value="{{ detalleOrden.id }}" class="btn btn-info form-control text-center" id = "edit-design" name= "edit-design">
+                                        <span><i class="fa fa-pencil" style="color: #FFFFFF"></i></span> Edit design
+                                    </button>
+                                </div>    
+                            </div> 
+                            
+                        </div>    
+                    </div>    
+                </form>
+            </div>
+        </div>        
+    </section>
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    <script>
+        $(document).ready(function () {
+            $(".attributes-inf").select2(); 
+            
+            $(".attributes-inf" ).change(function() {
+                total_pagar = 0;
+                var acum = 0;
+                var total_price = $(".attributes-inf").length;
+
+                $('.printing-cost').children().children().html('<img style="width:35%; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
+                
+                $(".attributes-inf").each(function(k, va) {
+                    var aux = 0;
+                    if($(this).val() !== null) {
+                        aux = $(this).val();
+                    }
+
+                    $.post( "{{path('get_attributes_precio')}}", { id: aux }, function( det ) {
+                        acum++;
+                        
+                        if(det.flag === 0) {
+                            total_pagar+= 0;
+                        }
+                        else {
+                            total_pagar+= parseFloat(det.values[0].precio);
+                        }    
+                        total = total_pagar;
+                        
+                        if(total_price === acum )
+                            $('.printing-cost').children().children().html('$ ' + total.toFixed(2));
+
+                    });
+
+                });
+            });
+        });
+    </script>    
+{% endblock %}

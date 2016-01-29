@@ -55,6 +55,7 @@ class RechazoArchivoController extends Controller
             
             $rechazoArchivo->setArchivo($detalleOrden->getArchivo());
             $rechazoArchivo->setDetalleOrden($detalleOrden);
+            var_dump($detalleOrden->getArchivo());
             $em->persist($rechazoArchivo);
             $em->flush();
             

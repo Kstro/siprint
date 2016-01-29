@@ -2,6 +2,9 @@
 
 {% block section %}Address Book{% endblock %}
 {% block section2 %}Address Book{% endblock %}
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
 {% block titleAccount -%}Address Book{% endblock %}
 
 {% block iconoPlus -%}

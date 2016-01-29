@@ -27,9 +27,11 @@ class ParametroController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $parametros = $em->getRepository('DGImpresionBundle:Parametro')->findAll();
-
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('parametro/index.html.twig', array(
             'parametros' => $parametros,
+            'promotion' => $promotion,
         ));
     }
 

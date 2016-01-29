@@ -5,15 +5,21 @@ namespace DG\ImpresionBundle\Report;
 class ReportePDF  extends \FPDF_FPDF {
     // Enabezado
     function Header(){
-         $this->SetFont('Arial','B',15);
+        // $this->SetFont('Arial','B',15);
         // Move to the right
-        $this->Cell(80);
+        // $this->Cell(80);
         
-         //$this->Image('../web/Resources/img/dgplusbelle/images/laplusbelle.jpg', 150, 5, 50, 20);
-         $this->Line(20, 25.5, 200, 25.5);
-         $this->Line(20, 26, 200, 26);
-        // Title
-        $this->Cell(30,10,'Title',0,0,'C');
+        $this->Image('../web/Resources/images/logo_siprint.jpg', 20, 10, 40, 15);
+        $this->SetY(19);
+        date_default_timezone_set('America/Los_Angeles');
+        $this->SetFont('Arial', '', 9);
+        $this->Cell(0,0, date('F d, Y, g:i a'),0,1,'R');
+        
+        $this->SetX(87);
+        $this->SetFont('Arial','B',12);
+        $this->Cell(180, 0, 'Final Details for Order');
+        $this->Line(20, 23, 207, 23);
+         
         // Line break
        $this->Ln(0);
     }
@@ -26,9 +32,10 @@ class ReportePDF  extends \FPDF_FPDF {
         // Arial italic 8
         $this->SetFont('Arial','I',6);
         // Número de página
+        $this->SetLineWidth(0.2);
         
-        $this->Line(20, 260.5, 200, 260.5);
-        $this->Line(20, 261, 200, 261);
+        $this->Line(20, 260.5, 207, 260.5);
+        //$this->Line(20, 261, 207, 261);
         
         $this->Cell(0, 10, '3003 S Central Ave, Los Angeles, CA, USA. Phone +323 3781554.',0,0);
         

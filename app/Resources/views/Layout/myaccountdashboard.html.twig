@@ -82,6 +82,12 @@
                             <div class="row acc-dashboard">
                                 {% block accountSidebar -%}
                                     {% include ':Layout:accountsidebar.html.twig'%}
+                                        <div class="category-left-banner">
+                                            <a href="#" title="category left banner">
+                                                    {% block img_prom %}{% endblock %}
+                                            </a>
+                                        </div>
+                                    </aside>
                                 {% endblock %}
                                 <section class="account-main col-md-9 col-sm-8 col-xs-12">
                                     <div class="acc-title lg">
@@ -125,6 +131,10 @@
             
             <script type="text/javascript" src="{{ asset('Resources/zebra/js/zebra_datepicker.js')}}" ></script>
             <script type="text/javascript" src="{{ asset('Resources/js/alertifyjs/alertify.min.js') }}"></script>  
+            
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+            
             <script>
                 $(document).ready(function () {
                     //if ( $("#show-cart") ) {

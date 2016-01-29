@@ -35,8 +35,11 @@ class DireccionController extends Controller
                    ->setParameter('usuario', $usuario)
                    ->getResult();
 
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('direccion/index.html.twig', array(
             'direccions' => $direccions,
+            'promotion' => $promotion,
         ));
     }
 

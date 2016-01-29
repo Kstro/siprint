@@ -75,14 +75,40 @@ class DetalleOrdenController extends Controller
         $attributes = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array('detalleOrden'   => $detalleOrden
                                                                               ));
         
-        
+        $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('detalleorden/show.html.twig', array(
             'detalleOrden' => $detalleOrden,
             'attributes' => $attributes,
+            'promotion' => $promotion,
         ));
     }
 
+    /**
+     * Finds and displays a DetalleOrden entity.
+     *
+     * @Route("/edit-design/{id}", name="admin_edit_design")
+     * @Method("GET")
+     */
+    public function editFeaturesDesignAction(DetalleOrden $detalleOrden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $attributes = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array('detalleOrden'   => $detalleOrden
+                                                                              ));
+        
+        $features = $em->getRepository('DGImpresionBundle:DetalleParametro')->findAll();
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('detalleorden/edit_features_design.html.twig', array(
+            'detalleOrden' => $detalleOrden,
+            'attributes' => $attributes,
+            'promotion' => $promotion,
+            'features' => $features,
+        ));
+    }
+    
     /**
      * Displays a form to edit an existing DetalleOrden entity.
      *
@@ -245,5 +271,81 @@ class DetalleOrdenController extends Controller
         } else {    
             return new Response('0');              
         }  
+    }
+    
+    /**
+     * Creates a new Order entity.
+     *
+     * @Route("/admin/update/", name="admin_update_detail_order")
+     * @Method("POST")
+     */
+    public function updateAction(Request $request)
+    {
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+                                                                            
+        $parameters = $request->request->all();
+        $detalleorden = $em->getRepository('DGImpresionBundle:DetalleOrden')->find($parameters['edit-design']);
+        
+        $attr = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array(
+                                                                                            'detalleOrden' => $detalleorden
+                                                                                            ));
+        
+
+        if($_FILES["file-design"]["name"]) 
+        {    
+            $path = $this->container->getParameter('photo.promotion');
+            $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
+            $aux = explode('.', $nombre_archivo);
+            $extension = end($aux);
+            $archivo_subir = 'Design'.'_'.date("dmY_His").'.'.$extension;
+
+            $detalleorden->setArchivo($archivo_subir);
+            move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
+        }
+        
+        
+        
+
+        $total = 0;
+        $i = 0;
+        foreach($parameters as $key => $p){
+            $val = explode("-", $key);
+            if($val[0] == 'attributes') {
+                $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($p);
+                $attr[$i]->setDetalleParametro($detalleParametro);
+                $em->merge($attr[$i]);
+                $em->flush();
+                
+                $total+=$attr[$i]->getDetalleParametro()->getValor();
+                $i++;
+            }    
+        }
+        
+        $detalleorden->setMonto($total);
+        $em->merge($detalleorden);
+        $em->flush();
+        
+        $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                               'usuario'  => $usuario
+                                                                              ));
+        
+        $noOrden=false;
+        if($cart==null){
+            $noOrden=true;
+        }
+        
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
+                                                                              ));
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('orden/show.html.twig', array(
+            'ord' => $cart,
+            'noOrden'=>$noOrden,
+            'products' => $products,
+            'promotion' => $promotion,
+        ));
     }
 }

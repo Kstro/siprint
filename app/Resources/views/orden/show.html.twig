@@ -32,9 +32,9 @@
                     {% endfor%}
                     Total order: <label id="totalOrden" style="width: 100px; max-height: 100%;position: relative;float:right;" class="text-bold">$ {{total|number_format('2','.',',')}}</label>
                 </div>
-                <div class="col-md-5 text-right">
+                {#<div class="col-md-5 text-right">
                     <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>
-                </div>
+                </div>#}
             </h4>
             <div class="row">
                 <div class="bs-address">
@@ -52,9 +52,15 @@
                                         <h3 class="product-name text-left">
                                             {#<a title="{{ product.categoria }}">{{ product.categoria }}</a>#}
                                             <strong>{{ row.categoria }}</strong>
-                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{detalleId:row.id})}}" class="acc-edit borrarDetalle pull-right" title="edit information">
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{detalleId:row.id})}}" class="acc-edit borrarDetalle pull-right" title="delete">
                                                 <i class="fa fa-times"></i>
                                             </a>
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_edit_design',{id: row.id})}}" class="acc-edit pull-right" title="edit information">
+                                                <i class="fa fa-edit"></i>
+                                            </a>    
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{detalleId:row.id})}}" class="acc-edit pull-right" title="view detail">
+                                                <i class="fa fa-eye"></i>
+                                            </a>     
                                         </h3>
                                     </div>
                                     <div class="price-box text-left" style="width: 100%">

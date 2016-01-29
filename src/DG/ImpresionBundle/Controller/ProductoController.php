@@ -27,9 +27,11 @@ class ProductoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $productos = $em->getRepository('DGImpresionBundle:Producto')->findAll();
-
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('producto/index.html.twig', array(
             'productos' => $productos,
+            'promotion' => $promotion,
         ));
     }
 

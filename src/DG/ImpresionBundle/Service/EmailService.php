@@ -28,7 +28,7 @@ class EmailService
         
         $this->view   = 'DGImpresionBundle:Emails:test.html.twig';
         $this->to     = $to;
-        $contenido    = 'Este correo es enviado desde el sistema de plussbelle';
+        $contenido    = 'Este correo es enviado desde el sistema Expressions Print';
         $this->body = $this->templating->render($this->view, array('body'=>$contenido));
         $this->sendEmail($this->to,null,$bcc,null,$this->body);
         
@@ -45,7 +45,7 @@ class EmailService
         if($replay != null ){
         $email->setReplyTo($replay);
         }else{
-        $email->setReplyTo('system@digitalitygarage.com');            
+        $email->setReplyTo('anthony@digitalitygarage.com');            
         }
         if($bcc != null ){
         $email->setBcc($bcc);

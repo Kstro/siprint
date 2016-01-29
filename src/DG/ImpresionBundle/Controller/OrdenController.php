@@ -80,11 +80,13 @@ class OrdenController extends Controller
                 ->getResult();
         
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
+        $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('orden/view_order.html.twig', array(
             'orders' => $cart,
             'products' => $products,
             'usuario' => $user,
+            'promotion' => $promotion,
         ));
 
     }
@@ -160,7 +162,10 @@ class OrdenController extends Controller
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $orden,
                                                                                 ));
         
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('orden/show_order.html.twig', array(
+            'promotion' => $promotion,
             'ord' => $orden,
             'products' => $products,
         ));

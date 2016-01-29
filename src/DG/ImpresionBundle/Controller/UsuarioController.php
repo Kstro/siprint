@@ -35,8 +35,11 @@ class UsuarioController extends Controller
                    ->setParameter('estado', 1)
                    ->getResult();
 
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        //var_dump($promotion);
         return $this->render('usuario/index.html.twig', array(
             'usuarios' => $usuarios,
+            'promotion' => $promotion,
         ));
     }
 

@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new PaymentSuite\StripeBundle\StripeBundle(),
             new PaymentBridgeBundle\PaymentBridgeBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

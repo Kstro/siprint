@@ -28,8 +28,11 @@ class PromocionController extends Controller
 
         $promocions = $em->getRepository('DGImpresionBundle:Promocion')->findAll();
 
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('promocion/index.html.twig', array(
             'promocions' => $promocions,
+            'promotion' => $promotion,
         ));
     }
 

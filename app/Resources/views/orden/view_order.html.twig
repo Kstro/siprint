@@ -1,4 +1,4 @@
-{% extends ':Layout:myaccountdashboard.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
 {% block css -%}
     {{parent()}}
@@ -18,9 +18,16 @@
     Orders
 {% endblock %}
 
-{% block titleAccount -%}Orders{% endblock %}
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
 
 {% block contenido %}
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Orders list</h3>
+        </div>
+    </div>
     <div class="form-edit-info" style="padding-top: 20px;">
         <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
             <thead>
@@ -35,23 +42,23 @@
             {% for order in orders %}
                 <tr>
                     <td>{{ order.usuario.persona }}</td>
-                    <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('m-d-Y') }}{% endif %}</td>
+                    <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
                     <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>
                     <td>
-                        <div >
-                            <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn btn-default datatables1-actions " role="button">
-                        <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
-                            <i class="fa fa-info-circle"></i>
-                        </a> 
+                        <div class=" pull-right">
+                            <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
+                            <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
+                                
+                                    <i class="fa fa-info-circle"></i>
+                               
                             </button>
+                             </a> 
+                            <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
+                                <a  class="export"  href="" style="margin-top: 3px;">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </a>
+                            </button>        
                         </div>
-                            <div style=" padding-left: 12px">  
-                                <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
-                        <a  class=" pull-right export"  href="">
-                            <i class="fa fa-file-pdf-o"></i>
-                        </a>
-                                </button>        
-                            </div>
                     </td>
                 </tr>
             {% endfor %}
@@ -83,8 +90,8 @@
     <script>  
         $(document).ready(function(){          
             $('.opciones').click(function(){
-                
-                    var url = Routing.generate('report');
+                    var id = $(this).val();
+                    var url = Routing.generate('admin_reporte_invoice', {'id': id});
                     window.open(url,'_blank');
                 
                 

@@ -1,30 +1,47 @@
-{% extends ':Layout:myaccountdashboard.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
 {% block section %}Order Information{% endblock %}
 {% block section2 %}Order Information{% endblock %}
 {% block accountSidebar -%}
     {% include ':Layout:sidebar.html.twig'%}
 {% endblock %}
-{% block titleAccount -%}
+{#{% block titleAccount -%}
     
     <div class="col-md-6 text-left">Order Information</div>
     
+{% endblock %}#}
+
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
 {% endblock %}
 
 {% block contenido %}
     <div id="resultado">
     </div>
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Order Information</h3>
+        </div>
+    </div>
     {% if ord %}
-    
         {% set total = 0 %}
-        <div class="db-address col-xs-12" style="margin-top: 20px;">
+        <div class="form-edit-info" style="padding-top: 20px;">
             <div class="row">
                 <div class="bs-address">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <h3 class="acc-sub-tit-i" style=" color: #25bce9; font-size: 1.19em;">
+                            <strong>
+                            <i class="fa fa-user"></i>
+                            Customer Information
+                            </strong>
+                        </h3>
+                    </div>    
+                    <br>
                      <ul id="pagination-demo" class="pagination-sm" style="margin-left: 10px; margin-top: 20px">
                             <li class="pro-item row">
-                                <div class="col-sm-10 col-sm-offset-1  col-xs-12">
+                                <div class=" acc-info-content pad-1015 col-sm-10 col-sm-offset-2  col-xs-12">
                                     <ul>
-                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Client: {{ ord.usuario.persona }}</li>
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Name: {{ ord.usuario.persona }}</li>
                                         <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: {% if ord.direccionEnvio.linea1 %} {{ ord.direccionEnvio.linea1 }}{% endif %}
                                                                                 {% if ord.direccionEnvio.linea2 %} {{ ord.direccionEnvio.linea2 }}{% endif %}, 
                                                                                 {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
@@ -46,8 +63,18 @@
                      </ul> 
                 </div>            
                 </div>
+                <div class="col-sm-10">
+                    <h3 class="acc-sub-tit-i" style=" color: #25bce9; font-size: 1.55em;">
+                        <strong>
+                        <i class="fa fa-bars"></i>
+                        Detail order
+                        </strong>
+                    </h3>
+                </div>
+                <br>
+                <hr>
                 {% for row in ord.detalleOrden | reverse %}
-                <div class="bs-address">
+                    <div class="acc-info-content pad-1015 col-xs-12 col-sm-12" style=" margin-bottom: 5px;">
                     
                     <ul id="pagination-demo" class="pagination-sm">
                         {#{% for row in ord.detalleOrden | reverse %}#}
@@ -89,6 +116,7 @@
                             </li>
                         {#{% endfor %}#}
                     </ul>
+                    <hr>
                 </div>
                   {% endfor %}  
             </div>

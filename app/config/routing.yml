@@ -37,3 +37,6 @@ custom_login:
 
 github_login:
     path: /login/check-github
+    
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"    

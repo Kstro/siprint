@@ -116,6 +116,12 @@
                                 <div class="row">
                                     {% block sidebar %}
                                         {% include ':Layout:sidebar.html.twig'%}
+                                            <div class="category-left-banner">
+                                                <a href="#" title="category left banner">
+                                                        {% block img_prom %}{% endblock %}
+                                                </a>
+                                            </div>
+                                        </aside>
                                     {% endblock %}
                                     {% block contenido %}
                                         <section class="category grid col-sm-9 col-xs-12">
@@ -160,6 +166,9 @@
             <script src="{{ asset('Resources/validar/tipoparametro.js') }}"></script>   
             <script src="{{ asset('Resources/validar/tipocategoria.js') }}"></script>   
             <script src="{{ asset('Resources/select2/dist/js/select2.min.js') }}"></script>   
+            
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
             
             <script>
                 $(document).ready(function () {

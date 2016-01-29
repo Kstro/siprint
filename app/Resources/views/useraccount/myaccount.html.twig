@@ -2,6 +2,11 @@
 
 {% block section %}My Account{% endblock %}
 {% block section2 %}My Account{% endblock %}
+
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
+
 {% block titleAccount -%}My Dashboard{% endblock %}
 
 {% block contenido %}
@@ -40,6 +45,26 @@
                         <span class="nav-icon"><i class="fa fa-user"></i> {{ app.user.persona }}</span>
                         <span class="nav-icon"><i class="fa fa-envelope-o"></i> {{ app.user.email }}</span>
                         <span class="nav-icon"><i class="fa fa-phone"></i> {{ app.user.persona.telefono }}</span>
+                    </div>
+                    
+                </div>
+            </div>
+            </div>
+                    
+            <div class="db-address col-xs-12">
+            <h4 class="acc-title">
+                Default Address
+            </h4>
+            <div class="row">
+                <div class="bs-address">
+                    
+                    <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
+                        <div style="margin-bottom: 15px"></div>
+                        <span class="nav-icon">{{ direccion[0].linea1 }}{% if(direccion[0].linea2) %}{{ ', ' ~ direccion[0].linea2 }}{% endif %}</span>
+                        <span class="nav-icon">{{ direccion[0].city ~ ', '}}{{ direccion[0].state}}</span>
+                        <span class="nav-icon">{{ direccion[0].phoneNumber }}</span>
+                        <span class="nav-icon">{{ direccion[0].zipCode }}</span>
+                        <span class="nav-icon">{{ direccion[0].country }}</span>
                     </div>
                     
                 </div>
