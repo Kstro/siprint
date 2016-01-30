@@ -338,7 +338,7 @@
                 $('#direccion_state').val('');
                 $('#direccion_country').val('');
                 
-                $('#direccion_country').val('');
+                
                 $('#direccion_zipCode').val('');
                 $('#direccion_securityAccessCode').val('');
                 
@@ -416,13 +416,13 @@
         $(document).on('keyup','#direccion_country',function(){
             var num = $(this).val();
             $('#stripe_view_address_country').val(num);
-            $('#direccion_country').addClass('error');
+            
         });
         
         $(document).on('keyup','#direccion_zipCode',function(){
             var num = $(this).val();
             $('#stripe_view_address_zip_code').val(num);
-            $('#direccion_zipCode').addClass('error');
+            
         });
         
         $(document).on('keyup','#direccion_securityAccessCode',function(){
