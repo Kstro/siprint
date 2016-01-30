@@ -45,7 +45,7 @@ class OrdenController extends Controller
 //                                                                              ));
 
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
-        
+        $promotion = $this->get('promotion_img')->searchPromotion();
         //var_dump($products);
         
         //var_dump($products[0]->getAtributoProductoOrden()[0]->getDetalleParametro());        
@@ -54,6 +54,7 @@ class OrdenController extends Controller
             'orden' => $cart,
             'products' => $products,
             'usuario' => $user,
+            'promotion' => $promotion,
         ));
         //var_dump($ordens);
 //        return $this->render('orden/index.html.twig', array(
@@ -94,7 +95,7 @@ class OrdenController extends Controller
     /**
      * Creates a new Orden entity.
      *
-     * @Route("/orders/new", name="orden_new")
+     * @Route("/admin/sale/register", name="admin_register_sale")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -102,7 +103,7 @@ class OrdenController extends Controller
         $orden = new Orden();
         $form = $this->createForm('DG\ImpresionBundle\Form\OrdenType', $orden);
         $form->handleRequest($request);
-
+        $promotion = $this->get('promotion_img')->searchPromotion();
         
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -115,6 +116,7 @@ class OrdenController extends Controller
         return $this->render('orden/new.html.twig', array(
             'orden' => $orden,
             'form' => $form->createView(),
+            'promotion' => $promotion,
         ));
     }
 
@@ -158,12 +160,17 @@ class OrdenController extends Controller
      */
     public function storeSaleAction()
     {
+        $orden = new Orden();
+        $form = $this->createForm('DG\ImpresionBundle\Form\OrdenType', $orden);
+        
         $em = $this->getDoctrine()->getManager();
         
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('orden/store_sale.html.twig', array(
+            'orden' => $orden,
+            'form' => $form->createView(),
             'usuario' => $usuario,
             'promotion' => $promotion,
             
@@ -278,7 +285,13 @@ class OrdenController extends Controller
 
         if($cart == NULL) {
             $orden->setUsuario($usuario);
-            $orden->setDireccionEnvio($direccionEnvio);
+            
+            if($direccionEnvio != NULL) {
+                $orden->setDireccionEnvio($direccionEnvio);
+            } else {
+                $orden->setDireccionEnvio(NULL);
+            }
+            
             $orden->setFechaAccion(new \DateTime ('now'));
             $orden->setEstado('ca');
             $em->persist($orden);
@@ -300,6 +313,7 @@ class OrdenController extends Controller
         $detalleorden->setArchivo($archivo_subir);
         move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
 
+        $detalleorden->setEstado('ad');
         $detalleorden->setCategoria($product);
         $detalleorden->setOrden($orden);
         
@@ -335,7 +349,10 @@ class OrdenController extends Controller
         $categorias = $em->createQuery($dql)
                    ->getResult();
         
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('categoria/productslist.html.twig', array(
+            'promotion' => $promotion,
             'types' => $types,
             'categorias' => $categorias,
             'registro'=>null

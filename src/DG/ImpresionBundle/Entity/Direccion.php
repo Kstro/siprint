@@ -376,4 +376,9 @@ class Direccion
     {
         return $this->usuario;
     }
+    
+    public function __toString() 
+    {
+        return $this->linea1 ? $this->linea1.', '.$this->city.', '.$this->state.'.' : '';
+    }
 }

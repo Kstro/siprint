@@ -15,8 +15,17 @@ class OrdenType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombreProyecto')
-            ->add('direccionEnvio')
+            //->add('nombreProyecto')
+            ->add('cliente', null, array(
+                    'attr'=>array(
+                    'class'=>'form-control col-md-4'
+                    )
+                ))    
+            ->add('direccionEnvio', null, array(
+                    'attr'=>array(
+                    'class'=>'form-control col-md-4'
+                    )
+                ))
         ;
     }
     
@@ -28,5 +37,7 @@ class OrdenType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'DG\ImpresionBundle\Entity\Orden'
         ));
+        
+        
     }
 }
