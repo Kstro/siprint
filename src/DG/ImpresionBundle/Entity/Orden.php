@@ -62,6 +62,15 @@ class Orden
      */
     private $direccionEnvio;
     
+    /**
+     * @var \Persona
+     *
+     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cliente", referencedColumnName="id")
+     * })
+     */
+    private $cliente;
     
     /**
      *
@@ -373,5 +382,27 @@ class Orden
         return $this->tarjetaPago;
     }
     
-    
+     /**
+     * Set persona
+     *
+     * @param \DG\ImpresionBundle\Entity\Persona $cliente
+     *
+     * @return Orden
+     */
+    public function setCliente(\DG\ImpresionBundle\Entity\Persona $cliente = null)
+    {
+        $this->cliente = $cliente;
+
+        return $this;
+    }
+
+    /**
+     * Get persona
+     *
+     * @return \DG\ImpresionBundle\Entity\Persona 
+     */
+    public function getCliente()
+    {
+        return $this->cliente;
+    }
 }

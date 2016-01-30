@@ -52,13 +52,13 @@
                                         <h3 class="product-name text-left">
                                             {#<a title="{{ product.categoria }}">{{ product.categoria }}</a>#}
                                             <strong>{{ row.categoria }}</strong>
-                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{detalleId:row.id})}}" class="acc-edit borrarDetalle pull-right" title="delete">
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{id:row.id})}}" class="acc-edit borrarDetalle pull-right" title="delete">
                                                 <i class="fa fa-times"></i>
                                             </a>
                                             <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_edit_design',{id: row.id})}}" class="acc-edit pull-right" title="edit information">
                                                 <i class="fa fa-edit"></i>
                                             </a>    
-                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{detalleId:row.id})}}" class="acc-edit pull-right" title="view detail">
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_detail_design_show',{id:row.id})}}" class="acc-edit pull-right" title="view detail">
                                                 <i class="fa fa-eye"></i>
                                             </a>     
                                         </h3>

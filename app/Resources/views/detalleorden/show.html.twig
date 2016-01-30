@@ -13,90 +13,78 @@
         </div>
     </aside>
 {% endblock %}
-{% block titleAccount -%} {{ detalleOrden.categoria }} {% endblock %}
 
 {% block contenido %}
     <div id="resultado"></div>
-    <div class="row">
-        <div class="detail-design tab-content clearfix">
-            <div role="tabpanel" class="tab-pane active" id="features">
-                <div class="product-image v-middle">
-                    <div class="col-sm-11 col-sm-offset-1 col-xs-12" style="margin-top: 50px; width: 450px;">
-                        <img src="{{ asset('Photos/promotions/')}}{{ detalleOrden.categoria.imagen }}" alt="{{ detalleOrden.categoria.nombre }}">
-                    </div>
+    <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="col-sm-11 col-sm-offset-1 col-xs-12" style="width: 100%;">
+                    <img src="{{ asset('Photos/promotions/')}}{{ detalleOrden.categoria.imagen }}" alt="{{ detalleOrden.categoria.nombre }}">
                 </div>
-                    <div class="product-shortdescript v-middle">
-                    <div class="col-sm-12 col-xs-12">
-                        <div class="v-middle">
-                            <h3 style="font-size: 1.3em; font-weight: bold;"> {{ detalleOrden.categoria }} </h3>
-                            <hr>
-                            <ul>
-                                {% for attribute in attributes %}
-                                    <li><i class="fa fa-check"></i> 
-                                        <span style="font-size: 1.14em;  font-weight: bold;">{{ attribute.detalleParametro.parametro }}:</span>
-                                        <span style="font-size: 1.14em;"> {{ attribute.detalleParametro.nombre }}.</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                            <br>
-                            <div style="background-color: #25bce9; padding-top: 7px; padding-bottom: 7px;">
-                                <h3 class="text-center" style="font-size: 1.5em; color: #FFF"> Printing Cost: $ {{ detalleOrden.monto  | number_format(2, '.', ',') }} </h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                {#<div class="row" style="margin-top: 50px; margin-left: 45px; padding-bottom: 15px">#}
-                
-                    <div class="col-sm-4 col-xs-12">
-                        <h3 style="font-size: 1.3em; font-weight: bold;"> Information </h3>
-                        <hr>
-                        <ul>
-                            <li><span class="avalue" style="font-size: 1.14em;">Client name: {{ detalleOrden.orden.usuario.persona }}</span></li>
-                            <li><span class="avalue" style="font-size: 1.14em;">Email: {{ detalleOrden.orden.usuario.email }}</span></li>
-                            <li><span class="avalue" style="font-size: 1.14em;">Address: {{ detalleOrden.orden.direccionEnvio.linea1 }}, {{ detalleOrden.orden.direccionEnvio.city }}, {{ detalleOrden.orden.direccionEnvio.state }}.</span></li>
-                            <li><span class="avalue" style="font-size: 1.14em;">Phone number: {{ detalleOrden.orden.direccionEnvio.phoneNumber }}</span></li>
-                        </ul>
-                    </div>
-                        <div class="col-sm-3 col-sm-offset-1 col-xs-12 v-middle">
-                            <h3 style="font-size: 1.3em; font-weight: bold;"> Download design </h3>
-                        <hr>
-                        <ul>
-                            <li><span class="avalue" style="font-size: 1em;">File: {{ detalleOrden.archivo }}</span></li>
-                        </ul>
-                        <br>
-                            <a href="{{ asset('Photos/promotions/')}}{{ detalleOrden.archivo }}" download><button class="form-control"><i class="fa fa-download"></i> Download</button></a>
-                        </div> 
-
-                {#</div> #}
-                        <div class="clearfix"></div> 
-                <div class="row" style="margin-bottom: 50px;">
-                    <div class="col-sm-12 col-xs-12" style="margin-left: 55px;">
-                        <hr style="width: 750px">
-                        <div class="text-center col-sm-3 col-sm-offset-2 col-xs-9" style="margin-top: 15px;">
-                            <button type="button" class="form-control" value="{{ detalleOrden.id }}" id="accept-file" name="accept-file">
-                                <i class="fa fa-check"></i>
-                                Accept design
-                            </button>
-                        </div>
-                        <div class="text-center col-sm-3 col-xs-9" style="margin-top: 15px;">
-                            <a href="{{ path('admin_disapprovedesign_new', { 'id': detalleOrden.id }) }}" class="disapprove">
-                                <button value="{{ detalleOrden.id }}" class="form-control" id="disapprove-file" name="disapprove-file">
-                                    <i class="fa fa-times"></i>
-                                    Disapprove design
-                                </button>
-                            </a>    
-                        </div>
-                    </div>    
-                </div>
-                            
             </div>
-            {#<div class="clearfix"></div>            #}
+            <div class="col-sm-6">
+                <div class="col-sm-12 col-xs-12">
+                    <h3 style="font-size: 1.3em; font-weight: bold;"> {{ detalleOrden.categoria }} </h3>
+                    <hr>
+                    <ul>
+                        {% for attribute in attributes %}
+                            <li><i class="fa fa-check"></i> 
+                                <span style="font-size: 1.14em;  font-weight: bold;">{{ attribute.detalleParametro.parametro }}:</span>
+                                <span style="font-size: 1.14em;"> {{ attribute.detalleParametro.nombre }}.</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                    <div style="background-color: #25bce9; padding-top: 7px; padding-bottom: 7px; margin-top: 40px">
+                        <h3 class="text-center" style="font-size: 1.5em; color: #FFF"> Printing Cost: $ {{ detalleOrden.monto  | number_format(2, '.', ',') }} </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>      
+            <div class="col-sm-7 col-xs-12" style=" margin-top: 35px">
+                <div class="col-sm-11 col-sm-offset-1 col-xs-12">
+                    <h3 style="font-size: 1.3em; font-weight: bold;"> Information </h3>
+                    <hr>
+                    <ul>
+                        <li><span class="avalue" style="font-size: 1.1em;">Client name: {{ detalleOrden.orden.usuario.persona }}</span></li>
+                        <li><span class="avalue" style="font-size: 1.1em;">Email: {{ detalleOrden.orden.usuario.email }}</span></li>
+                        <li><span class="avalue" style="font-size: 1.1em;">Address: {{ detalleOrden.orden.direccionEnvio.linea1 }}, {{ detalleOrden.orden.direccionEnvio.city }}, {{ detalleOrden.orden.direccionEnvio.state }}.</span></li>
+                        <li><span class="avalue" style="font-size: 1.1em;">Phone number: {{ detalleOrden.orden.direccionEnvio.phoneNumber }}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4  col-xs-12" style=" margin-top: 35px">
+                <h3 style="font-size: 1.3em; font-weight: bold;"> Download design </h3>
+                <hr>
+                <ul>
+                    <li><span class="avalue" style="font-size: 1em;">File: {{ detalleOrden.archivo }}</span></li>
+                </ul>
+                <br>
+                <a href="{{ asset('Photos/promotions/')}}{{ detalleOrden.archivo }}" download><button class="form-control"><i class="fa fa-download"></i> Download</button></a>
+            </div> 
+            <div class="clearfix"></div>   
             
-            {#<div class="clearfix"></div>#}
-            
-        </div> 
-    </div>    
+            <div class="col-sm-12 col-xs-12" style="margin-left: 55px; margin-bottom: 30px">
+                <hr style="width: 750px">
+                <div class="text-center col-sm-3 col-sm-offset-2 col-xs-9" style="margin-top: 15px;">
+                    <button type="button" class="form-control" value="{{ detalleOrden.id }}" id="accept-file" name="accept-file">
+                        <i class="fa fa-check"></i>
+                        Accept design
+                    </button>
+                </div>
+                <div class="text-center col-sm-3 col-xs-9" style="margin-top: 15px;">
+                    <a href="{{ path('admin_disapprovedesign_new', { 'id': detalleOrden.id }) }}" class="disapprove">
+                        <button value="{{ detalleOrden.id }}" class="form-control" id="disapprove-file" name="disapprove-file">
+                            <i class="fa fa-times"></i>
+                            Disapprove design
+                        </button>
+                    </a>    
+                </div>
+            </div>    
+                
+        </div>    
+    </section>
 {% endblock %}
 {% block javascripts_step %}
     {{parent()}}

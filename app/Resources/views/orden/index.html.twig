@@ -23,7 +23,12 @@
                 </div>
 {#                {% if #}
                     <div class="col-md-5 text-right">
-                        <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>
+                        <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="opciones" role="button" value="{{ ord.id }}" style=" background-color: #25bce9;">
+                            <a  class="export"  href="" style="margin-top: 3px; color: #FFF;">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </a>
+                        </button>
+                        <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a> 
                     </div>
 {#                %}#}
             </h4>
@@ -87,7 +92,17 @@
             });  
         });
     </script>    
-    
+    <script>  
+        $(document).ready(function(){          
+            $('.opciones').click(function(){
+                    var id = $(this).val();
+                    var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                    window.open(url,'_blank');
+                
+                
+                });    
+        });//Fin document ready        
+    </script>
 {% endblock %}
 
 

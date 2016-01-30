@@ -86,7 +86,13 @@
                                     <div class="pro-name-rate clearfix">
                                         <h3 class="product-name text-left" style="font-size: 1.19em;">
                                             <strong>{{ row.categoria }}</strong>
-                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_detalleorden_show',{id:row.id})}}" class="acc-edit borrarDetalle pull-right" title="edit information">
+                                            {#<a class="text-center pull-right borrarDetalle" style="margin-top: 3px; margin-left: 3px"  href="{{path('orden_delete',{id:row.id})}}" title="delete">
+                                                <i class="fa fa-times"></i>
+                                            </a>  #}
+                                            <a class="text-center pull-right edit-registro" style="margin-top: 3px; margin-right: 3px"  href="{{path('admin_design_edit',{id: row.id})}}" title="edit information">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </a>  
+                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_detalleorden_show',{id:row.id})}}" class="acc-edit pull-right" title="view detail">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </h3>
@@ -129,13 +135,55 @@
             No items
         </div>
         
-    {% endif %}
-    
-    
-    
-        
-    
-    
+    {% endif %}    
 {% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+        <script>
+            $(document).ready(function () {
+                
 
+                var direccionId= 0;
+                var tarjetaId= 0;
+                $(document).on('click','.borrarDetalle', function(){
+                    var mas = $(this).children();
+                    var link = $(this);    
+                    $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                    var totalAnterior=$('#totalOrden').html();
+                    
+                    $('#totalOrden').html('<img style="width:18%; position:relative; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
+                    
+                    var href = $(this).attr('href');
 
+                    ($('#resultado')) ? $('#resultado').remove():'';
+
+                    // crear un elemento para colocar la información
+                    var elem = $("<div id='resultado'></div>");
+                    var detalleId = $(this).attr('id');
+                    var id=0;
+                    
+                    $.post( "{{path('orden_delete')}}", { detalleId: detalleId,ordenId:id }, function( data ) {
+                        var par = new Array();
+                        par = data.query;
+
+                        // Si la plantilla contiene campos
+                        if(data.flag === 0) {
+                            //alert('0');
+                            $('#totalOrden').html('$ '+data.monto);
+                            $(link).html(mas);
+
+                            $(link).parent().parent().parent().parent().html('<div class="text-center">Item removed</div>');
+                        }
+                        else{
+                            $('#totalOrden').html(totalAnterior);
+                            $(link).html(mas);
+                        }
+                    }, "json");
+                
+                        
+                    return false;
+                });
+            });
+
+</script>
+{% endblock %}

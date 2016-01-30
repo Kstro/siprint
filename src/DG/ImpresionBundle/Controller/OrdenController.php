@@ -153,6 +153,26 @@ class OrdenController extends Controller
     /**
      * Finds and displays a Orden entity.
      *
+     * @Route("/admin/store-sale", name="admin_store_sale")
+     * @Method("GET")
+     */
+    public function storeSaleAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('orden/store_sale.html.twig', array(
+            'usuario' => $usuario,
+            'promotion' => $promotion,
+            
+        ));
+    }
+    
+    /**
+     * Finds and displays a Orden entity.
+     *
      * @Route("/admin/order/{id}", name="admin_orden_show")
      * @Method("GET")
      */
