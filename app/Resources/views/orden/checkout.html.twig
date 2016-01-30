@@ -29,6 +29,13 @@
         #labelMonto{
             display: block;
         }
+        .error{
+            border:1px solid #F00;
+            /*-webkit-box-shadow: 0px 0px 2px 0px rgba(255, 0, 0, 1);
+            -moz-box-shadow:    0px 0px 2px 0px rgba(255, 0, 0, 1);
+            box-shadow:         0px 0px 2px 0px rgba(255, 0, 0, 1);
+            */
+        }
     </style>
     <div class="container-fluid" style="margin-top:10px;">
         
@@ -50,56 +57,56 @@
         
             <div id="formnewaddress" class="row" style="margin: 50px 0;">
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    Full Name:
+                    * Full Name:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    Phone Number:
+                    * Phone Number:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_phoneNumber" name="direccion[phoneNumber]" maxlength="25" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    Line 1:
+                    * Line 1:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_linea1" name="direccion[linea1]" maxlength="150" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    Line 2:
+                    * Line 2:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_linea2" name="direccion[linea2]" maxlength="150" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    City:
+                    * City:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_city" name="direccion[city]" maxlength="150" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    State / Province / Region:
+                    * State / Province / Region:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_state" name="direccion[state]" maxlength="150" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    Country:
+                    * Country:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_country" name="direccion[country]" maxlength="100" class="form-control input-sm" type="text">
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                    Zip Code:
+                    * Zip Code:
                 </div>
                 <div class="col-md-6" style="margin-bottom: 4px;">
                     <input id="direccion_zipCode" name="direccion[zipCode]" maxlength="20" class="form-control input-sm" type="text">
@@ -147,28 +154,28 @@
 
                 <div id="formnewcard" class="row" style="margin: 50px 0;">
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                        Number:
+                        * Number:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
                         <input id="tarjeta_numero" name="tarjeta[numero]" maxlength="20" class="form-control input-sm" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                        Name:
+                        * Name:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
                         <input id="tarjeta_nombre" name="tarjeta[nombre]" maxlength="200" class="form-control input-sm" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                        CVC:
+                        * CVC:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
                         <input id="tarjeta_cvc" name="tarjeta[cvc]" required="required" maxlength="4" class="form-control input-sm" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
-                        Expiration date:
+                        * Expiration date:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
                         <input readonly="readonly" id="tarjeta_expiracion" name="tarjeta[expiracion]" class="form-control input-sm calZebra" type="text">
@@ -299,9 +306,14 @@
                 $('#formnewcard').show();
             }
             else{
-                $( "input" ).each(function() {
-                    $( this ).val( "" );
-                });
+                
+                $('#tarjeta_numero').val('');
+                $('#tarjeta_nombre').val('');
+                $('#tarjeta_cvc').val('');
+                $('#tarjeta_expiracion').val('');
+                
+                $('#opcionguardarcard').prop('checked',false);
+                
                 $('#formnewcard').hide();
             }
             $('#stripe_view_address_new_address').val(idDir);
@@ -316,9 +328,22 @@
                 $('#formnewaddress').show();
             }
             else{
-                $( "input" ).each(function() {
-                    $( this ).val( "" );
-                });
+                
+                $('#direccion_name').val('');
+                $('#direccion_phoneNumber').val('');
+                $('#direccion_linea1').val('');
+                $('#direccion_linea2').val('');
+                
+                $('#direccion_city').val('');
+                $('#direccion_state').val('');
+                $('#direccion_country').val('');
+                
+                $('#direccion_country').val('');
+                $('#direccion_zipCode').val('');
+                $('#direccion_securityAccessCode').val('');
+                
+                $('#opcionguardaraddress').prop('checked',false);
+                
                 $('#formnewaddress').hide();
             }
             $('#stripe_view_address_new_address').val(idDir);
@@ -354,41 +379,50 @@
         $(document).on('keyup','#direccion_name',function(){
             var num = $(this).val();
             $('#stripe_view_address_full_name').val(num);
+            $('#direccion_name').removeClass('error');
         });
         
         $(document).on('keyup','#direccion_phoneNumber',function(){
             var num = $(this).val();
             $('#stripe_view_address_phone_number').val(num);
+            $('#direccion_phoneNumber').removeClass('error');
+                
         });
         
         $(document).on('keyup','#direccion_linea1',function(){
             var num = $(this).val();
             $('#stripe_view_address_line1').val(num);
+            $('#direccion_linea1').removeClass('error');
         });
         
         $(document).on('keyup','#direccion_linea2',function(){
             var num = $(this).val();
             $('#stripe_view_address_line2').val(num);
+            $('#direccion_linea2').removeClass('error');
         });
         
         $(document).on('keyup','#direccion_city',function(){
             var num = $(this).val();
             $('#stripe_view_address_city').val(num);
+            $('#direccion_city').removeClass('error');
         });
         
         $(document).on('keyup','#direccion_state',function(){
             var num = $(this).val();
             $('#stripe_view_address_region').val(num);
+            $('#direccion_state').removeClass('error');
         });
         
         $(document).on('keyup','#direccion_country',function(){
             var num = $(this).val();
             $('#stripe_view_address_country').val(num);
+            $('#direccion_country').addClass('error');
         });
         
         $(document).on('keyup','#direccion_zipCode',function(){
             var num = $(this).val();
             $('#stripe_view_address_zip_code').val(num);
+            $('#direccion_zipCode').addClass('error');
         });
         
         $(document).on('keyup','#direccion_securityAccessCode',function(){
@@ -446,6 +480,42 @@
         
         //$('#formnewcard').hide();
         //$('#formnewaddress').hide();
+        
+        $('#payment-submit').on('click', function(){
+            var error=0;
+            if(
+                $('#selectDirecciones').val()==0 && ($('#direccion_name').val()=='' || $('#direccion_phoneNumber').val()==''
+                || $('#direccion_linea1').val()=='' || $('#direccion_linea2').val()=='' || $('#direccion_city').val()==''
+                || $('#direccion_state').val()=='' || $('#direccion_country').val()=='' || $('#direccion_zipCode').val()=='' )){
+            
+                $('#direccion_name').addClass('error');
+                $('#direccion_phoneNumber').addClass('error');
+                $('#direccion_linea1').addClass('error');
+                $('#direccion_linea2').addClass('error');
+                $('#direccion_city').addClass('error');
+                $('#direccion_state').addClass('error');
+                $('#direccion_country').addClass('error');
+                $('#direccion_zipCode').addClass('error');
+            
+                error++;
+            }
+            if($('#selectTarjetas').val()==0 && ($('#tarjeta_numero').val()=='' || $('#tarjeta_nombre').val()==''
+                    || $('#tarjeta_cvc').val()=='' || $('#tarjeta_expiracion').val()=='')){
+                //alert();
+                $('#tarjeta_numero').addClass('error');
+                $('#tarjeta_nombre').addClass('error');
+                $('#tarjeta_cvc').addClass('error');
+                $('#tarjeta_expiracion').addClass('error');
+                
+                error++;
+            }
+            if(error!=0){
+                return false;
+            }
+        });
+        
+        
+        
         
         
         
