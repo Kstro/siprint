@@ -88,6 +88,14 @@ class Orden
     
     
     /**
+     * @var float
+     *
+     * @ORM\Column(name="reembolso", type="float", nullable=false)
+     */
+    private $reembolso;
+    
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="tarjeta_pago", type="string", length=20, nullable=false)
@@ -405,4 +413,32 @@ class Orden
     {
         return $this->cliente;
     }
+    
+    
+    
+    
+    /**
+     * Set reembolso
+     *
+     * @param float $reembolso
+     *
+     *
+     */
+    public function setReembolso($reembolso)
+    {
+        $this->reembolso= $reembolso;
+
+        return $this;
+    }
+
+    /**
+     * Get monto
+     *
+     * @return float
+     */
+    public function getReembolso()
+    {
+        return $this->reembolso;
+    }
+    
 }

@@ -197,6 +197,86 @@ class OrdenController extends Controller
             'products' => $products,
         ));
     }
+    
+    
+    
+    
+    /**
+     * Finds and displays a Orden entity.
+     *
+     * @Route("/admin/order/refund/{id}", name="admin_orden_refund")
+     * @Method("GET")
+     */
+    public function refundAction(Orden $orden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $detalleOrden = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $orden,
+                                                                                ));
+        $monto = 0;
+        foreach($detalleOrden as $row){
+            $monto = $monto+ $row->getMonto();
+        }
+        //var_dump($monto);
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('orden/refund_order.html.twig', array(
+            'promotion' => $promotion,
+            'totalOrder' => $monto,
+            'order' => $orden->getId(),
+        ));
+    }
+    
+    
+    
+    
+    /**
+     * Finds and displays a Orden entity.
+     *
+     * @Route("/admin/order/refund/done", name="admin_orden_refund_done")
+     * @Method("POST")
+     */
+    public function refunddoneAction(Request $request)
+    {
+        //var_dump($request->getMethod());
+        $em = $this->getDoctrine()->getManager();
+        $orden = $request->get('orderid');
+        $detalleOrden = $em->getRepository('DGImpresionBundle:Orden')->find($orden);
+        
+        
+        
+        
+        
+        if ($request->getMethod()=="POST") {
+            $em = $this->getDoctrine()->getManager();
+            $refundAmount = $request->get('refundAmount');
+            //echo $refundAmount+0;
+            //die();
+            //$refundAmount = $refundAmount+0.0;
+            $m = $refundAmount;
+            //var_dump($m);
+            $detalleOrden->setReembolso($m);
+            $em->persist($detalleOrden);
+            $em->flush();
+        }
+        else{
+            
+        }
+        //var_dump($orden);
+        //echo "fin";
+        //die();
+        return $this->redirectToRoute('admin_view_orders_');
+        //var_dump($monto);
+//        $promotion = $this->get('promotion_img')->searchPromotion();
+//        
+//        return $this->render('orden/refund_order.html.twig', array(
+//            'promotion' => $promotion,
+//            'totalOrder' => $monto,
+//            'order' => $orden->getId(),
+//        ));
+    }
+    
+    
+    
 
     /**
      * Displays a form to edit an existing Orden entity.
@@ -512,6 +592,7 @@ class OrdenController extends Controller
         $response = new JsonResponse();
         $address = $em->getRepository('DGImpresionBundle:Direccion')->find($direccionId);
         $card = $em->getRepository('DGImpresionBundle:Tarjeta')->find($tarjetaId);
+        
         
         //var_dump($card->getExpiracion()->format('m-Y'));
         if(count($address)!=0 && count($card)!=0){
