@@ -60,11 +60,15 @@
                     
                     <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
                         <div style="margin-bottom: 15px"></div>
-                        <span class="nav-icon">{{ direccion[0].linea1 }}{% if(direccion[0].linea2) %}{{ ', ' ~ direccion[0].linea2 }}{% endif %}</span>
-                        <span class="nav-icon">{{ direccion[0].city ~ ', '}}{{ direccion[0].state}}</span>
-                        <span class="nav-icon">{{ direccion[0].phoneNumber }}</span>
-                        <span class="nav-icon">{{ direccion[0].zipCode }}</span>
-                        <span class="nav-icon">{{ direccion[0].country }}</span>
+                        {% if direccion %}
+                            <span class="nav-icon">{{ direccion[0].linea1 }}{% if(direccion[0].linea2) %}{{ ', ' ~ direccion[0].linea2 }}{% endif %}</span>
+                            <span class="nav-icon">{{ direccion[0].city ~ ', '}}{{ direccion[0].state}}</span>
+                            <span class="nav-icon">{{ direccion[0].phoneNumber }}</span>
+                            <span class="nav-icon">{{ direccion[0].zipCode }}</span>
+                            <span class="nav-icon">{{ direccion[0].country }}</span>
+                        {% else %}
+                            <p class="text-center">No address were found</p>
+                        {% endif %}
                     </div>
                     
                 </div>

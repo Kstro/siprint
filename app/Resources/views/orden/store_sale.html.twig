@@ -18,7 +18,7 @@
             <h3 class="" style="color:#FFF;">List of sales at the store</h3>
         </div>
         <div class="col-md-7 pull-right" >
-            <a id="accion" href="" class="pull-right nuevo-registro" style="color:#FFF;">
+            <a id="accion" href="{{ path('admin_register_sale') }}" class="pull-right nuevo-registro" style="color:#FFF;" title="Register new sale">
                 <i class="fa fa-plus"></i>
             </a>
         </div>        
@@ -29,26 +29,23 @@
             <thead>
                 <tr>
 {#                    <th>Id</th>#}
-                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Customer name</th>
+                    <th>Amount</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-            {#{% for parametro in parametros %}#}
                 <tr>
-{#                    <td><a href="{{ path('admin_parametro_show', { 'id': parametro.id }) }}">{{ parametro.id }}</a></td>#}
-                    <td>{#{{ parametro.nombre }}#}customer 1</td>
+                    <td class="text-center">January 29, 2016</td>
+                    <td>Mario Vladimir Ayala Orellana</td>
+                    <td class="text-right">$ 100.00</td>
                     <td>
-                        {#<ul>
-                            <li>
-                                <a href="{{ path('admin_parametro_show', { 'id': parametro.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">edit</a>
-                            </li>
-                        </ul>#}
-                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{#{{ path('admin_parametro_edit', { 'id': parametro.id }) }}#}">
-                            <i class="fa fa-edit"></i>
+                        {#<a class="text-center add-design pull-right" style="margin-top: 3px; margin-left: 5px;" title="add" href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">
+                            <i class="fa fa-folder-open"></i>
+                        </a>#}
+                        <a class="text-center view-sale pull-right" style="margin-top: 3px;" title="view detail" href="{#{{ path('admin_parametro_edit', { 'id': parametro.id }) }}#}">
+                            <i class="fa fa-eye"></i>
                         </a>
                     </td>
                 </tr>
@@ -62,134 +59,18 @@
 
 {% block javascripts_step %}
     {{parent()}}
-    
     <script>
-                $(document).ready(function(){
-                    
-                    $('.listados').DataTable({ 
-                        searching:true,
+        $(document).ready(function(){
+            $('.listados').DataTable({ 
+                searching:true,
 {#                        "order":[0, "desc"],#}
-                        "columnDefs": [
-                               { "orderable": true, "targets": 0 }
-                               
-{#                               { "orderable": false, "targets": 3 }#}
-                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
-                            ],
-                        {#"language": {
-                        "info": "Mostrando página _PAGE_ de _PAGES_",
-                        "infoEmpty": "",
-                        "emptyTable": "No se encontraron registros",
-                        "paginate": { 
-                            "next": "Siguiente",
-                            "previous": "Anterior"
-                        },
-                        "processing": "Procesando petición...",
-                        "search": "Buscar registros:",
-                        "lengthMenu": "Mostrar _MENU_ registros"
-                    },          #}
-
-                    });
-                    $('.dataTables_filter').addClass('pull-right ');
-                    
-                    {#var  input = $('.dataTables_filter').children('label').children('input');
-                    input.attr('placeholder', 'Buscar...');
-                    $('.dataTables_filter').children('label').html(input);        #}    
-{#                    $('.dataTables_filter').children('label').hide();#}
-                    
-{#                    $('.dataTables_filter').append('<span class="fa fa-search" id="labelid" aria-hidden="true" style="margin-left:10px;margin-top:7px;"></span>');#}
-                    {#$('#labelid').on('click',function(){
-                        $('.dataTables_filter').children('label').fadeToggle();
-                        
-                    });
-                    $('#filterDatatables1').on('keyup', function(event) {
-                        var filtro = $(this).val(); 
-                        //alert(filtro);
-                        $('#DataTables_Table_0_filter>label>input').val($(this).val());
-                        $('#DataTables_Table_0_filter>label>input').keyup();
-
-                    });#}
-                    
-                    $('.nuevo-registro').on("click",function(){
-                        {#$( "#dialog" ).dialog();
-                        return false;#}
-                        var mas = $(this).children();
-                        
-                        $(this).html('<img style="width:30%; position:inherit; float:right; " src="{{ asset('Resources/images/89.gif') }}">');
-                        
-                        
-                        var href = $(this).attr('href');
-                        
-                        
-                        ($('#resultado')) ? $('#resultado').remove():'';
- 
-                        // crear un elemento para colocar la información
-                        var elem = $("<div id='resultado'></div>");
- 
-                        //Agregar el elemento después de la clase records_list
-                        elem.insertAfter($(".listados"));
- 
-                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
-                        $('#resultado').load(href, function(){
-                            $(this).dialog({
-                                modal: true, 
-                                width: 1000,
-                                resizable: false,
-                                title: "New attribute",
-                                position: { 
-                                    my: "center", 
-                                    at: "center", 
-                                    of: '.modal-center'
-                                },
-                                show: { effect: "fadeIn", duration: 1000 }
-                            });
-                            $('.nuevo-registro').html(mas);
-                            
-                        });
-                        
-                        return false;
-                    });
-                    
-                    
-                    $(document).on("click", '.edit-registro',function(){
-                        {#$( "#dialog" ).dialog();
-                        return false;#}
-                        var mas = $(this).children();
-                        
-                        $(this).html('<img style="width:25%; position:inherit; float:right; " src="{{ asset('Resources/images/89C.gif') }}">');
-                        
-                        var href = $(this).attr('href');
-                        
-                        ($('#resultado')) ? $('#resultado').remove():'';
- 
-                        // crear un elemento para colocar la información
-                        var elem = $("<div id='resultado'></div>");
-                        
-                        //Agregar el elemento después de la clase records_list
-                        elem.insertAfter($(".listados"));
-{#                        return false;#}
-                        // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
-                        $('#resultado').load(href, function(){
-                            $(this).dialog({
-                                modal: true, 
-                                width: 1000,
-                                resizable: false,
-                                title: "Edit attribute",
-                                position: { 
-                                    my: "center", 
-                                    at: "center", 
-                                    of: '.modal-center'
-                                },
-                                show: { effect: "fadeIn", duration: 1000 }
-                            });
-                            $('.edit-registro').html(mas);
-                            
-                        });
-                        
-                        return false;
-                    });
-                    
-                });
-
-            </script>
-
+                "columnDefs": [
+                   { "orderable": true, "targets": 0 }
+{#                       { "orderable": false, "targets": 3 }#}
+                       //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                ],                       
+            });
+            $('.dataTables_filter').addClass('pull-right ');
+        });
+    </script>
 {% endblock %}

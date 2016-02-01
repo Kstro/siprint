@@ -1,16 +1,59 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
-    <h1>Orden creation</h1>
+{% block section %}
+    Store sales
+{% endblock %}
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+{% block section2 %}
+    Store sales
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('orden_index') }}">Back to the list</a>
-        </li>
-    </ul>
+{% block img_prom %}
+    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="acc-title lg">
+        <div class="col-md-8 pull-left">
+            <h3 class="" style="color:#FFF;">Register new sale</h3>
+        </div>
+              
+    </div>
+    <div id="resultado"></div>
+    <div class="form-edit-info" style="padding-top: 20px;">
+        {{ form_start(form, {'action': path('admin_register_sale')}) }}
+            {{ form_errors(form) }}
+                <div class="row" style="margin: 50px 0;">
+                    <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                        Customer name:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                        {{ form_widget(form.cliente) }}
+                    </div>
+
+                    {#<div class="clearfix"></div>#}
+                    <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                        Address:
+                    </div>
+                    <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                        {{ form_widget(form.direccionEnvio) }}
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <hr>    
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 text-center" style="margin-bottom: 4px;">
+                        <input type="submit" value="Register sale" style="margin-bottom: 10px;" class="btn-nuevo btn"/>
+                    </div>    
+                </div>    
+            
+        {{ form_end(form) }}
+
+        {#<ul>
+            <li>
+                <a href="{{ path('orden_index') }}">Back to the list</a>
+            </li>
+        </ul>#}
+    </div>
 {% endblock %}
