@@ -42,9 +42,16 @@
                                 <div class=" acc-info-content pad-1015 col-sm-10 col-sm-offset-2  col-xs-12">
                                     <ul>
                                         <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Name: {{ ord.usuario.persona }}</li>
-                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: {% if ord.direccionEnvio.linea1 %} {{ ord.direccionEnvio.linea1 }}{% endif %}
-                                                                                {% if ord.direccionEnvio.linea2 %} {{ ord.direccionEnvio.linea2 }}{% endif %}, 
-                                                                                {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: 
+                                            {% if ord.direccionEnvio %} 
+                                                {{ ord.direccionEnvio.linea1 }}
+                                                {% if ord.direccionEnvio.linea2 %} 
+                                                    {{ ord.direccionEnvio.linea2 }}
+                                                {% endif %}, 
+                                                {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
+                                            {% else %}
+                                                {{ ord.direccionEnvioGuardar }}
+                                            {% endif %}
                                         </li>
                                         <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Total amount: $ 
                                             {% set total = 0 %}

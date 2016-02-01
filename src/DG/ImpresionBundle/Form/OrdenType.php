@@ -18,12 +18,12 @@ class OrdenType extends AbstractType
             //->add('nombreProyecto')
             ->add('cliente', null, array(
                     'attr'=>array(
-                    'class'=>'form-control col-md-4'
+                    'class'=>'form-control'
                     )
                 ))    
             ->add('direccionEnvio', null, array(
                     'attr'=>array(
-                    'class'=>'form-control col-md-4'
+                    'class'=>'form-control'
                     )
                 ))
         ;

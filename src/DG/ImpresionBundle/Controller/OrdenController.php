@@ -100,6 +100,8 @@ class OrdenController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        
         $orden = new Orden();
         $form = $this->createForm('DG\ImpresionBundle\Form\OrdenType', $orden);
         $form->handleRequest($request);
@@ -113,8 +115,11 @@ class OrdenController extends Controller
             return $this->redirectToRoute('orden_show', array('id' => $orden->getId()));
         }
 
+        $categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
+        
         return $this->render('orden/new.html.twig', array(
             'orden' => $orden,
+            'categorias' => $categorias,
             'form' => $form->createView(),
             'promotion' => $promotion,
         ));

@@ -24,23 +24,141 @@
         {{ form_start(form, {'action': path('admin_register_sale')}) }}
             {{ form_errors(form) }}
                 <div class="row" style="margin: 50px 0;">
-                    <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                        Customer name:
+                    <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 15px;">
+                        Customer:
                     </div>
-                    <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
-                        {{ form_widget(form.cliente) }}
+                    <div class="col-md-5 col-sm-5 radio-cu" style="margin-bottom: 15px;">
+                        <label class="radio-inline"><input type="radio" name="customer" id="existing-cu">Existing </label>
+                        <label class="radio-inline"><input type="radio" name="customer" id="new-cu">New </label>
                     </div>
-
-                    {#<div class="clearfix"></div>#}
-                    <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                        Address:
-                    </div>
-                    <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
-                        {{ form_widget(form.direccionEnvio) }}
-                    </div>
-
                     <div class="clearfix"></div>
+                    <div class="customer-existing">
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            Customer name:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            {{ form_widget(form.cliente) }}
+                        </div>
+                    </div>
+                    <div class="customer-new">
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            First name:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                        </div>
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            Last name:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                        </div>
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            Phone:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>   
+                    <hr class="hr-1">    
+                    <div class="address-block">
+                        
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 15px;">
+                            Address:
+                        </div>
+                        <div class="col-md-5 col-sm-5 radio-ad" style="margin-bottom: 15px;">
+                            <label class="radio-inline"><input type="radio" name="address" id="existing-ad">Existing </label>
+                            <label class="radio-inline"><input type="radio" name="address" id="new-ad">New </label>
+                        </div>
+                        <div class="clearfix"></div>
+                    
+                        <div class="address-existing">
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                Full address:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                {{ form_widget(form.direccionEnvio) }}
+                            </div>
+                        </div>
+                        <div class="address-new">
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * Full Name:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * Phone Number:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_phoneNumber" name="direccion[phoneNumber]" maxlength="25" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * Line 1:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_linea1" name="direccion[linea1]" maxlength="150" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * Line 2:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_linea2" name="direccion[linea2]" maxlength="150" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * City:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_city" name="direccion[city]" maxlength="150" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * State / Province / Region:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_state" name="direccion[state]" maxlength="150" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * Country:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_country" name="direccion[country]" maxlength="100" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                * Zip Code:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_zipCode" name="direccion[zipCode]" maxlength="20" class="form-control input-sm" type="text">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                                Security Access Code:
+                            </div>
+                            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                                <input id="direccion_securityAccessCode" name="direccion[securityAccessCode]" maxlength="255" class="form-control input-sm" type="text">
+                            </div>
+                        </div>
+                    </div>        
+                    <div class="clearfix"></div>
+                    <hr class="hr-2">
+                    <div class="design-cat">
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                             Design:
+                        </div>
+                        <div class="col-md-4">
+                            <select id="selectDesigns" class="form-control input-sm">
+                                <option value="0">Select an option ...</option>
+                            {% for cat in categorias %}
+                                <option value="{{cat.id}}"> {{cat.nombre}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>        
                 </div>
+                {#</div>#}
                 <hr>    
                 <div class="row">
                     <div class="col-md-12 col-sm-12 text-center" style="margin-bottom: 4px;">
@@ -49,11 +167,53 @@
                 </div>    
             
         {{ form_end(form) }}
-
-        {#<ul>
-            <li>
-                <a href="{{ path('orden_index') }}">Back to the list</a>
-            </li>
-        </ul>#}
     </div>
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    <script>
+        $(document).ready(function(){
+            $("#orden_cliente").select2();
+            $("#orden_direccionEnvio").select2();
+            $("#selectDesigns").select2();
+        
+            $('.customer-new').hide();
+            $('.customer-existing').hide();
+            $('.address-block').hide();
+            $('.address-new').hide();
+            $('.address-existing').hide();
+            $('.design-cat').hide();
+            $('.hr-1').hide();
+            $('.hr-2').hide();
+            
+            $( "#existing-cu" ).on( "click", function() {
+                $('.hr-1').show();
+                $('.customer-new').hide();
+                $('.customer-existing').show();
+                $('.address-block').show();
+                $('.radio-ad').show();
+                $('.address-new').hide();
+            });
+
+            $( "#new-cu" ).on( "click", function() {
+                $('.hr-1').show();
+                $('.customer-new').show();
+                $('.radio-ad').hide();
+                $('.customer-existing').hide();
+                $('.address-block').show();
+                $('.address-new').show();
+                $('.address-existing').hide();
+            });
+
+            $( "#existing-ad" ).on( "click", function() {
+                $('.address-new').hide();
+                $('.address-existing').show();
+            });
+
+            $( "#new-ad" ).on( "click", function() {
+                $('.address-new').show();
+                $('.address-existing').hide();
+            });
+        });
+    </script>
 {% endblock %}

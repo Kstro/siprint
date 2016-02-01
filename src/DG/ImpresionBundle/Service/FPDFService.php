@@ -73,23 +73,32 @@ class FPDFService {
         
         $this->pdf->Ln(6);
         $break+=6;
+        
         $this->pdf->SetFont('Arial','B',9);
         $this->pdf->Cell(0, 10, 'Shipping Address:',0,0);
         
-        $this->pdf->SetX(50);
-        $this->pdf->SetFont('Arial','',9);
-        $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getLinea1(), 0, 0);
+        if($orden[0]->getOrden()->getDireccionEnvio()) 
+        {    
+            $this->pdf->SetX(50);
+            $this->pdf->SetFont('Arial','',9);
+            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getLinea1(), 0, 0);
+
+            $this->pdf->Ln(5);
+            $break+=5;
+            $this->pdf->SetX(50);
+            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getCity() . ', ' . $orden[0]->getOrden()->getDireccionEnvio()->getState(), 0, 0);
+
+            $this->pdf->Ln(5);
+            $break+=5;
+            $this->pdf->SetX(50);
+            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getZipCode(), 0, 0);
+        } else {
+            $this->pdf->SetX(50);
+            $this->pdf->SetFont('Arial','',9);
+            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvioGuardar(), 0, 0);
+        }
         
-        $this->pdf->Ln(5);
-        $break+=5;
-        $this->pdf->SetX(50);
-        $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getCity() . ', ' . $orden[0]->getOrden()->getDireccionEnvio()->getState(), 0, 0);
-        
-        $this->pdf->Ln(5);
-        $break+=5;
-        $this->pdf->SetX(50);
-        $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getZipCode(), 0, 0);
-        
+            
         $this->pdf->SetLineWidth(0.35);
         $this->pdf->Line(20, $customer_top, 20, $break + 30);
         $this->pdf->Line(207, $customer_top, 207, $break + 30);
