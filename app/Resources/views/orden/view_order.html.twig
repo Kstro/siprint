@@ -23,6 +23,7 @@
 {% endblock %}
 
 {% block contenido %}
+    <div id="resultado"></div>
     <div class="acc-title lg">
         <div class="col-md-5 pull-left">
             <h3 class="" style="color:#FFF;">Orders list</h3>
@@ -35,6 +36,9 @@
                     <th>Client</th>
                     <th>Date order</th>
                     <th>State</th>
+                    <th>Stripe ID</th>
+                    
+                    <th>Refund</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -44,21 +48,37 @@
                     <td>{{ order.usuario.persona }}</td>
                     <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
                     <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>
-                    <td>
-                        <div class=" pull-right">
-                            <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
-                            <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
-                                
-                                    <i class="fa fa-info-circle"></i>
-                               
-                            </button>
-                             </a> 
+                    <td class="text-right">
+                        
+                            {{order.idPago}}
                             
-                            <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
+                    </td>
+                    <td class="text-right">$ {% if order.reembolso == '' %} 0.00 {%else%} {{order.reembolso|number_format('2','.',',')}} {% endif %}</td>
+                    <td>
+                        <div class=" pull-right">    
+                            <div class="col-md-2">
+                                <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
+                                    <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
+                                        <i class="fa fa-info-circle"></i>
+                                    </button>
+                                </a> 
+                            </div>
+                            <div class="col-md-1">
                                 <a  class="export"  href="" style="margin-top: 3px;">
-                                    <i class="fa fa-file-pdf-o"></i>
+                                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </button>        
                                 </a>
-                            </button>        
+                            </div>
+                            {% if order.reembolso ==0 %}
+                                <div class="col-md-1">
+                                    <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                        <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                            <i class="fa fa-money"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -78,7 +98,6 @@
                 searching:true,
                 "order":[[0, "desc"],[1,"desc"]],
                 "columnDefs": [
-
                        { "orderable": false, "targets": 1 }
                 ]
             });
@@ -91,12 +110,58 @@
     <script>  
         $(document).ready(function(){          
             $('.opciones').click(function(){
-                    var id = $(this).val();
-                    var url = Routing.generate('admin_reporte_invoice', {'id': id});
-                    window.open(url,'_blank');
+                var id = $(this).val();
+                var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                window.open(url,'_blank');
+            });    
                 
-                
-                });    
+            {#$('.opcionRefund').click(function(){
+                var id = $(this).val();
+                var url = Routing.generate('admin_orden_refund', {'id': id});
+                window.open(url,'_blank');
+                return false;
+            });  #}
+            
+            
+            
+            $('.opcionRefund').on("click",function(){
+
+                //var mas = $(this).children();
+
+{#                $(this).html('<img style="width:5%;" src="{{ asset('Resources/images/89C.gif') }}">');#}
+
+                var href = $(this).attr('href');
+                {#
+                ($('#resultado')) ? $('#resultado').remove():'';
+
+                // crear un elemento para colocar la información
+                var elem = $("<div id='resultado'></div>");
+
+                //Agregar el elemento después de la clase records_list
+                elem.insertAfter($(".listados"));#}
+
+                // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                $('#resultado').load(href, function(){
+                    $(this).dialog({
+                        modal: true, 
+                        width: 600,
+                        title: "Refund...",
+                        resizable: false,
+                        position: { 
+                            my: "center", 
+                            at: "center", 
+                            of: '.modal-center'
+                        },
+                        show: { effect: "fadeIn", duration: 800 }
+                    });
+                    //$('.opcionRefund').html(mas);
+
+                });
+
+                return false;
+            });
+            
+            
         });//Fin document ready        
     </script>
 {% endblock %}
