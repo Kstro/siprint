@@ -1,0 +1,204 @@
+
+
+{% block css -%}
+    
+    <style>
+        .acc-title.lg > div:nth-child(2)> a:hover >i {
+            color: #000;
+            opacity:0.6;
+        }
+    </style>
+{% endblock %}
+
+
+
+
+
+{% block contenido %}
+    
+    <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Client</th>
+                    <th>Date order</th>
+{#                    <th>State</th>#}
+                    <th>Stripe ID</th>
+                    
+                    <th>Refund</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td># {{ order.id }}</td>
+                    <td>{{ order.usuario.persona }}</td>
+                    <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
+{#                    <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>#}
+                    <td class="text-right">
+                        
+                            {{order.idPago}}
+                            
+                    </td>
+                    <td class="text-right">$ {% if order.reembolso == '' %} 0.00 {%else%} {{order.reembolso|number_format('2','.',',')}} {% endif %}</td>
+                    <td>
+                        <div class=" pull-right">    
+                            <div class="col-md-2">
+                                <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
+                                    <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
+                                        <i class="fa fa-info-circle"></i>
+                                    </button>
+                                </a> 
+                            </div>
+                            <div class="col-md-1">
+                                <a  class="export"  href="" style="margin-top: 3px;">
+                                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                    </button>        
+                                </a>
+                            </div>
+                            {% if order.reembolso == 0 and order.estado == 'pa' %}
+                                <div class="col-md-1">
+                                    <a id="{{order.id}}" class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                        <button id="prOrder" data-toggle="tooltip" data-container="body" title="Print order" class="btn" role="button">
+                                            <i class="fa fa-print"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if order.reembolso == 0 and order.estado == 'cn' %}
+                                <div class="col-md-1">
+                                    <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                        <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                            <i class="fa fa-money"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if order.estado=='pr' %}
+                                <div class="col-md-1">
+                                    <a id="{{order.id}}" class="text-center edit-registro" style="margin-top: 3px;"  href="">
+                                        <button id="spOrder" data-toggle="tooltip" data-container="body" title="Ship order" class="btn" role="button">
+                                            <i class="fa fa-truck"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            {% endif %}{#
+                                {% if order.estado=='cn' %}
+                                    <div class="col-md-1">
+                                        <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                            <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                                <i class="fa fa-info-circle"></i>
+                                            </button>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if order.estado=='sp' %}
+                                    <div class="col-md-1">
+                                        <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                            <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                                <i class="fa fa-info-circle"></i>
+                                            </button>
+                                        </a>
+                                    </div>
+                                {% endif %}#}
+{#                            {% endif %}#}
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>                
+{% endblock %}
+{% block javascripts_step %}
+    
+    
+    <script>
+        $(document).ready(function(){
+
+            $('.listados').DataTable({ 
+                searching:true,
+                "order":[[0, "desc"],[1,"desc"]],
+                "columnDefs": [
+                       { "orderable": false, "targets": 1 }
+                ]
+            });
+            $('.dataTables_filter').addClass('pull-right ');
+
+        });
+
+    </script>
+
+    <script>  
+        $(document).ready(function(){          
+            $('.opciones').click(function(){
+                var id = $(this).val();
+                var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                window.open(url,'_blank');
+                return false;
+            });    
+                
+            {#$('.opcionRefund').click(function(){
+                var id = $(this).val();
+                var url = Routing.generate('admin_orden_refund', {'id': id});
+                window.open(url,'_blank');
+                return false;
+            });  #}
+            
+            
+            
+            $('.opcionRefund').on("click",function(){
+
+                //var mas = $(this).children();
+
+{#                $(this).html('<img style="width:5%;" src="{{ asset('Resources/images/89C.gif') }}">');#}
+
+                var href = $(this).attr('href');
+                {#
+                ($('#resultado')) ? $('#resultado').remove():'';
+
+                // crear un elemento para colocar la información
+                var elem = $("<div id='resultado'></div>");
+
+                //Agregar el elemento después de la clase records_list
+                elem.insertAfter($(".listados"));#}
+
+                // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
+                $('#resultado').load(href, function(){
+                    $(this).dialog({
+                        modal: true, 
+                        width: 600,
+                        title: "Refund...",
+                        resizable: false,
+                        position: { 
+                            my: "center", 
+                            at: "center", 
+                            of: '.modal-center'
+                        },
+                        show: { effect: "fadeIn", duration: 800 }
+                    });
+                    //$('.opcionRefund').html(mas);
+
+                });
+
+                return false;
+            });
+            
+            
+        });//Fin document ready        
+    </script>
+{% endblock %}

@@ -25,66 +25,31 @@
 {% block contenido %}
     <div id="resultado"></div>
     <div class="acc-title lg">
-        <div class="col-md-5 pull-left">
-            <h3 class="" style="color:#FFF;">Orders list</h3>
+        <div class="col-md-5 pull-left" style="height: 20px;">
+            <h3 class="" style="color:#FFF;" id="estadoOrder">{% block estadoOrden %} Paid orders list {% endblock %}</h3>
+        </div>
+        <div class="col-md-7 pull-right text-right" style="height: 20px;vertical-align: top;  position: relative;">
+            <a id="pa" data-toggle="tooltip" title="Paid orders" class="btn-estado btn" style="height:10px; margin-top: -20px;" >
+                <i class="fa fa-money" style="color:#FFF;"></i>
+            </a>
+            <a id="cn" data-toggle="tooltip" title="Cancelled orders" class="btn-estado btn" style="height:10px; margin-top: -20px;" >
+                <i class="fa fa-ban" style="color:#FFF;"></i>
+            </a>
+            
+            <a id="pr" data-toggle="tooltip" title="Procesing orders" class="btn-estado btn" style="height:10px; margin-top: -20px;" >
+                <i class="fa fa-print" style="color:#FFF;"></i>
+            </a>
+            <a id="sp" data-toggle="tooltip" title="Shipped orders" class="btn-estado btn" style="height:10px; margin-top: -20px;" >
+                <i class="fa fa-truck" style="color:#FFF;"></i>
+            </a>
+            
         </div>
     </div>
+    
     <div class="form-edit-info" style="padding-top: 20px;">
-        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th>Client</th>
-                    <th>Date order</th>
-                    <th>State</th>
-                    <th>Stripe ID</th>
-                    
-                    <th>Refund</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for order in orders %}
-                <tr>
-                    <td>{{ order.usuario.persona }}</td>
-                    <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
-                    <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>
-                    <td class="text-right">
-                        
-                            {{order.idPago}}
-                            
-                    </td>
-                    <td class="text-right">$ {% if order.reembolso == '' %} 0.00 {%else%} {{order.reembolso|number_format('2','.',',')}} {% endif %}</td>
-                    <td>
-                        <div class=" pull-right">    
-                            <div class="col-md-2">
-                                <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
-                                    <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
-                                        <i class="fa fa-info-circle"></i>
-                                    </button>
-                                </a> 
-                            </div>
-                            <div class="col-md-1">
-                                <a  class="export"  href="" style="margin-top: 3px;">
-                                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
-                                        <i class="fa fa-file-pdf-o"></i>
-                                    </button>        
-                                </a>
-                            </div>
-                            {% if order.reembolso ==0 %}
-                                <div class="col-md-1">
-                                    <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
-                                        <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
-                                            <i class="fa fa-money"></i>
-                                        </button>
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div id="orderFilter">
+            
+        </div>
     </div>            
                 
 {% endblock %}
@@ -94,6 +59,102 @@
     <script>
         $(document).ready(function(){
 
+            alertify.defaults = {
+                // dialogs defaults
+                modal:true,
+                basic:false,
+                frameless:false,
+                movable:true,
+                moveBounded:false,
+                resizable:true,
+                closable:true,
+                closableByDimmer:true,
+                maximizable:true,
+                startMaximized:false,
+                pinnable:true,
+                pinned:true,
+                padding: true,
+                overflow:true,
+                maintainFocus:true,
+                transition:'fade',
+                autoReset:true,
+
+                // notifier defaults
+
+
+                // language resources 
+                glossary:{
+                    // dialogs default title
+                    title:'...',
+                    // ok button text
+                    ok: 'OK',
+                    // cancel button text
+                    cancel: 'Cancel'            
+                },
+
+                // theme settings
+                theme:{
+                    // class name attached to prompt dialog input textbox.
+                    input:'ajs-input',
+                    // class name attached to ok button
+                    ok:'ajs-ok',
+                    // class name attached to cancel button 
+                    cancel:'ajs-cancel'
+                }
+            };
+
+            $(document).on("click",'#prOrder',function(){
+                var orderId= $(this).parent().attr('id');
+                //alert(orderId);
+
+                alertify.confirm('Imprimir orden?').set('onok', function(closeEvent){
+                    
+                    $.post( "{{path('admin_view_orders_estado_cambiar')}}", { id: orderId, idEstado: 'pr' }, function( det ) {
+                        //alert();
+                        if(det.flag==0){
+                            $('#'+orderId).parent().parent().parent().parent().remove();
+                            alertify.alert("Orden esta imprimiendose");
+                        }
+                        else{
+                            alertify.alert("Error, intente de nuevo");
+                            
+                        }
+                    });
+                    
+                    //alertify.success('Ok');
+                    
+                }); 
+            
+                return false; 
+                
+            });
+            
+            
+            $(document).on("click",'#spOrder',function(){
+                var orderId= $(this).parent().attr('id');
+                //alert(orderId);
+
+                alertify.confirm('Enviar orden?').set('onok', function(closeEvent){
+                    
+                    $.post( "{{path('admin_view_orders_estado_cambiar')}}", { id: orderId }, function( det ) {
+                        //alert();
+                        if(det.flag==0){
+                            $('#'+orderId).parent().parent().parent().parent().remove();
+                            alertify.alert("Orden enviada");
+                        }
+                        else{
+                            alertify.alert("Error, intente de nuevo");
+                        }
+                    });
+                    
+                    //alertify.success('Ok');
+                    
+                }); 
+            
+                return false; 
+                
+            });
+            
             $('.listados').DataTable({ 
                 searching:true,
                 "order":[[0, "desc"],[1,"desc"]],
@@ -101,7 +162,39 @@
                        { "orderable": false, "targets": 1 }
                 ]
             });
-            $('.dataTables_filter').addClass('pull-right ');
+            
+            $('#orderFilter').html("<div class='col-md-12 pull-right'><img width='25px;' src='{{ asset('Resources/images/89C.gif') }}'></div>");
+            var filter='pa';
+            var url = Routing.generate('admin_view_orders_filter', { estado: filter});
+            $('#orderFilter').load(url);
+            
+            $('.btn-estado').on('click',function(){
+                var f = $(this).attr('id');
+                
+                switch (f) {
+                    case 'pa':
+                        $('#estadoOrder').html('Paid orders list');
+                        break;
+                    case 'cn':
+                        $('#estadoOrder').html('Cancelled orders list');
+                        break;
+                    case 'pr':
+                        $('#estadoOrder').html('Processing orders list');
+                        break;
+                    case 'sp':
+                        $('#estadoOrder').html('Shipped orders list');
+                        break;
+                }
+        
+        
+                
+                
+                $('#orderFilter').html("<div class='col-md-12'><img width='25px;' src='{{ asset('Resources/images/89C.gif') }}'></div>");
+                
+                url = Routing.generate('admin_view_orders_filter', { estado: f});
+                $('#orderFilter').load(url);
+                return false;
+            });
 
         });
 
@@ -113,6 +206,7 @@
                 var id = $(this).val();
                 var url = Routing.generate('admin_reporte_invoice', {'id': id});
                 window.open(url,'_blank');
+                return false;
             });    
                 
             {#$('.opcionRefund').click(function(){

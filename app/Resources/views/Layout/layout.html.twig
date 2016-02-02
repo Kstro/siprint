@@ -27,6 +27,15 @@
                 <link rel="stylesheet" href="{{ asset('Resources/select2/dist/css/select2.min.css') }}" />
                 
                 <link rel="stylesheet" href="{{ asset('Resources/css/redmond/jquery-ui-1.10.4.custom.css') }}" />
+                
+                <link rel="stylesheet" href="{{ asset('Resources/js/alertifyjs/css/alertify.css') }}">
+
+                
+                <link rel="stylesheet" href="{{ asset('Resources/js/alertifyjs/css/themes/semantic.css') }}">
+                <!-- include boostrap theme  -->
+                <link rel="stylesheet" href="{{ asset('Resources/js/alertifyjs/css/themes/bootstrap.css') }}">
+                
+                
             {%- endblock %}
             {% block estilos -%}    
                 {# Estilo de modal #}
@@ -169,7 +178,8 @@
             
             <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
             <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-            
+            <script src="{{ asset('Resources/js/alertifyjs/alertify.js') }}"></script>
+
             <script>
                 $(document).ready(function () {
                     //if ( $("#show-cart") ) {
