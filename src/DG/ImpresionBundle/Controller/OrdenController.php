@@ -643,8 +643,116 @@ class OrdenController extends Controller
             
 
         
+    
+    
+    
+    /**
+     * Lists all Orden entities.
+     *
+     * @Route("/admin/orders/filter", name="admin_view_orders_filter", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function viewOrdersFilterAction(Request $request)
+    {
+        $filter = $request->get('estado');
+        //var_dump($filter);
+        $em = $this->getDoctrine()->getManager();
+
+//        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        $dql = "SELECT o FROM DGImpresionBundle:Orden o "
+                . "WHERE o.estado = :estado ORDER BY o.fechaPago ASC";
+        
+        $cart = $em->createQuery($dql)
+                ->setParameters(array('estado'=>$filter))
+                ->getResult();
+        
+        if(count($cart)==0){
+            $estado="No orders";
+        }
+        else{
+            $estado = $cart[0]->getEstado();
+        }
+        
+//        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
+//        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('orden/view_order_filter.html.twig', array(
+            'orders' => $cart,
+            'estado' => $estado,
+        ));
+
+    }
         
 
+    
+    
+    
+    /**
+     * Lists all Orden entities.
+     *
+     * @Route("/admin/orders/cambiar/estado", name="admin_view_orders_estado_cambiar")
+     * @Method("POST")
+     */
+    public function estadoOrdersCambiarAction(Request $request)
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $response = new JsonResponse();
+            $orderId = $request->get('id');
+            $idEstado = $request->get('idEstado');
+            
+            
+            //var_dump($idEstado);
+            //die();
+            $em = $this->getDoctrine()->getManager();
+            
+            $orden = $em->getRepository('DGImpresionBundle:Orden')->find($orderId);
+            
+            switch($orden->getEstado()){
+                case 'pa': // orden pagada
+                        if($idEstado=='pr'){
+                            $orden->setEstado('pr'); //en proceso
+                        }
+                        else{
+                            $orden->setEstado('cn'); //cancelada
+                        }
+                    break;
+                case 'cn': //cancelada
+                        //$orden->setEstado('cn');
+                    break;
+                case 'pr': //en proceso
+                        $orden->setEstado('sp'); //enviada shipped
+                    break;
+                case 'sp': //enviada shipped
+                        //$orden->setEstado('cn'); 
+                    break;
+            }
+            //var_dump($orden);
+            //die();
+    //        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+            $dql = "SELECT o FROM DGImpresionBundle:Orden o "
+                    . "WHERE o.estado = :estado ORDER BY o.id DESC";
+
+            
+            $em->persist($orden);
+            $em->flush();
+            $response->setData(array(
+                'flag' => 0,
+            ));    
+        }
+        else{
+            $response->setData(array(
+                'flag' => -1,
+            ));    
+        }
+//        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
+//        $promotion = $this->get('promotion_img')->searchPromotion();
+
+        return $response; 
+
+    }
         
     
 }

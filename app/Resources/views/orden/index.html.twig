@@ -27,11 +27,25 @@
 {#                {% if #}
                     <div class="col-md-5 text-right">
                         <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="opciones" role="button" value="{{ ord.id }}" style=" background-color: #25bce9;">
-                            <a  class="export"  href="" style="margin-top: 3px; color: #FFF;">
+                            <a class="export"  href="" style="margin-top: 3px; color: #FFF;">
                                 <i class="fa fa-file-pdf-o"></i>
                             </a>
                         </button>
-                        <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a> 
+{#                        <i class="fa fa-cc-stripe"></i>#}
+                        {% if ord.reembolso == 0 and ord.estado == 'pa' %}
+
+{#                                    <a id="{{ord.id}}" data-toggle="tooltip" title="Cancelled orders" class="btn-estado btn" style="height:10px; margin-top: -20px;">#}
+{#                                    <a id="{{ord.id}}" class="btn-estado btn" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': ord.id }) }}">#}
+                            <button id="cnOrder" data-toggle="tooltip" data-container="body" title="Cancel order" style="margin-left: 5px; background-color: #25bce9;" >
+{#                                <a id="{{ord.id}}" data-toggle="tooltip" title="Cancelled orders" style="margin-top: 3px; color: #FFF;">#}
+                                <a id="{{ord.id}}" class="export" title="Cancelled orders" data-toggle="tooltip" style="margin-top: 3px; color: #FFF;">
+                                    <i class="fa fa-ban" ></i>
+                                </a>
+                            </button>
+{#                                    </a>#}
+
+                        {% endif %}
+                            {#ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>#} 
                     </div>
 {#                %}#}
             </h4>
@@ -86,7 +100,8 @@
         {{ stripe_scripts() }}
     {% endblock foot_script %}
     #}
-    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>            
+    <script src="http://code.jquery.com/jquery-1.11.3.js"></script>     
+    <script src="{{ asset('Resources/js/alertifyjs/alertify.js') }}"></script>
     <script>
         $(document).ready(function () {
 
@@ -99,7 +114,83 @@
         });
     </script>    
     <script>  
-        $(document).ready(function(){          
+        $(document).ready(function(){      
+            
+            
+            
+            alertify.defaults = {
+                // dialogs defaults
+                modal:true,
+                basic:false,
+                frameless:false,
+                movable:true,
+                moveBounded:false,
+                resizable:true,
+                closable:true,
+                closableByDimmer:true,
+                maximizable:true,
+                startMaximized:false,
+                pinnable:true,
+                pinned:true,
+                padding: true,
+                overflow:true,
+                maintainFocus:true,
+                transition:'fade',
+                autoReset:true,
+
+                // notifier defaults
+
+
+                // language resources 
+                glossary:{
+                    // dialogs default title
+                    title:'...',
+                    // ok button text
+                    ok: 'OK',
+                    // cancel button text
+                    cancel: 'Cancel'            
+                },
+
+                // theme settings
+                theme:{
+                    // class name attached to prompt dialog input textbox.
+                    input:'ajs-input',
+                    // class name attached to ok button
+                    ok:'ajs-ok',
+                    // class name attached to cancel button 
+                    cancel:'ajs-cancel'
+                }
+            };
+
+            $(document).on("click",'#cnOrder',function(){
+                var orderId= $(this).children().attr('id');
+                //alert(orderId);
+
+                alertify.confirm('Cancelar orden?').set('onok', function(closeEvent){
+                    
+                    $.post( "{{path('admin_view_orders_estado_cambiar')}}", { id: orderId, idEstado: 'cn' }, function( det ) {
+                        //alert();
+                        if(det.flag==0){
+                            $('#'+orderId).parent().parent().parent().parent().remove();
+                            alertify.alert("Orden cancelada");
+                        }
+                        else{
+                            alertify.alert("Error, intente de nuevo");
+                            
+                        }
+                    });
+                    
+                    //alertify.success('Ok');
+                    
+                }); 
+            
+                return false; 
+                
+            });
+            
+            
+            
+            
             $('.opciones').click(function(){
                     var id = $(this).val();
                     var url = Routing.generate('admin_reporte_invoice', {'id': id});
