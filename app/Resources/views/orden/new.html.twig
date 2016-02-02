@@ -28,8 +28,8 @@
                         Customer:
                     </div>
                     <div class="col-md-5 col-sm-5 radio-cu" style="margin-bottom: 15px;">
+                        <label class="radio-inline"><input type="radio" name="customer" id="new-cu" checked="checked">New </label>
                         <label class="radio-inline"><input type="radio" name="customer" id="existing-cu">Existing </label>
-                        <label class="radio-inline"><input type="radio" name="customer" id="new-cu">New </label>
                     </div>
                     <div class="clearfix"></div>
                     <div class="customer-existing">
@@ -68,8 +68,8 @@
                             Address:
                         </div>
                         <div class="col-md-5 col-sm-5 radio-ad" style="margin-bottom: 15px;">
-                            <label class="radio-inline"><input type="radio" name="address" id="existing-ad">Existing </label>
                             <label class="radio-inline"><input type="radio" name="address" id="new-ad">New </label>
+                            <label class="radio-inline"><input type="radio" name="address" id="existing-ad">Existing </label>
                         </div>
                         <div class="clearfix"></div>
                     
@@ -83,52 +83,52 @@
                         </div>
                         <div class="address-new">
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * Full Name:
+                                 Full Name:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
                             </div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * Phone Number:
+                                 Phone Number:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_phoneNumber" name="direccion[phoneNumber]" maxlength="25" class="form-control input-sm" type="text">
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * Line 1:
+                                 Line 1:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_linea1" name="direccion[linea1]" maxlength="150" class="form-control input-sm" type="text">
                             </div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * Line 2:
+                                 Line 2:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_linea2" name="direccion[linea2]" maxlength="150" class="form-control input-sm" type="text">
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * City:
+                                 City:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_city" name="direccion[city]" maxlength="150" class="form-control input-sm" type="text">
                             </div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * State / Province / Region:
+                                 State / Province / Region:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_state" name="direccion[state]" maxlength="150" class="form-control input-sm" type="text">
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * Country:
+                                 Country:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_country" name="direccion[country]" maxlength="100" class="form-control input-sm" type="text">
                             </div>
                             <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                                * Zip Code:
+                                 Zip Code:
                             </div>
                             <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                                 <input id="direccion_zipCode" name="direccion[zipCode]" maxlength="20" class="form-control input-sm" type="text">
@@ -144,18 +144,52 @@
                     </div>        
                     <div class="clearfix"></div>
                     <hr class="hr-2">
+                    <div class="" style="height: 35px; margin-top: 10px;">
+                        <div class="col-md-6 col-sm-6 text-right">
+                            <span style="font-size: 1.5em;  font-weight: bold;">Printing cost:</span>
+                        </div>
+                        <div class="col-md-2 col-sm-2 printing-cost">
+                            <span style="font-size: 1.5em;  font-weight: bold;">$ 0.00</span>
+                        </div>
+                    </div>
+                    <hr>
                     <div class="design-cat">
-                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                             Design:
-                        </div>
-                        <div class="col-md-4">
-                            <select id="selectDesigns" class="form-control input-sm">
-                                <option value="0">Select an option ...</option>
-                            {% for cat in categorias %}
-                                <option value="{{cat.id}}"> {{cat.nombre}}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
+                        <div class="col-md-6 col-sm-6" style="margin-bottom: 4px;">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 4px;">
+                                     Design:
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <select id="selectDesigns" class="form-control input-sm">
+                                        <option value="0">Select an option ...</option>
+                                    {% for cat in categorias %}
+                                        <option value="{{cat.id}}"> {{cat.nombre}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 20px">
+                                <div class="col-md-4 col-sm-4 text-right" >
+                                    Code promo:
+                                </div>
+                                <div class="col-md-8 col-sm-8" >
+                                   <input id="code-promo" name="code-promo" maxlength="100" class="form-control input-sm" type="text">
+                                </div>  
+                            </div>         
+                            <div class="row" >
+                                <div class="col-md-4 col-sm-4 text-right" >
+                                     Upload file:
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <input type="file" name="file-design" id="file-design" />
+                                </div>
+                            </div>    
+                        </div>        
+                        <div class="col-md-6 col-sm-6 attributes-show">
+                            <div class="row show-attr" id="show-attr">
+                                
+                            </div>
+                        </div>    
                     </div>        
                 </div>
                 {#</div>#}
@@ -171,28 +205,28 @@
 {% endblock %}
 {% block javascripts_step %}
     {{parent()}}
+    <script type="text/javascript" src="{{ asset('Resources/js/jquery.blockUI.js') }}"></script>  
     <script>
         $(document).ready(function(){
             $("#orden_cliente").select2();
             $("#orden_direccionEnvio").select2();
             $("#selectDesigns").select2();
-        
-            $('.customer-new').hide();
+            //$("#new-cu").attr('checked', 'checked');
             $('.customer-existing').hide();
-            $('.address-block').hide();
-            $('.address-new').hide();
             $('.address-existing').hide();
-            $('.design-cat').hide();
-            $('.hr-1').hide();
-            $('.hr-2').hide();
+            //$('.design-cat').hide();
+            //$('.hr-2').hide();
+            $('.radio-ad').hide();
             
             $( "#existing-cu" ).on( "click", function() {
                 $('.hr-1').show();
+                $('.address-new').show();
                 $('.customer-new').hide();
                 $('.customer-existing').show();
                 $('.address-block').show();
                 $('.radio-ad').show();
                 $('.address-new').hide();
+                $('.address-existing').hide();
             });
 
             $( "#new-cu" ).on( "click", function() {
@@ -214,6 +248,94 @@
                 $('.address-new').show();
                 $('.address-existing').hide();
             });
+            
+            $( "#selectDesigns" ).on( "change", function() { 
+                var id = $( "#selectDesigns" ).val();
+                var acum_attr = 0;
+                var total_pagar = 0;
+                var parametro = '';
+                var draw = '';
+                var total_attr = 0;
+                
+                $('.attributes-show').children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
+                
+                $.post( "{{path('get_products')}}", { id: id }, function( data ) {
+                    $( ".show-attr" ).hide();
+                    total_attr = data.parametros.length;
+                    $.each( data.parametros, function( key, value ) {
+                        draw+='<div class="col-md-5" style="margin-bottom: 3px">';
+                        parametro = value.parametro;
+                        draw+='<p>' + parametro + '</p>';
+                        draw+='</div>';
+                        draw+='<div class="col-md-7" style="margin-bottom: 3px">';
+                        draw+='<select class="attributes-inf form-control" id="attributes-' + value.idParam + '" name="attributes-' + value.idParam + '">';
+                        draw+='<option value="0" disabled selected >Select an option ...</option>';
+                        
+                        $.post( "{{path('get_attributes_info')}}", { id: value.idParam }, function( val ) {
+                            $.each( val.paramsVal, function( clave, valor ) {
+                                if(value.idParam === valor.parametro) {
+                                    var opcion = '<option value="' + valor.idValorParam + '">' + valor.valorParam + '</option>';
+                                    //total_pagar+=valor.precio
+                                    $('#attributes-'+ value.idParam ).append(opcion);
+                                    
+                                }
+                            });
+                            
+                            acum_attr++;
+                            
+                            if(acum_attr === total_attr) {
+                                $( ".show-attr" ).show();    
+                                $(".attributes-inf").select2();
+                                
+                                $(".attributes-inf" ).change(function() {
+                                    total_pagar = 0;
+                                    var acum = 0;
+                                    var total_price = $(".attributes-inf").length;
+                                    
+                                    $('.printing-cost').children().html('<img style="width:30px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
+                                    
+                                    $(".attributes-inf").each(function(k, va) {
+                                        var aux = 0;
+                                        if($(this).val() !== null) {
+                                            aux = $(this).val();
+                                        }
+                                        
+                                        $.post( "{{path('get_attributes_precio')}}", { id: aux }, function( det ) {
+                                            acum++;
+                                            
+                                            if(det.flag === 0) {
+                                                total_pagar+= 0;
+                                            }
+                                            else {
+                                                total_pagar+= parseFloat(det.values[0].precio);
+                                            }    
+                                            total = total_pagar;
+                                            
+                                            if(total_price === acum )
+                                                $('.printing-cost').children().html('$ ' + total.toFixed(2));
+
+                                        });
+                                        
+                                    });
+                                });
+                                
+                            }  
+                        });
+                        
+                        draw+='</select>';
+                        draw+='</div>';
+                        draw+='<div class="clearfix"></div>';
+                        
+                    });  
+                    
+                    draw+='<div class="clearfix"></div>';
+                 
+                    
+                    document.getElementById('show-attr').innerHTML = draw;                        
+                    
+                }, "json"); // Fin de post 
+            });
+            
         });
     </script>
 {% endblock %}
