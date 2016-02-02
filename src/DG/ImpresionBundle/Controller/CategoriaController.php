@@ -231,7 +231,7 @@ class CategoriaController extends Controller
             
             $rsm->addScalarResult('idParam','idParam');
             $rsm->addScalarResult('parametro','parametro');
-            
+            //var_dump($cat);
             $query = $em->createNativeQuery($sql, $rsm);
             $query->setParameter(1, $id);
             $param = $query->getResult();

@@ -115,7 +115,13 @@ class OrdenController extends Controller
             return $this->redirectToRoute('orden_show', array('id' => $orden->getId()));
         }
 
-        $categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
+        //$categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->getResult();
         
         return $this->render('orden/new.html.twig', array(
             'orden' => $orden,

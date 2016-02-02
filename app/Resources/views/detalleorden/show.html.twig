@@ -49,8 +49,10 @@
                     <ul>
                         <li><span class="avalue" style="font-size: 1.1em;">Client name: {{ detalleOrden.orden.usuario.persona }}</span></li>
                         <li><span class="avalue" style="font-size: 1.1em;">Email: {{ detalleOrden.orden.usuario.email }}</span></li>
-                        <li><span class="avalue" style="font-size: 1.1em;">Address: {{ detalleOrden.orden.direccionEnvio.linea1 }}, {{ detalleOrden.orden.direccionEnvio.city }}, {{ detalleOrden.orden.direccionEnvio.state }}.</span></li>
-                        <li><span class="avalue" style="font-size: 1.1em;">Phone number: {{ detalleOrden.orden.direccionEnvio.phoneNumber }}</span></li>
+                        {% if detalleOrden.orden.direccionEnvio %}
+                            <li><span class="avalue" style="font-size: 1.1em;">Address: {{ detalleOrden.orden.direccionEnvio.linea1 }}, {{ detalleOrden.orden.direccionEnvio.city }}, {{ detalleOrden.orden.direccionEnvio.state }}.</span></li>
+                            <li><span class="avalue" style="font-size: 1.1em;">Phone number: {{ detalleOrden.orden.direccionEnvio.phoneNumber }}</span></li>
+                        {% endif %}    
                     </ul>
                 </div>
             </div>
