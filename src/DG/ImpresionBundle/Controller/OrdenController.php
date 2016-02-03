@@ -100,22 +100,139 @@ class OrdenController extends Controller
      */
     public function newAction(Request $request)
     {
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         $em = $this->getDoctrine()->getManager();
         
         $orden = new Orden();
         $form = $this->createForm('DG\ImpresionBundle\Form\OrdenType', $orden);
         $form->handleRequest($request);
-        $promotion = $this->get('promotion_img')->searchPromotion();
         
         if ($form->isSubmitted() && $form->isValid()) {
+            $parameters = $request->request->all();
+            
+            // Si se va a registrar a un cliente existente a la venta
+            if($parameters['customer'] == 'cu-exist'){
+                $cliente = $em->getRepository('DGImpresionBundle:Persona')->find($parameters['orden']['cliente']);
+                $orden->setCliente($cliente);
+                
+                // Si se va a registrar una direccion existente del cliente
+                if($parameters['address'] == 'ad-exist'){ 
+                    $direccion = $em->getRepository('DGImpresionBundle:Direccion')->find($parameters['orden']['direccionEnvio']);
+                    $orden->setDireccionEnvio($direccion);
+                    
+                // Si se va a registrar una nueva direccion del cliente
+                } else {
+                    $direccion = new \DG\ImpresionBundle\Entity\Direccion();
+                    
+                    $direccion->setName($parameters['direccion']['name']);
+                    $direccion->setLinea1($parameters['direccion']['linea1']);
+                    $direccion->setLinea2($parameters['direccion']['linea2']);
+                    $direccion->setCity($parameters['direccion']['city']);
+                    $direccion->setState($parameters['direccion']['state']);
+                    $direccion->setCountry($parameters['direccion']['country']);
+                    $direccion->setPhoneNumber($parameters['direccion']['phoneNumber']);
+                    $direccion->setZipCode($parameters['direccion']['zipCode']);
+                    $direccion->setSecurityAccessCode($parameters['direccion']['securityAccessCode']);
+                    $direccion->setDefaultDir(1);
+                    
+                    $em->persist($direccion);
+                    $em->flush();
+                    $orden->setDireccionEnvio($direccion);
+                }
+                
+            // Si se va a registrar un nuevo cliente a la venta    
+            } else {
+                $cliente = new \DG\ImpresionBundle\Entity\Persona();
+                $cliente->setNombres($parameters['cliente']['first_name']);
+                $cliente->setApellidos($parameters['cliente']['last_name']);
+                $cliente->setTelefono($parameters['cliente']['phone']);
+                $cliente->setEstado(1);
+                
+                $em->persist($direccion);
+                $em->flush();
+                $orden->setDireccionEnvio($direccion);
+                
+                $direccion = new \DG\ImpresionBundle\Entity\Direccion();
+                $direccion->setName($parameters['direccion']['name']);
+                $direccion->setLinea1($parameters['direccion']['linea1']);
+                $direccion->setLinea2($parameters['direccion']['linea2']);
+                $direccion->setCity($parameters['direccion']['city']);
+                $direccion->setState($parameters['direccion']['state']);
+                $direccion->setCountry($parameters['direccion']['country']);
+                $direccion->setPhoneNumber($parameters['direccion']['phoneNumber']);
+                $direccion->setZipCode($parameters['direccion']['zipCode']);
+                $direccion->setSecurityAccessCode($parameters['direccion']['securityAccessCode']);
+                $direccion->setDefaultDir(1);
+
+                $em->persist($direccion);
+                $em->flush();
+                $orden->setDireccionEnvio($direccion);
+            }
+            $orden->setReembolso(0);
+            $orden->setFechaPago(new \DateTime ('now'));
+            $orden->setFechaAccion(new \DateTime ('now'));
+            $orden->setEstado('sas');
+            
+            if($parameters['code-promo'] != ''){
+                $promocion = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $parameters['code-promo']));
+                $orden->setPromocion($promocion);
+            }
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($orden);
             $em->flush();
 
-            return $this->redirectToRoute('orden_show', array('id' => $orden->getId()));
+//            $path = $this->container->getParameter('photo.promotion');
+            //$nombre_archivo = strtolower($_FILES["file-design"]["name"]);
+            //var_dump($parameters['file-design']);
+            
+//            $aux = explode('.', $nombre_archivo);
+//            $extension = end($aux);
+//            $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
+
+            $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
+
+            $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['selectDesigns']);
+            $detalleorden->setArchivo($parameters['file-design']);
+            //move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
+
+            $detalleorden->setEstado('ad');
+            $detalleorden->setCategoria($product);
+            $detalleorden->setOrden($orden);
+
+            $em->persist($detalleorden);
+            $em->flush();
+            $total = 0;
+
+            foreach($parameters as $key => $p){
+                $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
+
+                $val = explode("-", $key);
+                if($val[0] == 'attributes') {
+                    $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($p);
+                    $atributo->setDetalleParametro($detalleParametro);
+                    $atributo->setDetalleOrden($detalleorden);
+                    $em->persist($atributo);
+                    $em->flush();
+                    
+                    $total+=$atributo->getDetalleParametro()->getValor();
+                }    
+            }
+
+            $detalleorden->setMonto($total);
+            $em->merge($detalleorden);
+            $em->flush();
+            
+            //var_dump($orden);
+            //var_dump($detalleorden);
+            //var_dump($parameters);
+            //  die();
+            
+            return $this->redirectToRoute('admin_store_sale');
         }
 
-        //$categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NOT NULL ";
@@ -176,11 +293,14 @@ class OrdenController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
+        $sales = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'sas'));
+        //var_dump($sales);
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('orden/store_sale.html.twig', array(
             'orden' => $orden,
+            'sales' => $sales,
             'form' => $form->createView(),
             'usuario' => $usuario,
             'promotion' => $promotion,

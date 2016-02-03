@@ -252,6 +252,58 @@ class CategoriaController extends Controller
     }
     
     /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/product-store/get", name="get_products_store")
+    */
+    public function productInfoStoreAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $id = $this->get('request')->request->get('id');
+            $code = $this->get('request')->request->get('code');
+            
+            $em = $this->getDoctrine()->getManager();            
+            $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
+            
+            $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
+            $porcentaje = 0;
+            
+            if( $promo != NULL && $code != '' ){
+                $porcentaje = $promo->getPorcentaje();
+            } 
+            
+            $rsm = new ResultSetMapping();
+            $sql = "select p.id as idParam, "
+                    . "p.nombre as parametro "
+                    . "from categoria_parametro cp "
+                    . "inner join parametro p on cp.parametro_id = p.id "
+                    . "where cp.categoria_id = ? ";
+            
+            $rsm->addScalarResult('idParam','idParam');
+            $rsm->addScalarResult('parametro','parametro');
+            //var_dump($cat);
+            $query = $em->createNativeQuery($sql, $rsm);
+            $query->setParameter(1, $id);
+            $param = $query->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'idproduct' => $cat->getId(),
+                                'nombre' => $cat->getNombre(),
+                                'imagen' => $cat->getImagen(),
+                                'categoria' => $cat->getCategoria()->getNombre(),
+                                'parametros' => $param,
+                                'porcentaje' => $porcentaje
+                    )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
+    
+    /**
     * Ajax utilizado para buscar informacion de los atributos del producto
     *  
     * @Route("/attributes/get", name="get_attributes_info")

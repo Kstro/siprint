@@ -51,7 +51,7 @@
                                                 {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
                                             {% else %}
                                                 {% set direccion = ord.direccionEnvioGuardar|split(',') %}
-                                                {{ direccion[2] ~ ', ' ~ direccion[4] ~ ', ' ~ direccion[5] ~ ', ' ~ direccion[6] }}
+                                                {#{{ direccion[2] ~ ', ' ~ direccion[4] ~ ', ' ~ direccion[5] ~ ', ' ~ direccion[6] }}#}
                                             {% endif %}
                                         </li>
                                         <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Total amount: $ 

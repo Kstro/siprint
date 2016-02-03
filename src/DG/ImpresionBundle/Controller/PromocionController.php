@@ -2,6 +2,8 @@
 
 namespace DG\ImpresionBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -171,5 +173,39 @@ class PromocionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+    * Ajax utilizado para validar la promocion que ha sido ingresada
+    *  
+    * @Route("/validar", name="valida_promocion")
+    */
+    public function validaPromocionAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $code = $this->get('request')->request->get('promocion');
+            $mensaje = '';
+            $porcentaje = 0;
+            
+            $em = $this->getDoctrine()->getManager();            
+            $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
+            
+            if( $promo == NULL && $code != '' ){
+                $mensaje = 'Code does not exist';
+            } else {
+                $porcentaje = $promo->getPorcentaje();
+            }
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'msj' => $mensaje,
+                                'porcentaje' => $porcentaje
+                            ));
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+        
     }
 }

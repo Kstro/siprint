@@ -17,7 +17,7 @@
 {% block contenido %}
     <div id="resultado"></div>
     <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto">
-        <div class="row">
+        <div class="row detail-design">
             <div class="col-sm-6">
                 <div class="col-sm-11 col-sm-offset-1 col-xs-12" style="width: 100%;">
                     <img src="{{ asset('Photos/promotions/')}}{{ detalleOrden.categoria.imagen }}" alt="{{ detalleOrden.categoria.nombre }}">
@@ -121,7 +121,7 @@
             // Al hacer click que no se aprueba el diseño que el cliente ha subido para su impresion
             $('.disapprove').on("click",function(){
                 //var detalle = $(this).val();
-                
+                //alert('aqui');
                 var href = $(this).attr('href');
                         
                 ($('#resultado')) ? $('#resultado').remove():'';

@@ -21,15 +21,19 @@
     </div>
     <div id="resultado"></div>
     <div class="form-edit-info" style="padding-top: 20px;">
-        {{ form_start(form, {'action': path('admin_register_sale')}) }}
+       
+            
+        <form action="{{ path('admin_register_sale') }}" method="post" {{ form_enctype(form) }} >
+             {{ form_start(form)  }}
             {{ form_errors(form) }}
+        {#<form id="fileupload" action="{{ path('admin_register_sale') }}" method="POST" enctype="multipart/form-data">#}
                 <div class="row" style="margin: 50px 0;">
                     <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 15px;">
                         Customer:
                     </div>
                     <div class="col-md-5 col-sm-5 radio-cu" style="margin-bottom: 15px;">
-                        <label class="radio-inline"><input type="radio" name="customer" id="new-cu" checked="checked">New </label>
-                        <label class="radio-inline"><input type="radio" name="customer" id="existing-cu">Existing </label>
+                        <label class="radio-inline"><input type="radio" name="customer" id="new-cu" value="cu-new" checked="checked">New </label>
+                        <label class="radio-inline"><input type="radio" name="customer" id="existing-cu" value="cu-exist">Existing </label>
                     </div>
                     <div class="clearfix"></div>
                     <div class="customer-existing">
@@ -45,19 +49,19 @@
                             First name:
                         </div>
                         <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
-                            <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                            <input id="first_name" name="cliente[first_name]" maxlength="200" class="form-control input-sm" type="text">
                         </div>
                         <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
                             Last name:
                         </div>
                         <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
-                            <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                            <input id="last_name" name="cliente[last_name]" maxlength="200" class="form-control input-sm" type="text">
                         </div>
                         <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
                             Phone:
                         </div>
                         <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
-                            <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                            <input id="phone" name="cliente[phone]" maxlength="200" class="form-control input-sm" type="text">
                         </div>
                     </div>
                     <div class="clearfix"></div>   
@@ -68,8 +72,8 @@
                             Address:
                         </div>
                         <div class="col-md-5 col-sm-5 radio-ad" style="margin-bottom: 15px;">
-                            <label class="radio-inline"><input type="radio" name="address" id="new-ad">New </label>
-                            <label class="radio-inline"><input type="radio" name="address" id="existing-ad">Existing </label>
+                            <label class="radio-inline"><input type="radio" name="address" id="new-ad" value="ad-new">New </label>
+                            <label class="radio-inline"><input type="radio" name="address" id="existing-ad" value="ad-exist">Existing </label>
                         </div>
                         <div class="clearfix"></div>
                     
@@ -153,6 +157,32 @@
                         </div>
                     </div>
                     <hr>
+                    <div class="" style="margin-top: 10px;">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 4px;">
+                                     Code promo:
+                                </div>
+                                <div class="col-md-8 col-sm-8" id = "num" name ="num">
+                                    <input id="code-promo" name="code-promo" maxlength="100" class="form-control" type="text" onblur = "validarPromocion();">
+                                </div>
+                                <div class="col-md-12 col-sm-12" id="capaError" style="color:red; visibility:hidden;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 4px;">
+                                    Upload file:
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <input type="file" name="file-design" id="file-design" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    
+                    <hr>
                     <div class="design-cat">
                         <div class="col-md-6 col-sm-6" style="margin-bottom: 4px;">
                             <div class="row">
@@ -160,35 +190,17 @@
                                      Design:
                                 </div>
                                 <div class="col-md-8 col-sm-8">
-                                    <select id="selectDesigns" class="form-control input-sm">
-                                        <option value="0">Select an option ...</option>
+                                    <select id="selectDesigns" name="selectDesigns" class="form-control input-sm">
+                                        <option value="0" disabled selected>Select an option ...</option>
                                     {% for cat in categorias %}
                                         <option value="{{cat.id}}"> {{cat.nombre}}</option>
                                     {% endfor %}
                                     </select>
                                 </div>
                             </div>
-                            <div class="row" style="margin-top: 20px">
-                                <div class="col-md-4 col-sm-4 text-right" >
-                                    Code promo:
-                                </div>
-                                <div class="col-md-8 col-sm-8" >
-                                   <input id="code-promo" name="code-promo" maxlength="100" class="form-control input-sm" type="text">
-                                </div>  
-                            </div>         
-                            <div class="row" >
-                                <div class="col-md-4 col-sm-4 text-right" >
-                                     Upload file:
-                                </div>
-                                <div class="col-md-8 col-sm-8">
-                                    <input type="file" name="file-design" id="file-design" />
-                                </div>
-                            </div>    
                         </div>        
                         <div class="col-md-6 col-sm-6 attributes-show">
-                            <div class="row show-attr" id="show-attr">
-                                
-                            </div>
+                            <div class="row show-attr" id="show-attr"></div>
                         </div>    
                     </div>        
                 </div>
@@ -199,15 +211,18 @@
                         <input type="submit" value="Register sale" style="margin-bottom: 10px;" class="btn-nuevo btn"/>
                     </div>    
                 </div>    
-            
-        {{ form_end(form) }}
+                {{ form_end(form) }}
+        </form>    
+        
     </div>
 {% endblock %}
 {% block javascripts_step %}
     {{parent()}}
     <script type="text/javascript" src="{{ asset('Resources/js/jquery.blockUI.js') }}"></script>  
     <script>
+        var total = 0;
         $(document).ready(function(){
+            $("#code-promo").val('');
             $("#orden_cliente").select2();
             $("#orden_direccionEnvio").select2();
             $("#selectDesigns").select2();
@@ -256,10 +271,10 @@
                 var parametro = '';
                 var draw = '';
                 var total_attr = 0;
-                
+                var code_promo = $( "#code-promo" ).val();
                 $('.attributes-show').children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
                 
-                $.post( "{{path('get_products')}}", { id: id }, function( data ) {
+                $.post( "{{path('get_products_store')}}", { id: id, code: code_promo }, function( data ) {
                     $( ".show-attr" ).hide();
                     total_attr = data.parametros.length;
                     $.each( data.parametros, function( key, value ) {
@@ -309,7 +324,7 @@
                                             else {
                                                 total_pagar+= parseFloat(det.values[0].precio);
                                             }    
-                                            total = total_pagar;
+                                            total = total_pagar - ((data.porcentaje * total_pagar)/100);
                                             
                                             if(total_price === acum )
                                                 $('.printing-cost').children().html('$ ' + total.toFixed(2));
@@ -337,5 +352,30 @@
             });
             
         });
+    </script>
+    <script type="text/javascript">	
+	function validarPromocion(){
+            var capaError=document.getElementById("capaError");
+            
+            $.ajax({
+              url:"{{path('valida_promocion')}}",
+              type: "POST",
+              data:"promocion="+$("#code-promo").val(),
+              success: function(respuesta){
+                  if(respuesta.msj !== ""){
+                      document.getElementById("code-promo").className = "form-group has-error col-md-8 col-sm-8";
+                      capaError.innerHTML=respuesta.msj;
+                      capaError.style.visibility="visible";
+                      $("#code_promo").select();
+                      $("#code_promo").focus();
+                  }     
+                  else{
+                      document.getElementById("code-promo").className = "col-md-8 col-sm-8";
+                      capaError.style.visibility="hidden";
+                  }   
+                       
+              }
+            });
+	}
     </script>
 {% endblock %}

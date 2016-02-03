@@ -26,14 +26,21 @@ class Promocion
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=100, nullable=false)
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="porcentaje", type="string", length=45, nullable=false)
+     * @ORM\Column(name="codigo", type="string", length=25, nullable=false)
+     */
+    private $codigo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="porcentaje", type="float", nullable=false)
      */
     private $porcentaje;
 
@@ -83,6 +90,30 @@ class Promocion
         return $this->nombre;
     }
 
+    /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return Promocion
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+    
     /**
      * Set porcentaje
      *
