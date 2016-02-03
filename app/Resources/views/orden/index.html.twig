@@ -36,7 +36,7 @@
 
 {#                                    <a id="{{ord.id}}" data-toggle="tooltip" title="Cancelled orders" class="btn-estado btn" style="height:10px; margin-top: -20px;">#}
 {#                                    <a id="{{ord.id}}" class="btn-estado btn" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': ord.id }) }}">#}
-                            <button id="cnOrder" data-toggle="tooltip" data-container="body" title="Cancel order" style="margin-left: 5px; background-color: #25bce9;" >
+                            <button id="cnOrder" data-toggle="tooltip" data-container="body" title="Cancel order" style="margin-left: 10px; background-color: #25bce9;" >
 {#                                <a id="{{ord.id}}" data-toggle="tooltip" title="Cancelled orders" style="margin-top: 3px; color: #FFF;">#}
                                 <a id="{{ord.id}}" class="export" title="Cancelled orders" data-toggle="tooltip" style="margin-top: 3px; color: #FFF;">
                                     <i class="fa fa-ban" ></i>
@@ -45,6 +45,26 @@
 {#                                    </a>#}
 
                         {% endif %}
+                        
+                            <label style="margin-left:10px;">Status:
+                                
+                                
+                                
+                                {% if ord.estado =='pa' %}
+                                    Paid
+                                {% endif %}
+                                {% if ord.estado =='cn' %}
+                                    Cancelled
+                                {% endif %}
+                                {% if ord.estado =='pr' %}
+                                    Printing
+                                {% endif %}
+                                {% if ord.estado =='sp' %}
+                                    Shipped
+                                {% endif %}
+                                    
+                            </label>
+                        
                             {#ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>#} 
                     </div>
 {#                %}#}
@@ -171,7 +191,7 @@
                     $.post( "{{path('admin_view_orders_estado_cambiar')}}", { id: orderId, idEstado: 'cn' }, function( det ) {
                         //alert();
                         if(det.flag==0){
-                            $('#'+orderId).parent().parent().parent().parent().remove();
+                            //$('#'+orderId).parent().parent().parent().parent().remove();
                             alertify.alert("Orden cancelada");
                         }
                         else{
