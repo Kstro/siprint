@@ -41,7 +41,7 @@
                 <tr>
                     <td>{{ promocion.nombre }}</td>
                     <td class="text-center">{{ promocion.codigo }}</td>
-                    <td class="text-center">{{ promocion.porcentaje }}</td>
+                    <td class="text-center">{{ promocion.porcentaje|number_format('2','.',',') }}</td>
                     <td>
                         <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_promocion_edit', { 'id': promocion.id }) }}">
                             <i class="fa fa-edit"></i>

@@ -303,6 +303,7 @@
                                 $(".attributes-inf").select2();
                                 
                                 $(".attributes-inf" ).change(function() {
+                                    var code_promo = $( "#code-promo" ).val();
                                     total_pagar = 0;
                                     var acum = 0;
                                     var total_price = $(".attributes-inf").length;
@@ -315,7 +316,7 @@
                                             aux = $(this).val();
                                         }
                                         
-                                        $.post( "{{path('get_attributes_precio')}}", { id: aux }, function( det ) {
+                                        $.post( "{{path('get_attributes_precio')}}", { id: aux, code: code_promo }, function( det ) {
                                             acum++;
                                             
                                             if(det.flag === 0) {
@@ -323,12 +324,15 @@
                                             }
                                             else {
                                                 total_pagar+= parseFloat(det.values[0].precio);
-                                            }    
-                                            total = total_pagar - ((data.porcentaje * total_pagar)/100);
+                                            } 
+                                            //total = total_pagar;
                                             
+                                            total = total_pagar - ((det.porcentaje * total_pagar)/100);
+                                            //alert(total);
                                             if(total_price === acum )
+                                                //alert(det.porcentaje);
                                                 $('.printing-cost').children().html('$ ' + total.toFixed(2));
-
+                                                //$('.printing-cost').children().html('$ ' + total_pagar.toFixed(2));
                                         });
                                         
                                     });

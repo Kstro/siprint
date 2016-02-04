@@ -358,6 +358,15 @@ class CategoriaController extends Controller
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
             $id = $this->get('request')->request->get('id');
+            $code = $this->get('request')->request->get('code');
+            
+            $em = $this->getDoctrine()->getManager();            
+            $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
+            $porcentaje = 0;
+            
+            if( $promo != NULL && $code != '' ){
+                $porcentaje = $promo->getPorcentaje();
+            } 
             
             if($id == 0){
                 $param[0] = 0;
@@ -386,6 +395,7 @@ class CategoriaController extends Controller
                 $response = new JsonResponse();
                 $response->setData(array(
                                'values' => $param,
+                               'porcentaje' => $porcentaje,
                                'flag' => 1
                         )); 
 

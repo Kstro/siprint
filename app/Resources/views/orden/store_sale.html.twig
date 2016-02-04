@@ -45,14 +45,21 @@
                             {% set monto = monto + design.monto %}
                         {% endfor %}
                         {% if sale.promocion %}
-                            {% set monto = monto + ((sale.promocion.porcentaje * monto) / 100 ) %}
+                            {% set monto = monto - ((sale.promocion.porcentaje * monto) / 100 ) %}
                         {% endif %}
                         $ {{ monto|number_format('2','.',',') }}
                     </td>
-                    <td>
-                        <a class="text-center view-sale pull-right" style="margin-top: 3px;" title="view detail" href="{#{{ path('admin_parametro_edit', { 'id': parametro.id }) }}#}">
-                            <i class="fa fa-eye"></i>
+                    <td class="text-right">
+                        <a  class="export"  href="" style="margin-top: 3px;">
+                            <button id="view-detail" data-toggle="tooltip" data-container="body" title="View detail" class="opciones" role="button" value="{{ sale.id }}">
+                                <i class="fa fa-eye"></i>
+                            </button>        
                         </a>
+                        <a  class="export"  href="" style="margin-top: 3px;">
+                            <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="invoice" role="button" value="{{ sale.id }}">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </button>        
+                        </a>    
                     </td>
                 </tr>
             {% endfor %}
@@ -75,6 +82,13 @@
                 ],                       
             });
             $('.dataTables_filter').addClass('pull-right ');
+            
+            $('.invoice').click(function(){
+                var id = $(this).val();
+                var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                window.open(url,'_blank');
+                return false;
+            });    
         });
     </script>
 {% endblock %}
