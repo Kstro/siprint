@@ -30,7 +30,7 @@
                             {% set total=total+product.monto %}
                         {% endif %}
                     {% endfor%}
-                    Total order: <label id="totalOrden" style="width: 100px; max-height: 100%;position: relative;float:right;" class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    <label style="font-size: 1.22em; color: #FFF">Total order:</label> <label id="totalOrden" style="width: 100px; max-height: 100%;position: relative;float:right; font-size: 1.3em;" class="text-bold">$ {{total|number_format('2','.',',')}}</label>
                 </div>
                 {#<div class="col-md-5 text-right">
                     <i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>

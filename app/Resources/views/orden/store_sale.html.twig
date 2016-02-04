@@ -28,7 +28,6 @@
         <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
             <thead>
                 <tr>
-{#                    <th>Id</th>#}
                     <th>Date</th>
                     <th>Customer name</th>
                     <th>Amount</th>
@@ -36,20 +35,27 @@
                 </tr>
             </thead>
             <tbody>
+                {% for sale in sales %}
                 <tr>
-                    <td class="text-center">January 29, 2016</td>
-                    <td>Mario Vladimir Ayala Orellana</td>
-                    <td class="text-right">$ 100.00</td>
+                    <td class="text-center">{% if sale.fechaOrden %}{{ sale.fechaOrden|date('F d, Y') }}{% endif %}</td>
+                    <td>{{ sale.cliente }}</td>
+                    <td class="text-right">
+                        {% set monto = 0 %}
+                        {% for design in sale.detalleOrden %}
+                            {% set monto = monto + design.monto %}
+                        {% endfor %}
+                        {% if sale.promocion %}
+                            {% set monto = monto + ((sale.promocion.porcentaje * monto) / 100 ) %}
+                        {% endif %}
+                        $ {{ monto|number_format('2','.',',') }}
+                    </td>
                     <td>
-                        {#<a class="text-center add-design pull-right" style="margin-top: 3px; margin-left: 5px;" title="add" href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">
-                            <i class="fa fa-folder-open"></i>
-                        </a>#}
                         <a class="text-center view-sale pull-right" style="margin-top: 3px;" title="view detail" href="{#{{ path('admin_parametro_edit', { 'id': parametro.id }) }}#}">
                             <i class="fa fa-eye"></i>
                         </a>
                     </td>
                 </tr>
-            {#{% endfor %}#}
+            {% endfor %}
             </tbody>
         </table>
 
@@ -63,11 +69,9 @@
         $(document).ready(function(){
             $('.listados').DataTable({ 
                 searching:true,
-{#                        "order":[0, "desc"],#}
+
                 "columnDefs": [
                    { "orderable": true, "targets": 0 }
-{#                       { "orderable": false, "targets": 3 }#}
-                       //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                 ],                       
             });
             $('.dataTables_filter').addClass('pull-right ');

@@ -63,6 +63,16 @@ class Orden
     private $direccionEnvio;
     
     /**
+     * @var \Promocion
+     *
+     * @ORM\ManyToOne(targetEntity="Promocion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="promocion", referencedColumnName="id")
+     * })
+     */
+    private $promocion;
+    
+    /**
      * @var \Persona
      *
      * @ORM\ManyToOne(targetEntity="Persona")
@@ -249,7 +259,29 @@ class Orden
         return $this->direccionEnvio;
     }
     
-    
+    /**
+     * Set promocion
+     *
+     * @param \DG\ImpresionBundle\Entity\Promocion $promocion
+     *
+     * @return Orden
+     */
+    public function setPromocion(\DG\ImpresionBundle\Entity\Promocion $promocion = null)
+    {
+        $this->promocion = $promocion;
+
+        return $this;
+    }
+
+    /**
+     * Get promocion
+     *
+     * @return \DG\ImpresionBundle\Entity\Promocion
+     */
+    public function getPromocion()
+    {
+        return $this->promocion;
+    }
     
     /**
      * Set direccionEnvio
