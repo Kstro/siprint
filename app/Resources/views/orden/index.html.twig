@@ -6,11 +6,34 @@
     <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
 {% endblock %}
 {% block titleAccount -%}My Orders{% endblock %}
-
+{% block css %}
+    {{parent()}}
+    <style>
+        #mensaje{
+            margin-top: 20px;
+            background: #008000;
+            color:#F0F3FA;
+            opacity: 0.5;
+            height: 30px; 
+            padding-top: 5px;
+        }
+    </style>
+{% endblock %}
 {% block contenido %}
     {% if orden %}
+        {#<div class="col-md-12 text-center">
+            {% if mensaje == 0 %}
+                <div id="mensaje" class="col-md-12">
+                    {{mensaje}}
+                </div>
+                <div class="">
+                    x
+                </div>
+            {% endif %}
+        </div>#}
     {% for ord in orden %}
         {% set total = 0 %}
+        
         <div class="db-address col-xs-12" style="margin-top: 20px;">
             <h4 class="acc-title">
                 <div class="col-md-3">
@@ -22,7 +45,7 @@
                             {% set total=total+product.monto %}
                         {% endif %}
                     {% endfor%}
-                    Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    
                 </div>
 {#                {% if #}
                     <div class="col-md-5 text-right">
@@ -100,7 +123,11 @@
                             </li>
                         {% endfor %}
                     </ul>
+                    <div class="pull-right" style="font-size:30px;">
+                        Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    </div>
                 </div>
+                    
             </div>
         </div>
         
@@ -133,9 +160,12 @@
             });  
         });
     </script>    
-    <script>  
+    <script>
+        
         $(document).ready(function(){      
+            {% if mensaje == 0 %}
             
+            {% endif %}
             
             
             alertify.defaults = {
@@ -181,6 +211,10 @@
                     cancel:'ajs-cancel'
                 }
             };
+            {% if mensaje == 0 %}
+                alertify.alert('Transaccion exitosa');
+            {% endif %}
+            
 
             $(document).on("click",'#cnOrder',function(){
                 var orderId= $(this).children().attr('id');

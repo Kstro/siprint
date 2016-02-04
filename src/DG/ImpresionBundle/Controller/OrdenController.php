@@ -25,7 +25,7 @@ class OrdenController extends Controller
      * @Route("/orders", name="orden_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -39,6 +39,15 @@ class OrdenController extends Controller
         $cart = $em->createQuery($dql)
                 ->setParameters(array('usuario'=>$user->getId()))
                 ->getResult();
+        
+        //$mensaje = $request->request->get('mensaje');
+        if($request->query->get('mensaje')!=''){
+            $mensaje = "Transacción exitosa";
+        }
+        else{
+            $mensaje = -1;
+        }
+        
         
 //        $cart = $em->getRepository('DGImpresionBundle:Orden')->findBy(array('estado'   => 'ca',
 //                                                                               'usuario'  => $user
@@ -55,6 +64,7 @@ class OrdenController extends Controller
             'products' => $products,
             'usuario' => $user,
             'promotion' => $promotion,
+            'mensaje'=>$mensaje,
         ));
         //var_dump($ordens);
 //        return $this->render('orden/index.html.twig', array(
