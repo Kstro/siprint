@@ -727,7 +727,7 @@ class OrdenController extends Controller
                                           <tr>
                                             <td class=\"panel\" style=\"border-radius:4px;border:1px #dceaf5 solid; color:#000 ; font-size:11pt;font-family:proxima_nova,'Open Sans','Lucida Grande','Segoe UI',Arial,Verdana,'Lucida Sans Unicode',Tahoma,'Sans Serif'; padding: 30px !important; background-color: #FFF;\">
                                             <center>
-                                              <img src=\"$logo\" style=\"padding: 15px 25px; width: 200px;\"/>
+                                              <img src=\"$logo\" style=\"padding: 15px 25px; width: 200px;\">
                                             </center>
                                                 <p>Su orden 
                                                 <b>#".$orden->getId()."</b> esta en proceso de impresión
