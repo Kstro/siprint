@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Estado list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for estado in estados %}
+            <tr>
+                <td><a href="{{ path('estado_show', { 'id': estado.id }) }}">{{ estado.id }}</a></td>
+                <td>{{ estado.codigo }}</td>
+                <td>{{ estado.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('estado_show', { 'id': estado.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('estado_edit', { 'id': estado.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('estado_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
