@@ -6,15 +6,38 @@
     <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
 {% endblock %}
 {% block titleAccount -%}My Orders{% endblock %}
-
+{% block css %}
+    {{parent()}}
+    <style>
+        #mensaje{
+            margin-top: 20px;
+            background: #008000;
+            color:#F0F3FA;
+            opacity: 0.5;
+            height: 30px; 
+            padding-top: 5px;
+        }
+    </style>
+{% endblock %}
 {% block contenido %}
     {% if orden %}
+        {#<div class="col-md-12 text-center">
+            {% if mensaje == 0 %}
+                <div id="mensaje" class="col-md-12">
+                    {{mensaje}}
+                </div>
+                <div class="">
+                    x
+                </div>
+            {% endif %}
+        </div>#}
     {% for ord in orden %}
         {% set total = 0 %}
+        
         <div class="db-address col-xs-12" style="margin-top: 20px;">
             <h4 class="acc-title">
                 <div class="col-md-3">
-                    Order #{{ord.id}}
+                    Order # {{ord.id}}
                 </div>
                 <div class="col-md-4 text-right">
                     {% for product in products %}
@@ -22,7 +45,7 @@
                             {% set total=total+product.monto %}
                         {% endif %}
                     {% endfor%}
-                    Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    
                 </div>
 {#                {% if #}
                     <div class="col-md-5 text-right">
@@ -36,7 +59,7 @@
 
 {#                                    <a id="{{ord.id}}" data-toggle="tooltip" title="Cancelled orders" class="btn-estado btn" style="height:10px; margin-top: -20px;">#}
 {#                                    <a id="{{ord.id}}" class="btn-estado btn" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': ord.id }) }}">#}
-                            <button id="cnOrder" data-toggle="tooltip" data-container="body" title="Cancel order" style="margin-left: 5px; background-color: #25bce9;" >
+                            <button id="cnOrder" data-toggle="tooltip" data-container="body" title="Cancel order" style="margin-left: 10px; background-color: #25bce9;" >
 {#                                <a id="{{ord.id}}" data-toggle="tooltip" title="Cancelled orders" style="margin-top: 3px; color: #FFF;">#}
                                 <a id="{{ord.id}}" class="export" title="Cancelled orders" data-toggle="tooltip" style="margin-top: 3px; color: #FFF;">
                                     <i class="fa fa-ban" ></i>
@@ -45,6 +68,26 @@
 {#                                    </a>#}
 
                         {% endif %}
+                        
+                            <label style="margin-left:10px;">Status:
+                                
+                                
+                                
+                                {% if ord.estado =='pa' %}
+                                    Paid
+                                {% endif %}
+                                {% if ord.estado =='cn' %}
+                                    Cancelled
+                                {% endif %}
+                                {% if ord.estado =='pr' %}
+                                    Printing
+                                {% endif %}
+                                {% if ord.estado =='sp' %}
+                                    Shipped
+                                {% endif %}
+                                    
+                            </label>
+                        
                             {#ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>#} 
                     </div>
 {#                %}#}
@@ -80,7 +123,11 @@
                             </li>
                         {% endfor %}
                     </ul>
+                    <div class="pull-right" style="font-size:30px;">
+                        Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    </div>
                 </div>
+                    
             </div>
         </div>
         
@@ -113,9 +160,12 @@
             });  
         });
     </script>    
-    <script>  
+    <script>
+        
         $(document).ready(function(){      
+            {% if mensaje == 0 %}
             
+            {% endif %}
             
             
             alertify.defaults = {
@@ -161,6 +211,10 @@
                     cancel:'ajs-cancel'
                 }
             };
+            {% if mensaje == 0 %}
+                alertify.alert('Transaccion exitosa');
+            {% endif %}
+            
 
             $(document).on("click",'#cnOrder',function(){
                 var orderId= $(this).children().attr('id');
@@ -171,7 +225,7 @@
                     $.post( "{{path('admin_view_orders_estado_cambiar')}}", { id: orderId, idEstado: 'cn' }, function( det ) {
                         //alert();
                         if(det.flag==0){
-                            $('#'+orderId).parent().parent().parent().parent().remove();
+                            //$('#'+orderId).parent().parent().parent().parent().remove();
                             alertify.alert("Orden cancelada");
                         }
                         else{

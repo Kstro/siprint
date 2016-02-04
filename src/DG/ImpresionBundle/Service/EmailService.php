@@ -21,7 +21,7 @@ class EmailService
       
         $this->mail   = $mail;
         $this->subject = 'Expressions Print';
-        $this->from   = 'anthony@digitalitygarage.com'; 
+        $this->from   = 'mario@digitalitygarage.com'; //Cambiar este correo tambien
     }  
     
     public function setEmail($to,$bcc=null){

@@ -127,6 +127,7 @@
                 </div>
                 <div class="clearfix"></div>
                 
+                
             </div>
 
             </form>    
@@ -152,7 +153,7 @@
 
                 <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute">
 
-                <div id="formnewcard" class="row" style="margin: 50px 0;">
+                <div id="formnewcard" class="row" style="margin: 10px 0;">
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         * Number:
                     </div>
@@ -188,7 +189,15 @@
                     <div class="col-md-6" style="margin-bottom: 4px;">
                         <input id="opcionguardarcard" name="tarjeta[payment]" class="form-control" value="1" type="checkbox">
                     </div>
+                    <div class="clearfix"></div>
                     
+                    <div class="col-md-5 text-right text-bold" style="margin-bottom: 4px;">
+                        Total order $:
+                    </div>
+                    <div class="col-md-6" style="margin-bottom: 4px;">
+                        <input readonly value="{{totalOrden|number_format(2,'.',',')}}" name="amount[amount]" class="form-control" type="text">
+                    </div>
+                    <div class="clearfix"></div>
                     <script>
                         $(document).ready(function(){
                             $('.calZebra').Zebra_DatePicker({
@@ -218,6 +227,18 @@
                     </script>
 
                 </div>
+                    <div class="col-md-5 text-right text-bold" style="margin-bottom: 4px;">
+                        Promo code:
+                    </div>
+                    <div class="col-md-4" style="margin-bottom: 4px;">
+                        <input name="amount[amount]" class="form-control" type="text">
+                    </div>
+                    <div class="col-md-2" style="margin-bottom: 20px;">
+                        <button id="promoCode" class="btn btn-success" >
+                            Apply
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
             </form>
             
         
@@ -320,7 +341,9 @@
             $('#stripe_view_card_new_card').val(idTar);
         });
         
-        
+        $('#promoCode').on('click',function(){
+            return false;
+        });
         $('#selectDirecciones').on('change',function(){
             var idDir=$(this).val();
             var idTar=$('#selectTarjetas').val();
