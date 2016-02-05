@@ -141,12 +141,18 @@
 {#                        return false;#}
                     // cargar mediante una llamada ajax la dirección que tiene href dentro de resultado 
                     var id=0;
-                    {% if not noOrden %}
+                    {#{% if noOrden %}
                         if({{ord.id}}==null){
                             id=0;
                         }
-                    {% endif %}
-                    $.post( "{{path('orden_delete')}}", { detalleId: detalleId,ordenId:id }, function( data ) {
+                        else{
+                            id={{ord.id}};
+                        }
+
+                    {% endif %}#}
+                        //alert(detalleId);
+{#                        //alert({{ord.id}});#}
+                    $.post( "{{path('orden_delete')}}", { detalleId: detalleId,ordenId:{{ord.id}} }, function( data ) {
                         var par = new Array();
                         par = data.query;
 

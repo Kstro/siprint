@@ -42,6 +42,14 @@ class Orden
      */
     private $estado;
     
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="porcentaje", type="float", nullable=false)
+     */
+    private $porcentaje;
+    
     /**
      * @var \Usuario
      *
@@ -120,6 +128,13 @@ class Orden
      */
     private $direccionEnvioGuardar;
     
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codigo_usado", type="string", length=25, nullable=false)
+     */
+    private $codigoUsado;
     
     /**
      * @var \DateTime
@@ -390,7 +405,27 @@ class Orden
     }
     
     
-    
+    /**
+     * Set codigoUsado
+     *
+     * @param string $codigoUsado
+     *
+     * @return Orden
+     */
+    public function setCodigoUsado($codigoUsado){
+        $this->codigoUsado = $codigoUsado;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsado
+     *
+     * @return string
+     */
+    public function getCodigoUsado(){
+        return $this->codigoUsado;
+    }
     
     
     
@@ -472,5 +507,31 @@ class Orden
     {
         return $this->reembolso;
     }
+    
+    
+    /**
+     * Set porcentaje
+     *
+     * @param string $porcentaje
+     *
+     * @return Promocion
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return string
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+    
     
 }

@@ -686,9 +686,10 @@ class OrdenController extends Controller
             
             //var_dump($detalleOrden);
             $em->remove($detalleOrden);
+            //die();
             $em->flush();
             
-            $detalleOrdenRecalc = $em->gestRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'=>$ordenId));
+            $detalleOrdenRecalc = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'=>$ordenId));
             
             //var_dump(count($detalleOrdenRecalc));
             $total=0;

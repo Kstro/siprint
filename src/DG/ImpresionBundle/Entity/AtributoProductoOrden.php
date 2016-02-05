@@ -25,7 +25,7 @@ class AtributoProductoOrden
     /**
      * @var \DetalleParametro
      *
-     * @ORM\ManyToOne(targetEntity="DetalleParametro", inversedBy="atributProductOrden", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="DetalleParametro", inversedBy="atributProductOrden", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="detalle_parametro", referencedColumnName="id")
      * })
