@@ -67,13 +67,43 @@
                         {% include ':Layout:slider.html.twig'%}
                     {% endblock %}
                     {% block promotion %}
-                        {% include ':Layout:promotion_product.html.twig'%}
+                        {#{% include ':Layout:promotion_product.html.twig'%}#}
+                        <!--Home Promotions Products : Begin -->
+                        <section class="home-promotion-product home-product parten-bg">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="block-title-w">
+                                        <h2 class="block-title">Promotions</h2> 
+                                        <span class="icon-title">
+                                            <span></span>
+                                            <i class="fa fa-star"></i>
+                                        </span>
+                                    </div>
+                                    <ul class="slider-w slider-owl">
+                                        {% for row in prom_random %}        
+                                            <li class="pro-item">
+                                                <div class="product-image-action">
+                                                    <img src="{{ asset('Photos/promotions/')}}{{row.imagen}}" title="{{ row.nombre|upper }}" style=" height: 263px">
+
+                                                </div>
+                                                <div class="product-info">
+                                                    <a href="#" title="product" class="product-name">{{ row.nombre|upper }}</a>
+                                                    <div class="price-box">
+                                                        {#<span class="normal-price">{{row.porcentaje}}%</span>#}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}    
+                                    </ul>
+                                </div>
+                            </div>
+                        </section><!--Home Promotions Products : End -->
                     {% endblock %}
                     {% block newTemplates %}
-                        {% include ':Layout:new_templates.html.twig'%}
+                        {#{% include ':Layout:new_templates.html.twig'%}#}
                     {% endblock %}
                     {% block makeOrder %}
-                        {% include ':Layout:make_order.html.twig'%}
+                        {#{% include ':Layout:make_order.html.twig'%}#}
                     {% endblock %}
                 {% endblock %} 
                 <div style="margin-bottom: 25px"></div>

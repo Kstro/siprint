@@ -168,9 +168,11 @@
                     draw+='<h4 class="text-center" style="color:#25bce9">CONFIGURE & PRICE</h4>';
                     draw+='</div>';
                     draw+='<hr>';
-                    draw+='<form id="fileupload" action="{{ path('admin_carrito_order') }}" method="POST" enctype="multipart/form-data">';
+                    {#draw+='<form id="fileupload" action="{{ path('admin_carrito_order') }}" method="POST" enctype="multipart/form-data">';#}
+                    draw+='<form id="data">';    
                     draw+='<div class="row" id="info-attributes"  style="margin-bottom: 15px">';
                     total_attr = data.parametros.length;
+                    draw+='<input type="hidden" name="order-now" id="order-now" value="'+data.idproduct+'" />';
                     
                     $.each( data.parametros, function( key, value ) {
                         draw+='<div class="col-md-5" style="margin-bottom: 3px">';
@@ -225,6 +227,59 @@
                                         
                                     });
                                 });
+                                
+                                {#$(document).on('submit', '#fileupload', function() {
+                                    var formData = new FormData($(this)[0]);
+                                    console.log(formData);
+                                    
+                                    $.ajax({
+                                        url     : '{{ path('admin_carrito_order') }}',
+                                        type    : $(this).attr('method'),
+                                        dataType: 'json',
+                                        data    : $(this).serialize(),
+                                        success : function( data ) {
+                                                     alertify.success('You registered correctly');
+                                        },
+                                        error   : function( xhr, err ) {
+                                                     alert('Error');     
+                                        }
+                                    });    
+                                    return false;
+                                });#}
+                                                            
+                                $("form#data").submit(function(event){
+                                    //disable the default form submission
+                                    event.preventDefault();
+
+                                    //grab all form data  
+                                    var formData = new FormData($(this)[0]);
+                                    var product = data.idproduct;
+                                    
+                                    var parametros = {
+                                        'product': product,
+                                        'formData': formData
+                                    };
+                                    console.log($(this));
+                                    $.ajax({
+                                        url: '{{ path('admin_carrito_order') }}',
+                                        type: 'POST',
+                                        data: formData,
+                                        async: false,
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        success: function (returndata) {
+                                            alertify.success('You registered correctly');
+                                            location.reload();
+                                        },
+                                        error   : function( xhr, err ) {
+                                            alert('Error');     
+                                        }
+                                    });
+
+                                    return false;
+                                  });
+                                
                             }  
                         });
                         
@@ -259,7 +314,7 @@
                     
                     draw+='<div class="row">';
                     draw+='<div class="col-md-8  col-md-offset-2 pull-center" style="margin-top: 15px">';
-                    draw+='<button type="submit" value="' + data.idproduct + '" class="btn btn-info form-control text-center" id = "order-now" name= "order-now"><span><i class="fa fa-cart-plus" style="color: #FFFFFF"></i></span> Add Cart</button>';
+                    draw+='<button type="submit" value="' + data.idproduct + '" class="btn btn-info form-control text-center" id = "orden-now" name= "orden-now"><span><i class="fa fa-cart-plus" style="color: #FFFFFF"></i></span> Add Cart</button>';
                     draw+='</div>';
                     draw+='</div>';
                     

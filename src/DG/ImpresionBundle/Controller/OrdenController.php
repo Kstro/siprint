@@ -521,7 +521,7 @@ class OrdenController extends Controller
         else {
             $orden = $cart;
         }
-        
+        var_dump($_POST);
         $path = $this->container->getParameter('photo.promotion');
         $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
         $aux = explode('.', $nombre_archivo);
