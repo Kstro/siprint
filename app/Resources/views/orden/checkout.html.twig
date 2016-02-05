@@ -53,11 +53,13 @@
                 </select>
             </div>
         
+        <div class="clearfix"></div>
+        <div class="col-md-12" style="height:400px;">
             
-            
+                    
              
                 
-            <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute">
+            <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute" style="margin-top: -25px;">
         
             <div id="formnewaddress" class="row" style="margin: 50px 0;">
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
@@ -189,11 +191,11 @@
             </div>
 
             </form>    
+    </div>
+                
+                
+                
             
-                
-                
-                
-            </div>
         
         <div class="clearfix"></div>
         
@@ -208,7 +210,8 @@
             </div>
         
             
-
+            <div class="clearfix"></div>
+            <div>
                 <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute">
 
                 <div id="formnewcard" class="row" style="margin: 10px 0;">
@@ -301,8 +304,8 @@
                     <div class="col-md-12 col-sm-12" id="capaError" style="color:red; visibility:hidden;"></div>
                     <div class="clearfix"></div>
             </form>
-            
-        
+        </div>    
+        </div>
         <div id="formCheckout" class="col-md-12 pull-right">
             {% block content %}
                 <div class="payment-wrapper">
@@ -632,11 +635,14 @@
             $('#total').val(totalSinPromo);
             $('#stripe_view_amount').val(totalSinPromo);
             $('#promoCode').prop('disabled',true);
+            var promocion = $("#promo").val();
+            var ordenId = {{ordenId}};
             //alert('prueba');
             $.ajax({
               url:"{{path('valida_promocion')}}",
               type: "POST",
-              data:"promocion="+$("#promo").val(),
+              data: { promocion:promocion, ordenId:ordenId },
+{#              data:{ promocion:""+$("#promo").val(),ordenId:""+{{ordenId}} },#}
               success: function(respuesta){
                   
                   if(respuesta.msj !== ""){

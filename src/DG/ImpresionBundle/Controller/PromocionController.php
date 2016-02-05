@@ -185,17 +185,37 @@ class PromocionController extends Controller
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
             $code = $this->get('request')->request->get('promocion');
+            $ordenId = $this->get('request')->request->get('ordenId');
             $mensaje = '';
             $porcentaje = 0;
+            //echo $code;
+            //echo $ordenId;
+            //var_dump($ordenId);
+            
+            
             
             $em = $this->getDoctrine()->getManager();            
+            $orden = $em->getRepository('DGImpresionBundle:Orden')->find($ordenId);
             $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
             
+            
+            
+            
+            //die();
             if( $promo == NULL && $code != '' ){
                 $mensaje = 'Code does not exist';
+                $orden->setPorcentaje(0);
+                $orden->setCodigoUsado('-');
             } else {
                 $porcentaje = $promo->getPorcentaje();
+                $orden->setPorcentaje($promo->getPorcentaje());
+                $orden->setCodigoUsado($promo->getCodigo());
             }
+            
+            
+            
+            $em->persist($orden);
+            $em->flush();
             
             $response = new JsonResponse();
             $response->setData(array(

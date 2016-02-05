@@ -4,12 +4,13 @@
         
         .addItem{
             position: absolute;
-            height: 50px;
+            height: 20px;
             float: right;
-            margin-bottom: 50px;
-            padding-bottom: 100px;
+{#            margin-bottom: 50px;#}
+{#            padding-bottom: 100px;#}
             top: -50px;
             left: -2px;
+            
         }
         
             .addItem div {
@@ -21,7 +22,39 @@
             overflow-y: auto;
             max-height: 540px; 
             width: 100%;
-        }    
+        }   
+        
+        .listado{
+            max-height:400px;
+        }
+        
+        .panel .bg-grd-light{
+            /*margin-top:60px;*/
+        }
+        
+            .bg-grd-light{
+                background:transparent;
+                height:170px;
+            }
+           
+        .row > div{
+            margin-top:-10px;
+        }
+        
+        .col-md-4 > div > a{
+            margin-top:-60px;
+        }
+        .panel-body{
+            margin-top:10px;
+        }
+        .panel-body > div .btn-danger{
+            margin-top:5px;
+            position:relative;
+        }
+        
+        .add_placa_link{
+            display:none;
+        }
     </style>
     
     
@@ -39,7 +72,7 @@
             <div class="col-md-5 col-sm-5 text-right" style="margin-bottom: 4px;">
                 Name:
             </div>
-            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+            <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;z-index: 5;">
                 {{ form_widget(edit_form.nombre) }}
             </div>
         
@@ -63,6 +96,10 @@
             
             <div class="clearfix"></div>
             
+            
+            <div class="col-md-12" style="margin-bottom:10px;">
+                <a id="btnEnlaceAdd" href="#" class="add_placa_link2 btn btn-primary">Add detail</a>
+            </div>
             {#<div class="col-md-6 text-right">
                 Categoria:
             </div>
@@ -98,15 +135,41 @@
             
             <div id="coleccionEdit">
               <div id="listadoa">
-                 <div class="listado col-md-12" style="margin-top:70px;">
+                 <div class="listado col-md-12" {#style="margin-top:70px;"#}>
                     <div class="coleccion" data-prototype="{% filter escape %}  {% include 'DGImpresionBundle:Prototype:detalleparametro.html.twig' with { 'form': edit_form.coleccion.vars.prototype} %}   {% endfilter  %}"> 
                         {% for col in edit_form.coleccion %}
                             <div class="col-md-4">
                                 <div class="panel bg-grd-light" data-fill-color="true">
                                     <div class="panel-body">
-
-                                        {{ form_widget(col) }} 
-
+                                        
+                                        <div class="col-md-5" style="margin-bottom: 4px;">
+                                            Name
+                                        </div>
+                                        <div class="col-md-7" style="margin-bottom: 4px;">
+                                            {{ form_widget(col.nombre) }}
+                                        </div>  
+                                        <div class="clearfix"></div>
+                                        <div class="col-md-5" style="margin-bottom: 4px;">
+                                            Value
+                                        </div>
+                                        <div class="col-md-7" style="margin-bottom: 4px;">
+                                            {{ form_widget(col.valor) }}
+                                        </div> 
+                                        <div class="clearfix"></div>
+                                        {#<div class="col-md-4" style="margin-bottom: 4px;">
+                                            Param:
+                                        </div>
+                                        <div class="col-md-8" style="margin-bottom: 4px;">
+                                            {{ form_widget(form.parametro) }}
+                                        </div> 
+                                        <div class="clearfix"></div>#}
+                                        <div class="col-md-5">
+                                            Type
+                                        </div>
+                                        <div class="col-md-7">
+                                            {{ form_widget(col.tipoParametro) }}
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
                             </div>        
@@ -143,14 +206,21 @@
         // setup an "add a tag" link
         var $addTagLink = $('<div class="row"><div class="col-md-12"><a href="#" class="add_placa_link btn btn-primary">Add detail</a></div></div>');
         {#var $addTagLink = $('<div class="row"><div class="col-md-12"><a href="#" class="add_detail add_placa_link btn btn-primary">Add detail</a></div></div>');#}
-        var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
+        var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger" style="margin-top:-20px;">Eliminar</a>');
         var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
         var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
 
-
+{#        $('.add_placa_link').hide(); #}
 
         jQuery(document).ready(function() { 
-
+            
+{#            $('.add_placa_link').hide(); #}
+            $('#btnEnlaceAdd').on('click',function(){
+               $('.add_placa_link').click();
+            });
+            
+            
+{#            $('.panel-body').css('margin-top', '10px');#}
             collectionHolder.find('.panel-body').each(function() {
                 addTagFormDeleteLink($(this));
             });
