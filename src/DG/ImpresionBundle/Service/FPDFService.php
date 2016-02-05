@@ -69,8 +69,12 @@ class FPDFService {
         
         $this->pdf->SetX(50);
         $this->pdf->SetFont('Arial','',9);
-        $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getUsuario()->getPersona(), 0, 0);
         
+        if( $orden[0]->getOrden()->getUsuario() != NULL ){
+            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getUsuario()->getPersona(), 0, 0);
+        } else {
+            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getCliente(), 0, 0);
+        }
         $this->pdf->Ln(6);
         $break+=6;
         
@@ -145,20 +149,54 @@ class FPDFService {
         $this->pdf->Ln(5);
         $break+=4;
         $this->pdf->SetFont('Arial', 'B', 10);
-        $this->pdf->setX(173);
-        $this->pdf->Cell(0, 10, 'Total', 0, 0);
+        $this->pdf->setX(152);
+        $this->pdf->Cell(0, 10, 'Sub - total', 0, 0);
         $this->pdf->Cell(0, 10, '$ ' . number_format($total, 2), 0, 0, 'R');
         $this->pdf->SetLineWidth(0.2);
         $this->pdf->Line(20, $break + 19, 207, $break+ 19 );
 //        $this->pdf->Line(170, $break + 19, 170, $break+ 32 );
         
-        $this->pdf->SetLineWidth(0.35);
         
+        $monto_cancelar = 0;
+        $promocion = 0;
+        if( $orden[0]->getOrden()->getPromocion() != NULL ){
+            $monto_cancelar = $total - (( $orden[0]->getOrden()->getPromocion()->getPorcentaje() * $total ) / 100);
+            $promocion = ( $orden[0]->getOrden()->getPromocion()->getPorcentaje() * $total ) / 100;
+        } else {
+            $monto_cancelar = $total;
+        }
+        
+        $this->pdf->Ln(8);
+        $break+=8;
+        $this->pdf->SetFont('Arial', '', 10);
+        $this->pdf->setX(152);
+        $this->pdf->Cell(0, 10, 'Promotion applied', 0, 0);
+        $this->pdf->Cell(0, 10, '($ ' . number_format($promocion, 2). ')', 0, 0, 'R');
+        
+        $this->pdf->Ln(5);
+        $break+=5;
+        $this->pdf->SetFont('Arial', '', 10);
+        $this->pdf->setX(152);
+        $this->pdf->Cell(0, 10, 'Tax applied', 0, 0);
+        $this->pdf->Cell(0, 10, '($ 0.00)', 0, 0, 'R');
+        
+        $this->pdf->Ln(12);
+        $break+=12;
+        $this->pdf->SetFont('Arial', 'B', 11);
+        $this->pdf->setX(152);
+        $this->pdf->Cell(0, 10, 'Total amount', 0, 0);
+        $this->pdf->Cell(0, 10, '$ ' . number_format($monto_cancelar, 2), 0, 0, 'R');
+        
+        $this->pdf->Line(20, $break + 20, 207, $break + 20);
+        
+        $this->pdf->SetLineWidth(0.35);
+        //$this->pdf->SetDrawColor(255,255,255);
         $this->pdf->Line(20, $top_border, 20, $break + 32);
         $this->pdf->Line(207, $top_border, 207, $break + 32);
         $this->pdf->Line(20, $top_border, 207, $top_border);
         $this->pdf->Line(20, $top_border + 10, 207, $top_border + 10);
         $this->pdf->Line(20, $break + 32, 207, $break + 32);
+        
         $this->pdf->Output();
         
         return $this->pdf;

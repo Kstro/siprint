@@ -16,6 +16,7 @@ class PromocionType extends AbstractType
     {
         $builder
             ->add('nombre')
+            ->add('codigo')    
             ->add('porcentaje')
             ->add('file',null, array(
                     //'label'=>'Photo promotion',
