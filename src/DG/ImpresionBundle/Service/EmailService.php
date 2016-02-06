@@ -45,7 +45,7 @@ class EmailService
         if($replay != null ){
         $email->setReplyTo($replay);
         }else{
-        $email->setReplyTo('anthony@digitalitygarage.com');            
+        $email->setReplyTo('mario@digitalitygarage.com');            
         }
         if($bcc != null ){
         $email->setBcc($bcc);
