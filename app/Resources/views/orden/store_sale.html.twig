@@ -50,11 +50,11 @@
                         $ {{ monto|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">
-                        <a  class="export"  href="" style="margin-top: 3px;">
+                        {#<a  class="export"  href="" style="margin-top: 3px;">
                             <button id="view-detail" data-toggle="tooltip" data-container="body" title="View detail" class="opciones" role="button" value="{{ sale.id }}">
                                 <i class="fa fa-eye"></i>
                             </button>        
-                        </a>
+                        </a>#}
                         <a  class="export"  href="" style="margin-top: 3px;">
                             <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="invoice" role="button" value="{{ sale.id }}">
                                 <i class="fa fa-file-pdf-o"></i>

@@ -21,7 +21,31 @@ class GeneralController extends Controller
      */
     public function indexAction()
     {
-        return $this->render(':General:index.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        
+        $promotions = $em->getRepository('DGImpresionBundle:Promocion')->findBy(array(),array('id'=>'DESC'));
+        $idMax = $promotions[0]->getId();
+        
+        $prom_random=array();
+        $idRecuperados=array();
+        
+        while(count($prom_random)<4){
+            
+            $random = rand(1,$idMax);
+            $prom= $em->getRepository('DGImpresionBundle:Promocion')->find($random);
+            
+            if(!in_array($random, $idRecuperados, true)){
+                if(count($prom)!=0){
+                    array_push ($prom_random, $prom);
+                    array_push ($idRecuperados, $random);
+                }
+            }
+        }
+        
+        return $this->render('General/index.html.twig', array(
+            'prom_random' => $prom_random,
+            'idRecuperados' => $idRecuperados
+        ));
     }
     
     /**
