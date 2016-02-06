@@ -843,8 +843,9 @@ class OrdenController extends Controller
             
             //$logo=$this->getParameter('photo.logo')."logo.png";
             $logo = $this->getRequest()->server->get('DOCUMENT_ROOT').'/siprint/web/Resources/images/logo.png';
-            //var_dump($logo);
-            //die();
+//            var_dump($logo);
+//            echo $logo;
+//            die();
             $em = $this->getDoctrine()->getManager();
             
             $orden = $em->getRepository('DGImpresionBundle:Orden')->find($orderId);
@@ -854,19 +855,12 @@ class OrdenController extends Controller
                         if($idEstado=='pr'){
                             $orden->setEstado('pr'); //en proceso
                             $this->get('envio_correo')->sendEmail($orden->getUsuario()->getEmail(),"","","",
-                                    "<html><meta charset=\"utf-8\"><body style=\"width:100% !important;
-                                            min-width: 100%;
-                                            -webkit-text-size-adjust:100%; 
-                                            -ms-text-size-adjust:100%; 
-                                            margin:0; 
-                                            padding:0;
-                                            height: 100%;
-                                            width: 100%;\">
-                                        <table class=\"twelve columns\" style=\"width: 540px; margin: 0 auto;\">
+                                    "
+                                        <table style=\"width: 540px; margin: 0 auto;\">
                                           <tr>
                                             <td class=\"panel\" style=\"border-radius:4px;border:1px #dceaf5 solid; color:#000 ; font-size:11pt;font-family:proxima_nova,'Open Sans','Lucida Grande','Segoe UI',Arial,Verdana,'Lucida Sans Unicode',Tahoma,'Sans Serif'; padding: 30px !important; background-color: #FFF;\">
                                             <center>
-                                              <img src=\"$logo\" style=\"padding: 15px 25px; width: 200px;\">
+                                              <img style=\"width:50%;\" src=\"http://expressionsprint.com/img/logo.jpg\">
                                             </center>
                                                 <p>Su orden 
                                                 <b>#".$orden->getId()."</b> esta en proceso de impresión
@@ -875,24 +869,16 @@ class OrdenController extends Controller
                                             <td class=\"expander\"></td>
                                           </tr>
                                         </table>
-                                    </body>
-                                    </html>");
+                                    ");
                         }
                         else{
                             $orden->setEstado('cn'); //cancelada
-                            $this->get('envio_correo')->sendEmail($orden->getUsuario()->getEmail(),"","","","<html><meta charset=\"utf-8\"><body style=\"width:100% !important;
-                                            min-width: 100%;
-                                            -webkit-text-size-adjust:100%; 
-                                            -ms-text-size-adjust:100%; 
-                                            margin:0; 
-                                            padding:0;
-                                            height: 100%;
-                                            width: 100%;\">
-                                        <table class=\"twelve columns\" style=\"width: 540px; margin: 0 auto;\">
+                            $this->get('envio_correo')->sendEmail($orden->getUsuario()->getEmail(),"","","","
+                                        <table style=\"width: 540px; margin: 0 auto;\">
                                           <tr>
                                             <td class=\"panel\" style=\"border-radius:4px;border:1px #dceaf5 solid; color:#000 ; font-size:11pt;font-family:proxima_nova,'Open Sans','Lucida Grande','Segoe UI',Arial,Verdana,'Lucida Sans Unicode',Tahoma,'Sans Serif'; padding: 30px !important; background-color: #FFF;\">
                                             <center>
-                                              <img src=\"".$logo."\" style=\"padding: 15px 25px; width: 200px;\">
+                                              <img style=\"width:50%;\" src=\"http://expressionsprint.com/img/logo.jpg\">
                                             </center>
                                                 <p>Su orden 
                                                 <b>#".$orden->getId()."</b> ha sido cancelada
@@ -901,8 +887,7 @@ class OrdenController extends Controller
                                             <td class=\"expander\"></td>
                                           </tr>
                                         </table>
-                                    </body>
-                                    </html>");
+                                    ");
                         }
                     break;
                 case 'cn': //cancelada
@@ -910,19 +895,12 @@ class OrdenController extends Controller
                     break;
                 case 'pr': //en proceso
                         $orden->setEstado('sp'); //enviada shipped
-                        $this->get('envio_correo')->sendEmail($orden->getUsuario()->getEmail(),"","","","<html><meta charset=\"utf-8\"><body style=\"width:100% !important;
-                                            min-width: 100%;
-                                            -webkit-text-size-adjust:100%; 
-                                            -ms-text-size-adjust:100%; 
-                                            margin:0; 
-                                            padding:0;
-                                            height: 100%;
-                                            width: 100%;\">
-                                        <table class=\"twelve columns\" style=\"width: 540px; margin: 0 auto;\">
+                        $this->get('envio_correo')->sendEmail($orden->getUsuario()->getEmail(),"","","","
+                                        <table style=\"width: 540px; margin: 0 auto;\">
                                           <tr>
                                             <td class=\"panel\" style=\"border-radius:4px;border:1px #dceaf5 solid; color:#000 ; font-size:11pt;font-family:proxima_nova,'Open Sans','Lucida Grande','Segoe UI',Arial,Verdana,'Lucida Sans Unicode',Tahoma,'Sans Serif'; padding: 30px !important; background-color: #FFF;\">
                                             <center>
-                                              <img src=\"".$logo."\" style=\"padding: 15px 25px; width: 200px;\">
+                                              <img style=\"width:50%;\" src=\"http://expressionsprint.com/img/logo.jpg\">
                                             </center>
                                                 <p>Su orden 
                                                 <b>#".$orden->getId()."</b> ha sido enviada
@@ -930,9 +908,7 @@ class OrdenController extends Controller
                                             </td>
                                             <td class=\"expander\"></td>
                                           </tr>
-                                        </table>
-                                    </body>
-                                    </html>");
+                                        </table>");
                     break;
                 case 'sp': //enviada shipped
                         //$orden->setEstado('cn'); 
