@@ -187,7 +187,15 @@ class OrdenController extends Controller
             
             if($parameters['code-promo'] != ''){
                 $promocion = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $parameters['code-promo']));
-                $orden->setPromocion($promocion);
+                
+                if($promocion != NULL) { 
+                    $orden->setPorcentaje($promocion->getPorcentaje());
+                    $orden->setCodigoUsado($promocion->getCodigo());
+                } else {
+                    $orden->setPorcentaje(0);
+                    $orden->setCodigoUsado('-');
+                }
+                //$orden->setPromocion($promocion);
             }
             
             $em = $this->getDoctrine()->getManager();

@@ -193,7 +193,7 @@ class PromocionController extends Controller
             //var_dump($ordenId);
             
             
-            
+            //var_dump($ordenId);
             $em = $this->getDoctrine()->getManager();            
             $orden = $em->getRepository('DGImpresionBundle:Orden')->find($ordenId);
             $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
@@ -222,6 +222,37 @@ class PromocionController extends Controller
                                 'msj' => $mensaje,
                                 'porcentaje' => $porcentaje
                             ));
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+        
+    }
+    
+    /**
+    * Ajax utilizado para validar la promocion que ha sido ingresada
+    *  
+    * @Route("/venta-validar", name="valida_promocion_venta")
+    */
+    public function validaPromocionVentaAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $code = $this->get('request')->request->get('promocion');
+            $mensaje = '';
+            $porcentaje = 0;
+            
+            $em = $this->getDoctrine()->getManager();            
+            $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
+            
+            if( $promo == NULL && $code != '' ){
+                $mensaje = 'Code does not exist';
+            } else {
+                $porcentaje = $promo->getPorcentaje();
+            }
+            
+            $response = new JsonResponse();
+            $response->setData(array('msj' => $mensaje, 'porcentaje' => $porcentaje));
             return $response; 
         } else {    
             return new Response('0');              
