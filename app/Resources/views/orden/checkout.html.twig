@@ -463,32 +463,32 @@
         
         
 {#      Campos de direccion  #}
-        $(document).on('keyup','#direccion_name',function(){
+        $(document).on('input','#direccion_name',function(){
             var num = $(this).val();
             $('#stripe_view_address_full_name').val(num);
             $('#direccion_name').removeClass('error');
         });
         
-        $(document).on('keyup','#direccion_phoneNumber',function(){
+        $(document).on('input','#direccion_phoneNumber',function(){
             var num = $(this).val();
             $('#stripe_view_address_phone_number').val(num);
             $('#direccion_phoneNumber').removeClass('error');
                 
         });
         
-        $(document).on('keyup','#direccion_linea1',function(){
+        $(document).on('input','#direccion_linea1',function(){
             var num = $(this).val();
             $('#stripe_view_address_line1').val(num);
             $('#direccion_linea1').removeClass('error');
         });
         
-        $(document).on('keyup','#direccion_linea2',function(){
+        $(document).on('input','#direccion_linea2',function(){
             var num = $(this).val();
             $('#stripe_view_address_line2').val(num);
             $('#direccion_linea2').removeClass('error');
         });
         
-        $(document).on('keyup','#direccion_city',function(){
+        $(document).on('input','#direccion_city',function(){
             var num = $(this).val();
             $('#stripe_view_address_city').val(num);
             $('#direccion_city').removeClass('error');
@@ -506,13 +506,13 @@
             
         });
         
-        $(document).on('keyup','#direccion_zipCode',function(){
+        $(document).on('input','#direccion_zipCode',function(){
             var num = $(this).val();
             $('#stripe_view_address_zip_code').val(num);
             
         });
         
-        $(document).on('keyup','#direccion_securityAccessCode',function(){
+        $(document).on('input','#direccion_securityAccessCode',function(){
             var num = $(this).val();
             $('#stripe_view_address_security_code').val(num);
         });
@@ -544,18 +544,18 @@
         $('#stripe_view_address_save_address').hide();
         
 {#      Campos de pago  #}
-        $(document).on('keyup','#tarjeta_numero',function(){
+        $(document).on('input','#tarjeta_numero',function(){
             var num = $(this).val();
             $('#stripe_view_card_number').val(num);
             $('#stripe_view_credit_cart').val(num);
         });
         
-        $(document).on('keyup','#tarjeta_nombre',function(){
+        $(document).on('input','#tarjeta_nombre',function(){
             var num = $(this).val();
             $('#stripe_view_card_full_name').val(num);
         });
         
-        $(document).on('keyup','#tarjeta_cvc',function(){
+        $(document).on('input','#tarjeta_cvc',function(){
             var cvc = $(this).val();
             $('#stripe_view_card_cvc').val(cvc);
             $('#stripe_view_credit_cart_security').val(cvc);

@@ -222,74 +222,90 @@ class UsuarioController extends Controller
         $persona = new Persona();
         $form = $this->createForm('DG\ImpresionBundle\Form\UsuarioType', $usuario);
         $form->handleRequest($request);
-        var_dump($_POST['email']);
+//        var_dump($_POST['email']);
         $usuarioBuscar="";
-        if($_POST['email']!=""){
-            $usuarioBuscar = $em->getRepository('DGImpresionBundle:Usuario')->findBy(array('email'=>$_POST['email']));
-            if(count($usuarioBuscar)==0){
-                //var_dump('usuario no existe,crearlo');
-                $persona->setNombres($_POST['firstname']);
-                $persona->setApellidos($_POST['lastname']);
-
-                $persona->setTelefono(null);
-
-                $persona->setEstado(1);
-
-                //evalua si la contraseña fue modificada: ------------------------
-                $this->setSecurePassword($usuario);
-
-                $usuario->setPersona($persona);
-                //$usuario->setPersona();
-                $usuario->setEmail($_POST['email']);
-                //$usuario->setPassword($_POST['email']);
-
-                $rol = $em->getRepository('DGImpresionBundle:Rol')->find(1);
-
-                $usuario->addRol($rol);
-
-                $usuario->setUsername($_POST['username']);
-
-                $usuario->isEnabled(1);
-                //var_dump($usuario);
-                //var_dump($_POST);
-
-                
         
-        //if ($form->isSubmitted()) {
-            //establecemos la contraseña: --------------------------
-                        
-            
-                $em->persist($persona);
-                $em->persist($usuario);
-                //$em->persist($usuario);
-                $em->flush();
-                $mensaje="Cuenta creada con éxito";
-                //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
-                //return $this->redirectToRoute('admin_account_created');
-                return $this->render('usuario/accountcreated.html.twig', array(
-                    'mensaje'=>$mensaje,
-                    'redirect'=>'Login',
-                    'header'=>'Account created',
-                ));
+        
+        
+        
+            if($_POST['email']!="" && $_POST['password']!="" ){
+                if($_POST['re-password']!= $_POST['password'] ){
+                    $mensaje = "Las contraseñas deben ser iguales";
+                    
+                    return $this->render('usuario/accountcreated.html.twig', array(
+                        'mensaje'=>$mensaje,
+                        'redirect'=>'Try again',
+                        'header'=>'Error...',
+                    ));
+                }
+                
+                $usuarioBuscar = $em->getRepository('DGImpresionBundle:Usuario')->findBy(array('email'=>$_POST['email'],'username'=>$_POST['username']));
+                if(count($usuarioBuscar)==0){
+                    //var_dump('usuario no existe,crearlo');
+                    $persona->setNombres($_POST['firstname']);
+                    $persona->setApellidos($_POST['lastname']);
+                    $usuario->setPassword($_POST['password']);
+                    //die();
+                    $persona->setTelefono(null);
+
+                    $persona->setEstado(1);
+
+                    //evalua si la contraseña fue modificada: ------------------------
+                    $this->setSecurePassword($usuario);
+
+                    $usuario->setPersona($persona);
+                    //$usuario->setPersona();
+                    $usuario->setEmail($_POST['email']);
+                    //$usuario->setPassword($_POST['email']);
+
+                    $rol = $em->getRepository('DGImpresionBundle:Rol')->find(2);
+
+                    $usuario->addRol($rol);
+
+                    $usuario->setUsername($_POST['username']);
+
+                    $usuario->isEnabled(1);
+                    //var_dump($usuario);
+                    //var_dump($_POST);
+
+            //if ($form->isSubmitted()) {
+                //establecemos la contraseña: --------------------------
+
+
+                    $em->persist($persona);
+                    $em->persist($usuario);
+                    //$em->persist($usuario);
+                    $em->flush();
+                    $mensaje="Cuenta creada con éxito";
+                    //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
+                    //return $this->redirectToRoute('admin_account_created');
+                    return $this->render('usuario/accountcreated.html.twig', array(
+                        'mensaje'=>$mensaje,
+                        'redirect'=>'Login',
+                        'header'=>'Account created',
+                    ));
+                }
+                else{
+                    $mensaje="El correo o el nombre de usuario proporcionado ya existe";
+                    return $this->render('usuario/accountcreated.html.twig', array(
+                        'mensaje'=>$mensaje,
+                        'redirect'=>'Login',
+                        'header'=>'Error...',
+                    ));
+                    //var_dump('usuario existe, no se creo usuario');
+                }
             }
             else{
-                $mensaje="El correo usado ya existe";
+                $mensaje = "Debe ingresar un correo";
+                if($_POST['password']=="" ){
+                    $mensaje = "Debe una contraseña";
+                }
                 return $this->render('usuario/accountcreated.html.twig', array(
                     'mensaje'=>$mensaje,
-                    'redirect'=>'Login',
+                    'redirect'=>'Try again',
                     'header'=>'Error...',
                 ));
-                var_dump('usuario existe, no se creo usuario');
             }
-        }
-        else{
-            $mensaje = "Debe ingresar un correo";
-            return $this->render('usuario/accountcreated.html.twig', array(
-                'mensaje'=>$mensaje,
-                'redirect'=>'Try again',
-                'header'=>'Error...',
-            ));
-        }
         
         //var_dump($usuarioBuscar);
         //die();
