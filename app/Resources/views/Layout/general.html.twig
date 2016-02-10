@@ -99,11 +99,15 @@
                             </div>
                         </section><!--Home Promotions Products : End -->
                     {% endblock %}
-                    {% block newTemplates %}
-                        {#{% include ':Layout:new_templates.html.twig'%}#}
+                    {% block features %}
+                        {% include ':Layout:features.html.twig'%}
                     {% endblock %}
+                    {% block newTemplates %}
+                        {% include ':Layout:new_templates.html.twig'%}
+                    {% endblock %}
+                    
                     {% block makeOrder %}
-                        {#{% include ':Layout:make_order.html.twig'%}#}
+                        {% include ':Layout:make_order.html.twig'%}
                     {% endblock %}
                 {% endblock %} 
                 <div style="margin-bottom: 25px"></div>

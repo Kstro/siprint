@@ -5,6 +5,7 @@ namespace DG\ImpresionBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Doctrine\ORM\EntityRepository;
 
 class CategoriaType extends AbstractType
 {
@@ -15,8 +16,23 @@ class CategoriaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-//            ->add('categoria')
+            ->add('nombre', null, array(
+                   'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('categoria','entity',array('required'=>false,
+                    'empty_value'   => 'Select an option...',
+                    'class'=>'DGImpresionBundle:Categoria',
+                    'query_builder' => function(EntityRepository $r) {
+                        return $r->createQueryBuilder('s')
+                                ->where('s.categoria is NULL')
+                               //->setParameter('cat', NULL)
+                                ;   
+                        } ,
+                    'attr'=>array(
+                        'class'=>'form-control input-sm'
+                     )            
+                    ))
             ->add('parametro','entity',array('required'=>false,
                 'class'=>'DGImpresionBundle:Parametro','property'=>'nombre',
                 'multiple'=>true,

@@ -97,6 +97,7 @@
                 <p class="">{{ registro.nombre }}</p>
             {% else %}      
                 <ul>
+                    {% if categorias %}
                     {% for categorium in categorias %}
                     <li class="pro-item col-md-4 col-sm-6 col-xs-12">
                         <div class="product-image-action" height="292.5px">
@@ -123,6 +124,9 @@
                         </div>
                     </li>
                     {% endfor %}
+                    {% else %}
+                        <p class="text-center" style="font-size: 1.5em; font-weight: bold;">No products found</p>
+                    {% endif %}    
                 </ul>
             {% endif %}    
         </div>    
@@ -328,8 +332,6 @@
             });
             
         });   
-        
-        
         
         $(document).ajaxStop(function(){
             $.unblockUI();

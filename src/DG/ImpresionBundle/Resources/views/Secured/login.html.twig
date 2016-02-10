@@ -64,8 +64,10 @@
                             <input  type="text" value="{{ last_username }}" id="username" name="_username"  placeholder="Username">
                             <p>Password <span class="star">*</span></p>
                             <input class="pasword" type="password" id="password" name="_password" value="" placeholder="Password">
+                            <p style=" font-size: 15px; color: #6E6E6E">Forgot your password?<a href="{{ path('admin_reset_passw') }}" > click here</a></p>
                             <button type="submit" class="login">Login</button>
                         </form>
+                            
                     </div>
                     {#<div class="socail" id="facebook-connect">
                         <h4>Connect with Facebook</h4>

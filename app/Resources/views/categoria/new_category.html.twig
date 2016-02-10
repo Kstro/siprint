@@ -22,17 +22,10 @@
     {{ form_start(form, {'action': path('categoria_new')}) }}
     {{ form_errors(form) }}
         <div >
-            <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px;">
-                Category:
-            </div>
-            <div class="col-md-6 col-xs-6" style="margin-bottom: 6px;">
-                {{ form_widget(form.categoria) }}
-            </div>
-            <div class="clearfix"></div>
-            <div class="col-md-3 col-xs-3 text-right" >
+            <div class="col-md-3 col-xs-3 text-right">
                 Name:
             </div>
-            <div class="col-md-6 col-xs-6">
+            <div class="col-md-8 col-xs-8">
                 {{ form_widget(form.nombre) }}
             </div>
         
