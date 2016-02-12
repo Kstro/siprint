@@ -16,6 +16,14 @@ class CategoriaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+//            ->add('option','choice',array('required'=>false,
+//                'mapped'  =>false,
+//                'multiple'=>false,
+//                'expanded'=>true,
+//                'choices'  => array('cat' => 'Category', 'prod' => 'Product'),
+//                'attr'=>array(
+//                    'class'=>'parametros radio-inline'
+//                )))    
             ->add('nombre', null, array(
                     'required'=>false,
                    'attr'=>array(

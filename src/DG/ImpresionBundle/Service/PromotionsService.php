@@ -18,11 +18,17 @@ class PromotionsService {
         //$promoImg = new Promocion();
         
         $promotions = $this->em->getRepository('DGImpresionBundle:Promocion')->findBy(array(),array('id'=>'DESC'));
-        $idMax = $promotions[0]->getId();
-       
-        $random = rand(1,$idMax);
-        $prom= $this->em->getRepository('DGImpresionBundle:Promocion')->find($random);
+        //var_dump($promotions);
         
+        if(!empty($promotions )){
+            $idMax = $promotions[0]->getId();
+        
+            $random = rand(1,$idMax);
+            $prom= $this->em->getRepository('DGImpresionBundle:Promocion')->find($random);
+        } else {
+            $prom = 0;
+        }
+            
         return array(
             'promotion'=>$prom,
         );  
