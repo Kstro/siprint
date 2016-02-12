@@ -15,9 +15,15 @@ class ProveedorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('empresa')
-            ->add('contacto')
-            ->add('telefono')
+            ->add('empresa', null, array(
+                'required'=>false,
+                ))
+            ->add('contacto', null, array(
+                'required'=>false,
+                ))
+            ->add('telefono', null, array(
+                'required'=>false,
+                ))
         ;
     }
     

@@ -16,11 +16,13 @@ class PersonaType extends AbstractType
     {
         $builder
             ->add('nombres', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control col-md-8'
                     )
                 ))
             ->add('apellidos', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )
@@ -31,6 +33,7 @@ class PersonaType extends AbstractType
 //                    )
 //                ))
             ->add('telefono', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control col-md-8'
                     )

@@ -9,10 +9,10 @@
                     </a>
                 </div>	
             </div>
-            <div class="col-lg-7 col-md-8 visible-md visible-lg">
+            <div class="col-lg-7 col-md-8 col-xs-12 visible-md visible-lg">
                 <nav id="main-menu" class="main-menu clearfix">
                     <ul>
-                        <li class="level0 parent col1 all-product hd-pd">
+                        <li class="level0 hd-pd">
                             <a href="{{ path('products_list')}}"><span>Services/Products</span></i></a>
                         </li>
                        <li class="level0 hd-pd">
@@ -36,8 +36,8 @@
                 </span>
             </div>
                         <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3 headerCS" style="margin-top: 22px">
-                {% if app.user %}
-                <div class="cart-w SC-w hd-pd " id="show-cart" height="80px"></div>
+                {% if is_granted('ROLE_USER') %}
+                    <div class="cart-w SC-w hd-pd " id="show-cart" height="80px"></div>
                 {% endif %}        
                 {#<div class="search-w SC-w hd-pd ">
                     <span class="search-icon dropdowSCIcon">

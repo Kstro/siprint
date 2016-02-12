@@ -16,65 +16,69 @@
             <p class="hello-user">
                 Hello, {{ app.user.persona }}!
             </p>
-            <p class="hello-par">
-                From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
-            </p>
+            {% if is_granted('ROLE_USER') %}
+                <p class="hello-par">
+                    From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.
+                </p>
+            {% endif %}            
         </div>
     </div>
-    <div class="db-info col-xs-12">
-        <h3 class="acc-sub-tit-i">
-            <i class="fa fa-user"></i>
-            Account Information
-        </h3>
-        
-        <div class="db-address col-xs-12">
-            <h4 class="acc-title">
-                Contact Information
-                {#<a href="#" class="acc-edit" title="edit subscription">
-                    Manage Addresses
-                </a>#}
-                <a href="{{ path('admin_usuario_edit', { 'id': app.user.id }) }}" class="acc-edit edit-registro" title="edit information">
-                    <i class="fa fa-pencil-square-o"></i>
-                </a>
-            </h4>
-            <div class="row">
-                <div class="bs-address">
-                    
-                    <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
-                        <div style="margin-bottom: 15px"></div>
-                        <span class="nav-icon"><i class="fa fa-user"></i> {{ app.user.persona }}</span>
-                        <span class="nav-icon"><i class="fa fa-envelope-o"></i> {{ app.user.email }}</span>
-                        <span class="nav-icon"><i class="fa fa-phone"></i> {{ app.user.persona.telefono }}</span>
-                    </div>
-                    
-                </div>
-            </div>
-            </div>
-                    
+    {% if is_granted('ROLE_USER') %}    
+        <div class="db-info col-xs-12">
+            <h3 class="acc-sub-tit-i">
+                <i class="fa fa-user"></i>
+                Account Information
+            </h3>
+
             <div class="db-address col-xs-12">
-            <h4 class="acc-title">
-                Default Address
-            </h4>
-            <div class="row">
-                <div class="bs-address">
-                    
-                    <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
-                        <div style="margin-bottom: 15px"></div>
-                        {% if direccion %}
-                            <span class="nav-icon">{{ direccion[0].linea1 }}{% if(direccion[0].linea2) %}{{ ', ' ~ direccion[0].linea2 }}{% endif %}</span>
-                            <span class="nav-icon">{{ direccion[0].city ~ ', '}}{{ direccion[0].state}}</span>
-                            <span class="nav-icon">{{ direccion[0].phoneNumber }}</span>
-                            <span class="nav-icon">{{ direccion[0].zipCode }}</span>
-                            <span class="nav-icon">{{ direccion[0].country }}</span>
-                        {% else %}
-                            <p class="text-center">No address were found</p>
-                        {% endif %}
+                <h4 class="acc-title">
+                    Contact Information
+                    {#<a href="#" class="acc-edit" title="edit subscription">
+                        Manage Addresses
+                    </a>#}
+                    <a href="{{ path('admin_usuario_edit', { 'id': app.user.id }) }}" class="acc-edit edit-registro" title="edit information">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                </h4>
+                <div class="row">
+                    <div class="bs-address">
+
+                        <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
+                            <div style="margin-bottom: 15px"></div>
+                            <span class="nav-icon"><i class="fa fa-user"></i> {{ app.user.persona }}</span>
+                            <span class="nav-icon"><i class="fa fa-envelope-o"></i> {{ app.user.email }}</span>
+                            <span class="nav-icon"><i class="fa fa-phone"></i> {{ app.user.persona.telefono }}</span>
+                        </div>
+
                     </div>
-                    
                 </div>
             </div>
+
+                <div class="db-address col-xs-12">
+                <h4 class="acc-title">
+                    Default Address
+                </h4>
+                <div class="row">
+                    <div class="bs-address">
+
+                        <div class="acc-info-content pad-1015 col-xs-10 col-xs-offset-1">
+                            <div style="margin-bottom: 15px"></div>
+                            {% if direccion %}
+                                <span class="nav-icon">{{ direccion[0].linea1 }}{% if(direccion[0].linea2) %}{{ ', ' ~ direccion[0].linea2 }}{% endif %}</span>
+                                <span class="nav-icon">{{ direccion[0].city ~ ', '}}{{ direccion[0].state}}</span>
+                                <span class="nav-icon">{{ direccion[0].phoneNumber }}</span>
+                                <span class="nav-icon">{{ direccion[0].zipCode }}</span>
+                                <span class="nav-icon">{{ direccion[0].country }}</span>
+                            {% else %}
+                                <p class="text-center">No address were found</p>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                </div>
             </div>
-        </div>
+        {% endif %}                            
         <div style="margin-bottom: 40px"></div>
     </div>
 {% endblock %}    

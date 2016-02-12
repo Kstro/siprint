@@ -119,16 +119,17 @@ class SecuredController extends Controller
                             <center>
                               <img style=\"width:50%;\" src=\"http://expressionsprint.com/img/logo.jpg\">
                             </center>
-                                <p>" . $usuario->getPersona() . ", you have requested to reset your password, then displays your new password.</p><br>
-                                <p> User:" . $usuario->getUsername() . "</p><br>
-                                <p> Email: " . $email . "</p><br>
-                                <p> Password:" . $password . "</p>
+                                <p>" . $usuario->getPersona() . ", you have requested to reset your password, then displays your new password.</p>
+                                <p> User:" . $usuario->getUsername() . "</p>
+                                <p> Email: " . $email . "</p>
+                                <p><b> Password: " . $password . "</b></p>
+                                <p>Thanks, by the use of our services. </p>    
                             </td>
                             <td class=\"expander\"></td>
                           </tr>
                         </table>
                     ");
-        var_dump($password);
+        //var_dump($password);
         //var_dump($usuario);
          
         

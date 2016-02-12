@@ -86,3 +86,13 @@
         <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
     {{ form_end(form) }}
 {% endblock %}
+{% block javascripts %}
+   
+    <script src="{{ asset('Resources/js/validaciones/promocion.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            validar();   
+        });
+    </script>
+{% endblock %}   

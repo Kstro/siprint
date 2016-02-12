@@ -41,18 +41,12 @@
 {#</form>#}
     {{ form_end(form) }}
 {% endblock %}
-
 {% block javascripts %}
-    
+   <script src="{{ asset('Resources/js/validaciones/raw_material.js') }}"></script>
+
     <script>
-                $(document).ready(function(){
-{#                    validarTipoCategoria();#}
-                    {#$('.btn-edit').on("click",function(){
-                        //$(this).removeClass('btn-edit');
-                    });#}
-                    
-                });
-
-            </script>
-
-{% endblock %}
+        $(document).ready(function(){
+            validar();   
+        });
+    </script>
+{% endblock %}  

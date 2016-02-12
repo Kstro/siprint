@@ -88,3 +88,12 @@
         </li>
     </ul>#}
 {% endblock %}
+{% block javascripts %}
+   <script src="{{ asset('Resources/js/validaciones/usuario.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            validar();   
+        });
+    </script>
+{% endblock %}  

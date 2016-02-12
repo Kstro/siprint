@@ -2,42 +2,56 @@
     <h3 class="acc-title lg">Account</h3>
     <ul>
         <li class="active">
-            
-                
             <a href="{{ path('dg_my_account') }}" title="Account dashboard">
                 <i class="fa fa-bars"></i> Account Dashboard
             </a>
         </li>
-        {#<li>
-            <a href="myaccount-information.html" title="account dashboard">Account information</a>
-        </li>#}
-        <li>
-            <a href="{{ path('orden_show') }}" title="Shopping Cart">
-                <i class="fa fa-cart-arrow-down"></i> Shopping Cart
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('orden_index') }}" title="Manage Credit Cards">
-                <i class="fa fa-bars"></i> My orders
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('admin_address_book_index') }}" title="Address Book">
-                <i class="fa fa-book"></i> Address Book
-            </a>
-        </li>
-        {#<li>
-            <a href="#" title="Wishlist">
-                <i class="fa fa-check-square-o"></i> Wishlist
-            </a>
-        </li>#}
-        <li>
-            <a href="{{ path('admin_credit_cards_index') }}" title="Manage Credit Cards">
-                <i class="fa fa-credit-card"></i> Manage Credit Cards
-            </a>
-        </li>
-        {#<li>
-            <a href="myaccount-newsletter.html" title="account dashboard">Newsletter Subscriptions</a>
-        </li>#}
+        {% if is_granted('ROLE_USER') %}
+            <li>
+                <a href="{{ path('orden_show') }}" title="Shopping Cart">
+                    <i class="fa fa-cart-arrow-down"></i> Shopping Cart
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('orden_index') }}" title="Manage Credit Cards">
+                    <i class="fa fa-bars"></i> My orders
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_address_book_index') }}" title="Address Book">
+                    <i class="fa fa-book"></i> Address Book
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_credit_cards_index') }}" title="Manage Credit Cards">
+                    <i class="fa fa-credit-card"></i> Manage Credit Cards
+                </a>
+            </li>
+        {% elseif is_granted('ROLE_ADMIN') %}
+            <li class="level0">
+                <a href="{{ path('admin_view_orders_') }}" title="Orders">
+                    <span class="nav-icon"><i class="fa fa-bars"></i></span>
+                    <span class="nav-text">Orders</span>
+                </a>
+            </li>
+            <li class="level0">
+                <a href="{{ path('admin_store_sale') }}" title="Store sales">
+                    <span class="nav-icon"><i class="fa fa-plus-square-o "></i></span>
+                    <span class="nav-text">New store sales</span>
+                </a>
+            </li>
+            <li class="level0">
+                <a href="{{ path('admin_store_sale') }}" title="Store sales">
+                    <span class="nav-icon"><i class="fa fa-money"></i></span>
+                    <span class="nav-text">In - store sales</span>
+                </a>
+            </li>
+            <li class="level0">
+                <a href="{{path('admin_promocion_index')}}" title="Promotions">
+                    <span class="nav-icon"><i class="fa fa-ticket"></i></span>
+                    <span class="nav-text">Promotions</span>
+                </a>
+            </li>
+        {% endif %}            
     </ul>
     

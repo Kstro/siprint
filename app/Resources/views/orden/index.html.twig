@@ -20,6 +20,11 @@
     </style>
 {% endblock %}
 {% block contenido %}
+    <div>
+        <small>
+            Se muestran las ordenes que ha realizado
+        </small>
+    </div>
     {% if orden %}
         {#<div class="col-md-12 text-center">
             {% if mensaje == 0 %}
@@ -155,7 +160,8 @@
             $(".idpago").on("click",function(){
                 var href = $(this).attr('href');
                 //alert (href);
-                window.open(href,'_blank');
+                //window.open(href,'_blank');
+                window.location = href;
                 return false;
             });  
         });

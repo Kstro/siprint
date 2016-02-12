@@ -76,11 +76,12 @@
                 <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                     User roles:
                 </div>
-                <div class="clearfix"></div>
-                <div class="col-md-12 text-center" style="margin-bottom: 4px;">
-                    {{ form_widget(edit_form.user_roles) }}
-                </div>
-            {% endif %}
+            {% endif %}    
+            <div class="clearfix"></div>
+            <div class="col-md-12 text-center" style="margin-bottom: 4px;">
+                {{ form_widget(edit_form.user_roles) }}
+            </div>
+            
             <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
     {{ form_end(edit_form) }}
 
@@ -90,3 +91,12 @@
         </li>
     </ul>#}
 {% endblock %}
+{% block javascripts %}
+    {% if is_granted('ROLE_USER') %}
+        <script>
+            $(document).ready(function(){
+                $('#usuario_user_roles').hide();
+            });
+        </script>
+    {% endif %} 
+{% endblock %}  

@@ -17,6 +17,7 @@ class CategoriaType extends AbstractType
     {
         $builder
             ->add('nombre', null, array(
+                    'required'=>false,
                    'attr'=>array(
                     'class'=>'form-control'
                     )))

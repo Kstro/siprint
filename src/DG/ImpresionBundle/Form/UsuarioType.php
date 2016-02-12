@@ -17,6 +17,7 @@ class UsuarioType extends AbstractType
     {
         $builder
             ->add('username', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )
@@ -36,6 +37,7 @@ class UsuarioType extends AbstractType
                     )),
                 ))
             ->add('email', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )

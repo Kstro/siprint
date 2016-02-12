@@ -205,7 +205,8 @@
             $('.opciones').click(function(){
                 var id = $(this).val();
                 var url = Routing.generate('admin_reporte_invoice', {'id': id});
-                window.open(url,'_blank');
+                //window.open(url,'_blank');
+                window.location.href = url;
                 return false;
             });    
                 

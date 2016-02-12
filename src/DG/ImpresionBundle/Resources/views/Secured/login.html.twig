@@ -27,17 +27,17 @@
                         
                         <form id="register-form" class="form-validate form-horizontal" method="post" action="{% block form_action1 %}{{ path("admin_usuario_register") }}{% endblock %}">
                             <p>First Name <span class="star">*</span></p>
-                            <input name="firstname" class="firstname" type="text" >
+                            <input name="firstname" id="firstname" class="firstname" type="text" >
                             <p>Last Name <span class="star">*</span></p>
-                            <input name="lastname" class="lastname" type="text" >
+                            <input name="lastname" id="lastname" class="lastname" type="text" >
                             <p>Create a username<span class="star">*</span></p>
-                            <input name="username" class="user" type="text" > 
+                            <input name="username" id="username" class="user" type="text" > 
                             <p>Email Address <span class="star">*</span></p>
-                            <input name="email" class="email" type="text" >
+                            <input name="email" id="email" class="email" type="text" >
                             <p>Create a password  <span class="star">*</span></p>
-                            <input name="password" class="pasword" type="password">
+                            <input name="password" id="password" class="pasword" type="password">
                             <p>confirm a password  <span class="star">*</span></p>
-                            <input name="re-password" class="re-pasword" type="password" > 
+                            <input name="re-password" id="re-password" class="re-pasword" type="password" > 
                             <div>
                             
                             
@@ -88,4 +88,15 @@
 
         </div>
     </section>
+{% endblock %}   
+{% block javascripts %}
+   <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script> 
+   <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
+    <script src="{{ asset('Resources/js/validaciones/usuario.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            validarCreacionUsuario();   
+        });
+    </script>
 {% endblock %}  

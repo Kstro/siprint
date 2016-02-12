@@ -5,17 +5,17 @@
             <div class="top-links col-lg-7 col-md-6 col-sm-5 col-xs-6">
                 <ul>
                     {#<li class="visible-md visible-lg">
-                        <a href="{{ path('admin_usuario_index') }}">
+                        <a href="{{ path('dg_my_account') }}">
                             <i class="fa fa-lock" title="Account"></i>
                             <!-- Account -->
                         </a>
                     </li>#}
-                    <li class="hidden-xs">
-                        <a href="{{ path('admin_usuario_index')}}" title="Sign Up and Login">
+                    {#<li class="hidden-xs">
+                        <a href="{{ path('dg_my_account') }}" title="Sign Up and Login">
                             <i class="fa fa-user"></i>
                             <!-- Sign Up and Login -->
                         </a>
-                    </li>
+                    </li>#}
                     <li class="hidden-xs">
                         <a href="#">
                             <i class="fa fa-facebook"></i>
@@ -45,22 +45,37 @@
                                 </span>
                             </div>
                             <ul>
+                                {% if is_granted('ROLE_USER') %}
                                 <li>
                                     <a href="{{ path('dg_my_account')}}" title="My Account">
                                         <span>My Account</span>
                                     </a>
                                 </li>
-                                {#<li>
-                                    <a href="#" title="Select currency japan">
-                                        <span>Change Password</span>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a href="{{ path('admin_usuario_index')}}" title="Setting">
+                                        <span>Setting</span>
                                     </a>
-                                </li>#}
+                                </li>
+                                {% endif %}
                                 <li>
                                     <a href="{{ path('admin_secured_logout')}}" title="Log Out">
                                         <span>Log Out</span>
                                     </a>
                                 </li>
                             </ul>
+                        </div>
+                    {% else %}
+                        <div class="block-currency">
+                            <div class="currency-active">
+                                <a href="{{ path('admin_secured_logout')}}" title="Sign in">
+                                    <span class="currency-name">
+                                        <i class="fa fa-user"></i> Sign in
+
+                                    </span>
+                                </a>
+                            </div>
                         </div>
                     {% endif %}
                     {#<div class="language-w clearfix">

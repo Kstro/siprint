@@ -54,16 +54,11 @@
     </ul>#}
 {% endblock %}
 {% block javascripts %}
-    
+   <script src="{{ asset('Resources/js/validaciones/proveedor.js') }}"></script>
+
     <script>
-                $(document).ready(function(){
-{#                    validarTipoParametro();#}
-                    {#$('.btn-edit').on("click",function(){
-                        //$(this).removeClass('btn-edit');
-                    });#}
-                    
-                });
-
-            </script>
-
-{% endblock %}
+        $(document).ready(function(){
+            validar();   
+        });
+    </script>
+{% endblock %}  

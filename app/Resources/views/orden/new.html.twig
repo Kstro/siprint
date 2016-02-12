@@ -219,9 +219,12 @@
 {% block javascripts_step %}
     {{parent()}}
     <script type="text/javascript" src="{{ asset('Resources/js/jquery.blockUI.js') }}"></script>  
+    
+    <script src="{{ asset('Resources/js/validaciones/sale.js') }}"></script>
     <script>
         var total = 0;
         $(document).ready(function(){
+            validar();   
             $('.modal-center').hide();
             $("#code-promo").val('');
             $("#orden_cliente").select2();
@@ -333,6 +336,7 @@
                                                 //alert(det.porcentaje);
                                                 $('.printing-cost').children().html('$ ' + total.toFixed(2));
                                                 //$('.printing-cost').children().html('$ ' + total_pagar.toFixed(2));
+                                                validar();   
                                         });
                                         
                                     });

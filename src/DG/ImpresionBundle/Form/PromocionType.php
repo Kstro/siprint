@@ -15,9 +15,15 @@ class PromocionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('codigo')    
-            ->add('porcentaje')
+            ->add('nombre', null, array(
+                'required'=>false,
+                ))
+            ->add('codigo', null, array(
+                'required'=>false,
+                ))    
+            ->add('porcentaje', null, array(
+                'required'=>false,
+                ))
             ->add('file',null, array(
                     //'label'=>'Photo promotion',
                     'required'=>false,

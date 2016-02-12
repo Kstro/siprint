@@ -38,7 +38,7 @@ security:
             form_login:
                 login_path: /secured/login
                 check_path: /secured/login_check
-                default_target_path: /admin/orders
+                default_target_path: /admin/myaccount
                 #always_use_default_target_path: true 
                 failure_path:      /secured/login
                 #use_referer:         true
@@ -46,12 +46,20 @@ security:
                 path: /secured/logout
                 target: /secured/login        
 
+#    access_control:
+#        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/admin/usuario/registeruser/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/admin/usuario/account/created, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/admin/*, role:  ROLE_USER } 
+#        - { path: ^/secured/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        Roles admin
+#        - { path: ^/admin/*, role:  ROLE_ADMIN }
+
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/usuario/registeruser/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/usuario/account/created, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        
+        - { path: ^/admin/*, role:  [ROLE_USER, ROLE_ADMIN]} 
         - { path: ^/secured/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #Roles admin
-        - { path: ^/admin/*, role:  ROLE_ADMIN }
-        - { path: ^/admin/usuario/*, role:  ROLE_USER } 
+        - { path: ^/admin/*, role:  ROLE_ADMIN }        

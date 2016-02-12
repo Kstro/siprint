@@ -16,16 +16,19 @@ class TarjetaType extends AbstractType
     {
         $builder
             ->add('numero', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )
                 ))
             ->add('nombre', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )
                 ))
             ->add('cvc', null, array(
+                    'required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )

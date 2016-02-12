@@ -48,3 +48,12 @@
     </script>
     
 {% endblock %}
+{% block javascripts %}
+   <script src="{{ asset('Resources/js/validaciones/tarjeta.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            validar();   
+        });
+    </script>
+{% endblock %}

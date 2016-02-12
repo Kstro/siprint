@@ -90,9 +90,13 @@
         </div>
     {{ form_end(form) }}
 
-    {#<ul>
-        <li>
-            <a href="{{ path('admin_address_book_index') }}">Back to the list</a>
-        </li>
-    </ul>#}
+{% endblock %}
+{% block javascripts %}
+   <script src="{{ asset('Resources/js/validaciones/direccion.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            validar();   
+        });
+    </script>
 {% endblock %}
