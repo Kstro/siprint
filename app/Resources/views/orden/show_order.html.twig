@@ -2,8 +2,20 @@
 
 {% block section %}Order Information{% endblock %}
 {% block section2 %}Order Information{% endblock %}
-{% block accountSidebar -%}
-    {% include ':Layout:sidebar.html.twig'%}
+{% block sidebar %}
+    {% include ':Layout:accountsidebar.html.twig'%}
+        <div class="category-left-banner">
+            <a href="#" title="category left banner">
+                    {% block img_prom %}
+                        {% if promotion['promotion'] %}
+                            <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+                        {% else %}    
+                            <img src="http://placehold.it/263x263" alt="promotions">
+                        {% endif %}    
+                    {% endblock %}
+            </a>
+        </div>
+    </aside>
 {% endblock %}
 {#{% block titleAccount -%}
     
@@ -11,9 +23,13 @@
     
 {% endblock %}#}
 
-{% block img_prom %}
-    <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
-{% endblock %}
+{#{% block img_prom %}
+    {% if promotion['promotion'] %}
+        <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+    {% else %}    
+        <img src="http://placehold.it/263x263" alt="promotions">
+    {% endif %}    
+{% endblock %}#}
 
 {% block contenido %}
     <div id="resultado">

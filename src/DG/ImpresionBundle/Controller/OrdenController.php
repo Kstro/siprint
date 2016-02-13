@@ -289,11 +289,13 @@ class OrdenController extends Controller
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $cart
                                                                               ));
         
-                                                                            
+        $promotion = $this->get('promotion_img')->searchPromotion();  
+                                                                          
         //var_dump($cart);
         return $this->render('orden/show.html.twig', array(
             'ord' => $cart,
             'noOrden'=>$noOrden,
+            'promotion' => $promotion,
             'products' => $products,
         ));
     }

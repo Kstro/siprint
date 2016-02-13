@@ -26,7 +26,7 @@ class PromotionsService {
             $random = rand(1,$idMax);
             $prom= $this->em->getRepository('DGImpresionBundle:Promocion')->find($random);
         } else {
-            $prom = 0;
+            $prom = NULL;
         }
             
         return array(

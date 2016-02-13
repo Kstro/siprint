@@ -80,20 +80,18 @@
                                         </span>
                                     </div>
                                     <ul class="slider-w slider-owl">
-                                        {% for row in prom_random %}        
+                                        {#{% for row in prom_random %}        
                                             <li class="pro-item">
                                                 <div class="product-image-action">
-                                                    <img src="{#{{ asset('Photos/promotions/')}}{{row.imagen}}#}http://placehold.it/263x263" title="{{ row.nombre|upper }}" style=" height: 263px">
+                                                    <img src="{{ asset('Photos/promotions/')}}{{row.imagen}}http://placehold.it/263x263" title="{{ row.nombre|upper }}" style=" height: 263px">
 
                                                 </div>
                                                 <div class="product-info">
                                                     <a href="#" title="product" class="product-name">{{ row.nombre|upper }}</a>
-                                                    <div class="price-box">
-                                                        {#<span class="normal-price">{{row.porcentaje}}%</span>#}
-                                                    </div>
+                                                    <div class="price-box"></div>
                                                 </div>
                                             </li>
-                                        {% endfor %}    
+                                        {% endfor %}   #} 
                                     </ul>
                                 </div>
                             </div>

@@ -23,7 +23,11 @@
         <div class="category-left-banner">
             <a href="#" title="category left banner">
                     {% block img_prom %}
-                        <img src="{#{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}#}http://placehold.it/263x263" alt="{{ promotion['promotion'].nombre }}">
+                        {% if promotion['promotion'] %}
+                            <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+                        {% else %}    
+                            <img src="http://placehold.it/263x263" alt="promotions">
+                        {% endif %}    
                     {% endblock %}
             </a>
         </div>

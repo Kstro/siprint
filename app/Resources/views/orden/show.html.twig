@@ -2,6 +2,13 @@
 
 {% block section %}Shopping Cart{% endblock %}
 {% block section2 %}Shopping Cart{% endblock %}
+{% block img_prom %}
+    {% if promotion['promotion'] %}
+        <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+    {% else %}    
+        <img src="http://placehold.it/263x263" alt="promotions">
+    {% endif %}
+{% endblock %}
 {% block titleAccount -%}
     
     <div class="col-md-6 text-left">Your shopping basket</div>
@@ -152,6 +159,7 @@
                     {% endif %}#}
                         //alert(detalleId);
 {#                        //alert({{ord.id}});#}
+                    {% if ord %} 
                     $.post( "{{path('orden_delete')}}", { detalleId: detalleId,ordenId:{{ord.id}} }, function( data ) {
                         var par = new Array();
                         par = data.query;
@@ -171,7 +179,7 @@
                             $(link).html(mas);
                         }
                     }, "json");
-                
+                    {% endif %}
                         
                     return false;
                 });
