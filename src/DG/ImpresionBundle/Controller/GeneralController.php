@@ -23,28 +23,46 @@ class GeneralController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-//        $promotions = $em->getRepository('DGImpresionBundle:Promocion')->findBy(array(),array('id'=>'DESC'));
-//        $idMax = $promotions[0]->getId();
-//        
-//        $prom_random=array();
-//        $idRecuperados=array();
-//        
-//        while(count($prom_random)<4){
-//            
-//            $random = rand(1,$idMax);
-//            $prom= $em->getRepository('DGImpresionBundle:Promocion')->find($random);
-//            
-//            if(!in_array($random, $idRecuperados, true)){
-//                if(count($prom)!=0){
-//                    array_push ($prom_random, $prom);
-//                    array_push ($idRecuperados, $random);
-//                }
-//            }
-//        }
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL "
+                . "ORDER BY p.id DESC ";
+        
+        $products = $em->createQuery($dql)
+                         ->getResult();
+        
+        $tot_products = count($products);
+        $idproducts=array();
+        foreach ($products as $key => $value) {
+            array_push ($idproducts, $value->getId());
+        }
+        
+        if($tot_products > 4) {
+            $cantidad = 4;
+        } else {
+            $cantidad = $tot_products;
+        }
+        
+        $prom_random=array();
+        $idRecuperados=array();
+        
+        
+        while( count($prom_random) < $cantidad ){
+            
+            $random = array_rand($idproducts, 1);
+            $prom= $em->getRepository('DGImpresionBundle:Categoria')->find($idproducts[$random]);
+
+            if(!in_array($random, $idRecuperados, true)){
+                if(count($prom)!=0){
+                    array_push ($prom_random, $prom);
+                    array_push ($idRecuperados, $random);
+                }
+            }
+        }
         
         return $this->render('General/index.html.twig', array(
-            //'prom_random' => $prom_random,
-            //'idRecuperados' => $idRecuperados
+            'prom_random' => $prom_random,
+            'idRecuperados' => $idRecuperados
         ));
     }
     

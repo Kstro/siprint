@@ -78,11 +78,12 @@ class FPDFService {
         $this->pdf->Ln(6);
         $break+=6;
         
-        $this->pdf->SetFont('Arial','B',9);
-        $this->pdf->Cell(0, 10, 'Shipping Address:',0,0);
+        
         
         if($orden[0]->getOrden()->getDireccionEnvio()) 
         {    
+            $this->pdf->SetFont('Arial','B',9);
+            $this->pdf->Cell(0, 10, 'Shipping Address:',0,0);
             $this->pdf->SetX(50);
             $this->pdf->SetFont('Arial','',9);
             $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getLinea1(), 0, 0);
@@ -96,11 +97,12 @@ class FPDFService {
             $break+=5;
             $this->pdf->SetX(50);
             $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvio()->getZipCode(), 0, 0);
-        } else {
-            $this->pdf->SetX(50);
-            $this->pdf->SetFont('Arial','',9);
-            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvioGuardar(), 0, 0);
-        }
+        }    
+//        else {
+//            $this->pdf->SetX(50);
+//            $this->pdf->SetFont('Arial','',9);
+//            $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getDireccionEnvioGuardar(), 0, 0);
+//        }
         
             
         $this->pdf->SetLineWidth(0.35);
@@ -159,9 +161,9 @@ class FPDFService {
         
         $monto_cancelar = 0;
         $promocion = 0;
-        if( $orden[0]->getOrden()->getPromocion() != NULL ){
-            $monto_cancelar = $total - (( $orden[0]->getOrden()->getPromocion()->getPorcentaje() * $total ) / 100);
-            $promocion = ( $orden[0]->getOrden()->getPromocion()->getPorcentaje() * $total ) / 100;
+        if( $orden[0]->getOrden()->getPorcentaje() != NULL ){
+            $monto_cancelar = $total - (( $orden[0]->getOrden()->getPorcentaje() * $total ) / 100);
+            $promocion = ( $orden[0]->getOrden()->getPorcentaje() * $total ) / 100;
         } else {
             $monto_cancelar = $total;
         }

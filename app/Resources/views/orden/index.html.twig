@@ -132,8 +132,28 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <div class="pull-right" style="font-size:30px;">
-                        Total order: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    <div class="pull-right" style="font-size:20px; margin-right: 10px;">
+                        Sub-total: <label class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="pull-right" style="font-size:20px; margin-right: 10px;">Promotion applied: 
+                        <label class="text-bold">$ 
+                            {% set porcentaje = 0 %}
+                            {% if ord.porcentaje %}
+                                {% set porcentaje = ( ord.porcentaje * total )/100 %}
+                            {% endif %}
+                            {{ porcentaje | number_format('2','.',',') }}
+                         </label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="pull-right" style="font-size:20px; margin-right: 10px;">Total order: 
+                        <label class="text-bold">$ 
+                            {% if ord.porcentaje %}
+                                {{(total - porcentaje)|number_format('2','.',',')}}
+                            {% else %}    
+                                {{total|number_format('2','.',',')}}
+                            {% endif %}
+                        </label>
                     </div>
                 </div>
                     
