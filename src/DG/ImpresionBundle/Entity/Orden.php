@@ -143,6 +143,12 @@ class Orden
      */
     private $fechaPago;
     
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cookie", type="integer", nullable=false)
+     */
+    private $cookie;
     
     /**
      * Get id
@@ -152,6 +158,30 @@ class Orden
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set cookie
+     *
+     * @param integer $cookie
+     *
+     * @return Orden
+     */
+    public function setCookie($cookie)
+    {
+        $this->cookie = $cookie;
+
+        return $this;
+    }
+
+    /**
+     * Get cookie
+     *
+     * @return integer
+     */
+    public function getCookie()
+    {
+        return $this->cookie;
     }
 
     /**

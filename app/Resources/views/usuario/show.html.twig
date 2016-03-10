@@ -1,40 +1,50 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:myaccountdashboard.html.twig' %}
 
-{% block body %}
-    <h1>Usuario</h1>
+{% block section %}User information{% endblock %}
+{% block section2 %}User information{% endblock %}
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ usuario.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ usuario.username }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ usuario.password }}</td>
-            </tr>
-            <tr>
-                <th>Salt</th>
-                <td>{{ usuario.salt }}</td>
-            </tr>
-        </tbody>
-    </table>
+{% block img_prom %}
+    {% if promotion['promotion'] %}
+        <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+    {% else %}    
+        <img src="http://placehold.it/263x263" alt="promotions">
+    {% endif %}    
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_usuario_index') }}">Back to the list</a>
-        </li>
+{% block titleAccount -%}User information{% endblock %}
+
+{% block contenido %}
+    
+    <div class="col-md-10 col-md-offset-1" style="margin-top: 35px;">
+        <table id="tabla" class="table table-bordered table-hover table-condensed">
+            <tbody>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ usuario.persona }}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>{{ usuario.username }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ usuario.email }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="clearfix"></div>    
+    
+
+    {#<ul>
+        {% if is_granted('ROLE_ADMIN') %}
+            <li>
+                <a href="{{ path('admin_usuario_index') }}">Back to the list</a>
+            </li>
+        {% endif %}  
         <li>
             <a href="{{ path('admin_usuario_edit', { 'id': usuario.id }) }}">Edit</a>
         </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+        
+    </ul>#}
 {% endblock %}

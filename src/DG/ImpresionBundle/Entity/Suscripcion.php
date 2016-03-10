@@ -24,10 +24,30 @@ class Suscripcion
     /**
      * @var string
      *
-     * @ORM\Column(name="correo_electronico", type="string", length=150, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=255, nullable=false)
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tema", type="string", length=255, nullable=false)
+     */
+    private $tema;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correo_electronico", type="string", length=200, nullable=false)
      */
     private $correoElectronico;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mensaje", type="string", length=750, nullable=false)
+     */
+    private $mensaje;
 
 
     /**
@@ -40,6 +60,54 @@ class Suscripcion
         return $this->id;
     }
 
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return Suscripcion
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+    
+    /**
+     * Set tema
+     *
+     * @param string $tema
+     *
+     * @return Suscripcion
+     */
+    public function setTema($tema)
+    {
+        $this->tema = $tema;
+
+        return $this;
+    }
+
+    /**
+     * Get tema
+     *
+     * @return string
+     */
+    public function getTema()
+    {
+        return $this->tema;
+    }
+    
     /**
      * Set correoElectronico
      *
@@ -62,5 +130,29 @@ class Suscripcion
     public function getCorreoElectronico()
     {
         return $this->correoElectronico;
+    }
+    
+    /**
+     * Set mensaje
+     *
+     * @param string $mensaje
+     *
+     * @return Suscripcion
+     */
+    public function setMensaje($mensaje)
+    {
+        $this->mensaje = $mensaje;
+
+        return $this;
+    }
+
+    /**
+     * Get mensaje
+     *
+     * @return string
+     */
+    public function getMensaje()
+    {
+        return $this->mensaje;
     }
 }

@@ -17,7 +17,7 @@ class ParametroType extends AbstractType
         $builder
             ->add('nombre',null, array('required'=>false, 'attr'=>array('class'=>'form-control input-sm')))
 //            ->add('parametro')
-            ->add('tipoCategoria',null, array('attr'=>array('class'=>'form-control input-sm')))
+            //->add('tipoCategoria',null, array('attr'=>array('class'=>'form-control input-sm')))
 //            ->add('categoria')
 //            ->add('detalleCategoria')
 //            ->add('formatoPlantilla')

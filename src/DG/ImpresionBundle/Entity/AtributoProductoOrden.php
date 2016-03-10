@@ -23,14 +23,14 @@ class AtributoProductoOrden
     private $id;
     
     /**
-     * @var \DetalleParametro
+     * @var \OpcionProducto
      *
-     * @ORM\ManyToOne(targetEntity="DetalleParametro", inversedBy="atributProductOrden", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="OpcionProducto", inversedBy="atributProductOrden", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="detalle_parametro", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="opcion_producto", referencedColumnName="id")
      * })
      */
-    private $detalleParametro;
+    private $opcionProducto;
 
     /**
      * @var \DetalleOrden
@@ -55,27 +55,27 @@ class AtributoProductoOrden
     }
 
     /**
-     * Set detalleParametro
+     * Set opcionProducto
      *
-     * @param \DG\ImpresionBundle\Entity\DetalleParametro $detalleParametro
+     * @param \DG\ImpresionBundle\Entity\OpcionProducto $opcionProducto
      *
      * @return AtributoProductoOrden
      */
-    public function setDetalleParametro(\DG\ImpresionBundle\Entity\DetalleParametro $detalleParametro = null)
+    public function setOpcionProducto(\DG\ImpresionBundle\Entity\OpcionProducto $opcionProducto = null)
     {
-        $this->detalleParametro = $detalleParametro;
+        $this->opcionProducto = $opcionProducto;
 
         return $this;
     }
 
     /**
-     * Get detalleParametro
+     * Get opcionProducto
      *
-     * @return \DG\ImpresionBundle\Entity\DetalleParametro
+     * @return \DG\ImpresionBundle\Entity\OpcionProducto
      */
-    public function getDetalleParametro()
+    public function getOpcionProducto()
     {
-        return $this->detalleParametro;
+        return $this->opcionProducto;
     }
 
     /**

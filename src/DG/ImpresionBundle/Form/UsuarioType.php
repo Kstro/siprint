@@ -43,13 +43,7 @@ class UsuarioType extends AbstractType
                     )
                 ))   
             ->add('persona', new PersonaType())
-            ->add('user_roles','entity',array('label' => 'Select a role','required'=>false,
-                'class'=>'DGImpresionBundle:Rol','property'=>'nombre',
-                'multiple'=>true,
-                'expanded'=>true,
-                    'attr'=>array(
-                    'class'=>'roles'
-                    )))
+            
         ;
     }
     

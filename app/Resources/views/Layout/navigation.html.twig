@@ -36,7 +36,7 @@
                 </span>
             </div>
                         <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3 headerCS" style="margin-top: 22px">
-                {% if is_granted('ROLE_USER') %}
+                {% if not is_granted('ROLE_ADMIN') %}
                     <div class="cart-w SC-w hd-pd " id="show-cart" height="80px"></div>
                 {% endif %}        
                 {#<div class="search-w SC-w hd-pd ">

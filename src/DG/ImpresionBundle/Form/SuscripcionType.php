@@ -15,7 +15,10 @@ class SuscripcionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('nombre')
+            ->add('tema')
             ->add('correoElectronico')
+            ->add('mensaje', 'textarea')    
         ;
     }
     

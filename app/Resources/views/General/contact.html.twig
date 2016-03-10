@@ -50,24 +50,33 @@
                         </p>
                     </div>
                 </div>
-                <form id="contact-form" class="form-validate form-horizontal" method="post" action="#">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <textarea aria-required="true" required="required" class="required invalid" rows="10" cols="50" id="jform_contact_message" name="contact_message" aria-invalid="true" >Message *</textarea>
-                    <p>Ask us a question and we'll write back to you promptly! Simply fill out the form below and click Send Email.</p>
-                    <p>Thanks. Items marked with an asterisk (<span class="star">*</span>) are required fields.</p>
-                </div>
 
-                <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input class="name" type="text" value="Enter your name *">
-                    <input class="email" type="text" value="Enter E-mail *">
-                    <input class="mesage" type="text" value="Enter Mesage Subject *">
-                    <div class="button">
-                    <input class="subject" type="checkbox" value="Enter Mesage Subject *">
-                    <span>Send copy to yourself</span>
+                {{ form_start(form, {'action': path('dg_general_contact')}, {'attr': {'class':'form-validate form-horizontal'} }) }}
+                {{ form_errors(form) }}
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form_widget(form.mensaje, {'attr': {'class':'required invalid', 'rows': '10', 'cols': '50', 'placeholder': 'Message *'} }) }}
+                        <p>Ask us a question and we'll write back to you promptly! Simply fill out the form below and click Send Email.</p>
+                        <p>Thanks. Items marked with an asterisk (<span class="star">*</span>) are required fields.</p>
                     </div>
-                    <button type="submit" class="sendmail">Submit</button>
-                </div>
-                </form>
+
+                    <div class="col-md-3 col-sm-3 col-xs-12">
+                        {{ form_widget(form.nombre, {'attr': {'class':'name form-control', 'placeholder': 'Enter your name *', 'style': 'margin-bottom: 30px' } }) }}
+                        {{ form_widget(form.correoElectronico, {'attr': {'class':'mesage form-control', 'placeholder': 'Enter E-mail *', 'style': 'margin-bottom: 30px'} }) }}
+                        {{ form_widget(form.tema, {'attr': {'class':'mesage form-control', 'placeholder': 'Enter Mesage Subject *', 'style': 'margin-bottom: 30px'} }) }}
+
+                        <input type="submit" value="Submit" style="margin-bottom: 10px;" class="sendmail btn btn-primary form-control"/>
+                    </div>
+                {{ form_end(form) }}
+                {#</form>#}
             </div>
     </section>
 {% endblock %}    
+{% block javascript_step %}
+    <script>
+        $(document).ready(function(){
+            $('#suscripcion_nombre').val('');
+            $('#suscripcion_correoElectronico').val('');
+            $('#suscripcion_tema').val('');
+        });
+    </script>
+{% endblock %}

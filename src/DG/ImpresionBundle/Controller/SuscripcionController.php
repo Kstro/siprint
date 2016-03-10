@@ -12,14 +12,14 @@ use DG\ImpresionBundle\Form\SuscripcionType;
 /**
  * Suscripcion controller.
  *
- * @Route("/suscripcion")
+ * @Route("/")
  */
 class SuscripcionController extends Controller
 {
     /**
      * Lists all Suscripcion entities.
      *
-     * @Route("/", name="suscripcion_index")
+     * @Route("/suscripcion/all", name="suscripcion_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -36,7 +36,7 @@ class SuscripcionController extends Controller
     /**
      * Creates a new Suscripcion entity.
      *
-     * @Route("/new", name="suscripcion_new")
+     * @Route("/contact-us", name="dg_general_contact")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -49,11 +49,26 @@ class SuscripcionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($suscripcion);
             $em->flush();
+            
+            $this->get('envio_correo')->sendEmail("anthony@digitalitygarage.com", "", "", "",
+                "
+                    <table style=\"width: 540px; margin: 0 auto;\">
+                      <tr>
+                        <td class=\"panel\" style=\"border-radius:4px;border:1px #dceaf5 solid; color:#000 ; font-size:11pt;font-family:proxima_nova,'Open Sans','Lucida Grande','Segoe UI',Arial,Verdana,'Lucida Sans Unicode',Tahoma,'Sans Serif'; padding: 30px !important; background-color: #FFF;\">
+                        <center>
+                          <img style=\"width:50%;\" src=\"http://expressionsprint.com/img/logo.jpg\">
+                        </center>
+                            <p>" . $suscripcion->getMensaje() . "</p>    
+                        </td>
+                        <td class=\"expander\"></td>
+                      </tr>
+                    </table>
+                ");
 
-            return $this->redirectToRoute('suscripcion_show', array('id' => $suscripcion->getId()));
+            return $this->redirectToRoute('dg_general_contact');
         }
 
-        return $this->render('suscripcion/new.html.twig', array(
+        return $this->render('General/contact.html.twig', array(
             'suscripcion' => $suscripcion,
             'form' => $form->createView(),
         ));
@@ -62,7 +77,7 @@ class SuscripcionController extends Controller
     /**
      * Finds and displays a Suscripcion entity.
      *
-     * @Route("/{id}", name="suscripcion_show")
+     * @Route("/suscripcion/{id}", name="suscripcion_show")
      * @Method("GET")
      */
     public function showAction(Suscripcion $suscripcion)
@@ -78,7 +93,7 @@ class SuscripcionController extends Controller
     /**
      * Displays a form to edit an existing Suscripcion entity.
      *
-     * @Route("/{id}/edit", name="suscripcion_edit")
+     * @Route("/suscripcion/{id}/edit", name="suscripcion_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Suscripcion $suscripcion)
@@ -105,7 +120,7 @@ class SuscripcionController extends Controller
     /**
      * Deletes a Suscripcion entity.
      *
-     * @Route("/{id}", name="suscripcion_delete")
+     * @Route("/suscripcion/{id}", name="suscripcion_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Suscripcion $suscripcion)

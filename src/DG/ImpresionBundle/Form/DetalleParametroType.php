@@ -16,9 +16,9 @@ class DetalleParametroType extends AbstractType
     {
         $builder
             ->add('nombre',null, array('required'=>false, 'attr'=>array('class'=>'input-sm form-control')))
-            ->add('valor',null, array('required'=>false, 'attr'=>array('class'=>'input-sm form-control')))
+            //->add('valor',null, array('required'=>false, 'attr'=>array('class'=>'input-sm form-control')))
 //            ->add('parametro',null, array('attr'=>array('class'=>'input-sm form-control')))
-            ->add('tipoParametro',null, array('attr'=>array('class'=>'input-sm form-control')))    
+            //->add('tipoParametro',null, array('attr'=>array('class'=>'input-sm form-control')))    
         ;
     }
     

@@ -1,5 +1,4 @@
 
-
 {% block css %}
     
     
@@ -80,14 +79,48 @@
             <div class="clearfix"></div>  
             <div class="attributes-pr">
                 <div class="col-md-12 text-center" style="margin-top: 20px;">
-                    Attributes:
+                    <p><strong>Attributes:</strong></p>
                 </div>
 
                 <div class="clearfix"></div>
-
+                <hr>
                 <div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
-                    {{ form_widget(form.parametro) }}
+                    <div class="row">
+                        {% for key, atributo in atributos %}
+                            
+                            <div class="col-md-4">
+                                <p><strong>{{ atributo.nombre }}</strong></p>
+                                
+                                {% for attr in attr_val %}
+                                    {% if attr.idpar == atributo.id %}
+                                        <div id="capa" class="row" style="margin-bottom: 3px;">
+                                            <div class="col-md-1">
+                                                {% if key == 0 %}
+                                                    <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo-0" value="{{ attr.iddp }}">
+                                                {% else %}    
+                                                    <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo" value="{{ attr.iddp }}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>{{ attr.nomdp }}</label>
+                                            </div>
+                                            
+                                            <div id="capa-text-{{ attr.iddp }}" class="col-md-4" style="display: none">
+                                                <input type="text" id="costo-{{ attr.iddp }}" name="costo[{{ attr.iddp }}]" class="form-control costo-attr" placeholder="$">
+                                            </div>    
+                                        </div>
+                                    {% endif %}      
+                                {% endfor %}      
+                            </div>
+                            {% if loop.index is divisibleby(3) %}
+                                <div class="clearfix"></div>
+                            {% endif %}          
+                        {% endfor %}  
+                    </div>
                 </div>
+                {#<div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
+                    {{ form_widget(form.parametro) }}
+                </div>#}
             </div>
                 
             {#<div class="col-md-6 col-xs-6 text-right" style="margin-top: 20px;">
@@ -119,7 +152,7 @@
         </div>
         
             
-    
+        <hr>
         <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
 
     {{ form_end(form) }}
@@ -164,6 +197,30 @@
                     attr('data-bvalidator-msg', 'Select at least one checkbox');
         
                 $( ".btn-nuevo" ).prop( "disabled", false );
+            });
+            
+            $( ".valor-atributo" ).on( "click", function() {
+                var id = $(this).attr('id');
+                var capaid = id.split('-');
+                var capa = document.getElementById('capa-text-'+capaid[1]);
+                
+                if($("#"+id).is(':checked')) {  
+                    capa.style.display = 'block';
+                } else {  
+                    capa.style.display = 'none';
+                }  
+            });
+            
+            $( ".valor-atributo-0" ).on( "click", function() {
+                var id = $(this).attr('id');
+                var capaid = id.split('-');
+                var capa = document.getElementById('capa-text-'+capaid[1]);
+                
+                if($("#"+id).is(':checked')) {  
+                    capa.style.display = 'block';
+                } else {  
+                    capa.style.display = 'none';
+                }  
             });
         });
     </script>

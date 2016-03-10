@@ -11,7 +11,9 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Categoria;
+use Symfony\Component\HttpFoundation\Cookie;
 use DG\ImpresionBundle\Form\CategoriaType;
+
 
 /**
  * Categoria controller.
@@ -30,12 +32,27 @@ class CategoriaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
+        //$categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL "
+                . "AND p.estado = 1 ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->getResult();
 
+        $atributos = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findAll();
+        
         $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+                                                                                 'estado'    => 1
+                                                                                ));
         
         return $this->render('categoria/index.html.twig', array(
             'categorias' => $categorias,
+            'types' => $types,
+            'atributos' => $atributos,
             'promotion' => $promotion,
         ));
     }
@@ -50,11 +67,14 @@ class CategoriaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL));
-        
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+                                                                                 'estado'    => 1
+                                                                                ));
+//        var_dump($_COOKIE);
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
-                . "WHERE p.categoria IS NOT NULL ";
+                . "WHERE p.categoria IS NOT NULL "
+                . "AND p.estado = 1 ";
         
         $categorias = $em->createQuery($dql)
                    ->getResult();
@@ -82,7 +102,10 @@ class CategoriaController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $parameters = $request->request->all();
+            
             $em = $this->getDoctrine()->getManager();
+            $categorium->setEstado(1);
             $em->persist($categorium);
             $em->flush();
             
@@ -100,14 +123,55 @@ class CategoriaController extends Controller
                 $categorium->getFile()->move($path,$nombreArchivo);
                 $em->persist($categorium);
                 $em->flush();
+                
+                
+                //$em->merge($categorium);
+                //$em->flush();
             }
+            
+            if(isset($parameters['chk'])){
+                $detalle = 0;
+                foreach ($parameters['chk'] as $key => $value) {
+                    $categoriaParametro = new \DG\ImpresionBundle\Entity\CategoriaParametro;
+                    $opcionProducto = new \DG\ImpresionBundle\Entity\OpcionProducto;
+                    $costo = $parameters['costo'][$value];
+                    $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($value);
 
+                    if($detalle != $detalleParametro->getParametro()->getId()){
+                        $detalle = $detalleParametro->getParametro()->getId();
+
+                        $categoriaParametro->setCategoria($categorium);
+                        $categoriaParametro->setParametro($detalleParametro->getParametro());
+                        $em->persist($categoriaParametro);
+                        $em->flush();
+                    }
+
+                    $opcionProducto->setCosto($costo);
+                    $opcionProducto->setCategoria($categorium);
+                    $opcionProducto->setDetalleParametro($detalleParametro);
+
+                    $em->persist($opcionProducto);
+                    $em->flush();
+                }
+            }
 //            return $this->redirectToRoute('categoria_show', array('id' => $categorium->getId()));
             return $this->redirectToRoute('categoria_index');
         }
-
+        
+        $em = $this->getDoctrine()->getManager();
+        $atributos = $em->getRepository('DGImpresionBundle:Parametro')->findAll();
+        
+        $dql = "SELECT dp.id iddp, dp.nombre nomdp, p.id idpar, p.nombre nompar "
+                . "FROM DGImpresionBundle:DetalleParametro dp "
+                . "INNER JOIN dp.parametro p ";
+        
+        $attr_val = $em->createQuery($dql)
+                   ->getResult();
+       
         return $this->render('categoria/new.html.twig', array(
             'categorium' => $categorium,
+            'atributos' => $atributos,
+            'attr_val' => $attr_val,
             'form' => $form->createView(),
         ));
     }
@@ -120,12 +184,50 @@ class CategoriaController extends Controller
      */
     public function showAction(Categoria $categorium)
     {
+        $em = $this->getDoctrine()->getManager();
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL, 'estado' => 1));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL AND p.estado = 1 ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->getResult();
+        
+        $rsm = new ResultSetMapping();
+        $sql = "select p.id as idParam, p.nombre as parametro "
+                . "from categoria_parametro cp inner join parametro p on cp.parametro = p.id "
+                . "where cp.categoria = ? ";
+
+        $rsm->addScalarResult('idParam','idParam');
+        $rsm->addScalarResult('parametro','parametro');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter(1, $categorium->getId());
+        $atributos = $query->getResult();
+        
+        $opciones = array();
+        foreach ($atributos as $value) {
+            $rsm2 = new ResultSetMapping();
+            $sql = "select dp.parametro as parametro, op.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
+                    . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
+                    . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
+                    . "where dp.parametro = ? ";
+
+            $rsm2->addScalarResult('parametro','parametro');
+            $rsm2->addScalarResult('idValorParam','idValorParam');
+            $rsm2->addScalarResult('valorParam','valorParam');
+            $rsm2->addScalarResult('precio','precio');
+            $rsm2->addScalarResult('tipo','tipo');
+            $query2 = $em->createNativeQuery($sql, $rsm2);
+            $query2->setParameter(1, $value['idParam']);
+            $param = $query2->getResult(); 
+            array_push($opciones, $param);
+        }
+        //var_dump($opciones);
+        $promotion = $this->get('promotion_img')->searchPromotion();
         $deleteForm = $this->createDeleteForm($categorium);
 
-        return $this->render('categoria/show.html.twig', array(
-            'categorium' => $categorium,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('categoria/show.html.twig', array('categorium' => $categorium, 'opciones' => $opciones, 'delete_form' => $deleteForm->createView(), 'types' => $types, 'categorias' => $categorias, 'atributos' => $atributos, 'promotion' => $promotion, 'registro'=>null ));
     }
 
     /**
@@ -379,24 +481,27 @@ class CategoriaController extends Controller
             } else {
             
                 $em = $this->getDoctrine()->getManager();            
-                $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
+                //$cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
 
                 $rsm = new ResultSetMapping();
-                $sql = "select dp.valor as precio "
-                        . "from detalle_parametro dp "
-                        . "where dp.id = ? ";
+                $sql = "select op.costo as precio "
+                        . "from opcion_producto op "
+                        . "where op.id = ? ";
 
                 $rsm->addScalarResult('precio','precio');
 
                 $query = $em->createNativeQuery($sql, $rsm);
                 $query->setParameter(1, $id);
-                $param = $query->getResult();
+                $param = $query->getSingleResult();
 
+               // var_dump($param);
+                
                 $response = new JsonResponse();
                 $response->setData(array(
-                               'values' => $param,
+                               'id'         => $id,
+                               'values'     => $param['precio'],
                                'porcentaje' => $porcentaje,
-                               'flag' => 1
+                               'flag'       => 1
                         )); 
 
                 return $response; 

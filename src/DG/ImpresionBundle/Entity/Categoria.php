@@ -31,6 +31,13 @@ class Categoria
     private $nombre;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     */
+    private $estado;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="imagen", type="string", length=255, nullable=true)
@@ -217,6 +224,30 @@ class Categoria
     public function getFile()
     {
         return $this->file;
+    }
+    
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Categoria
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
     
     public function __toString()

@@ -180,7 +180,7 @@ class FPDFService {
         $this->pdf->SetFont('Arial', '', 10);
         $this->pdf->setX(152);
         $this->pdf->Cell(0, 10, 'Tax applied', 0, 0);
-        $this->pdf->Cell(0, 10, '($ 0.00)', 0, 0, 'R');
+        $this->pdf->Cell(0, 10, '$ 0.00', 0, 0, 'R');
         
         $this->pdf->Ln(12);
         $break+=12;

@@ -27,7 +27,7 @@
             {% endif %}            
         </div>
     </div>
-    {% if is_granted('ROLE_USER') %}    
+    {#{% if is_granted('ROLE_USER') %}    #}
         <div class="db-info col-xs-12">
             <h3 class="acc-sub-tit-i">
                 <i class="fa fa-user"></i>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-
+            {% if is_granted('ROLE_USER') %}    
                 <div class="db-address col-xs-12">
                 <h4 class="acc-title">
                     Default Address
@@ -81,8 +81,9 @@
                     </div>
                 </div>
                 </div>
+            {% endif %}            
             </div>
-        {% endif %}                            
+        {#{% endif %} #}                           
         <div style="margin-bottom: 40px"></div>
     </div>
 {% endblock %}    

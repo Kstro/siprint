@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Orden;
 use DG\ImpresionBundle\Form\OrdenType;
 use Doctrine\ORM\Query\ResultSetMapping;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Orden controller.
@@ -269,7 +271,7 @@ class OrdenController extends Controller
     /**
      * Finds and displays a Orden entity.
      *
-     * @Route("/admin/shopping-cart", name="orden_show")
+     * @Route("/shopping-cart", name="orden_show")
      * @Method("GET")
      */
     public function showAction()
@@ -279,9 +281,9 @@ class OrdenController extends Controller
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         
         $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
-                                                                               'usuario'  => $usuario
+                                                                               'cookie'  => $_COOKIE['expressionsPrint']
                                                                               ));
-        //var_dump($cart);
+        
         $noOrden=false;
         if($cart==null){
             $noOrden=true;
@@ -291,12 +293,24 @@ class OrdenController extends Controller
         
         $promotion = $this->get('promotion_img')->searchPromotion();  
                                                                           
-        //var_dump($cart);
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL, 'estado' => 1));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL AND p.estado = 1 ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->getResult();
+        
+        
+        
         return $this->render('orden/show.html.twig', array(
             'ord' => $cart,
-            'noOrden'=>$noOrden,
-            'promotion' => $promotion,
             'products' => $products,
+            'promotion' => $promotion,
+            'types' => $types,
+            'categorias' => $categorias,
+            'registro'=>null
         ));
     }
     
@@ -495,7 +509,7 @@ class OrdenController extends Controller
     /**
      * Creates a new Order entity.
      *
-     * @Route("/admin/create", name="admin_carrito_order")
+     * @Route("/create", name="admin_carrito_order")
      * @Method("POST")
      */
     public function createAction(Request $request)
@@ -507,31 +521,72 @@ class OrdenController extends Controller
                                                                                           'usuario'    => $usuario
                                                                                           ));
         
-        $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
-                                                                               'usuario'  => $usuario
-                                                                              ));
-
-                                                                              
+        
+        
         $parameters = $request->request->all();
 
-        if($cart == NULL) {
-            $orden->setUsuario($usuario);
+        if(!isset($_COOKIE['expressionsPrint'])){
+            $val = 1;
+                    
+            $valorCookie = $em->getRepository('DGImpresionBundle:Cookie')->findBy(array(),array('valor' => 'DESC'));
             
+            if(isset($valorCookie[0])){
+                $val = $valorCookie[0]->getValor();
+                $val++;
+            }
+            
+            $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                'cookie'  => $val
+                                                                               ));
+            
+            if($usuario != 'anon.') {
+                $orden->setUsuario($usuario);
+            }
+                
             if($direccionEnvio != NULL) {
                 $orden->setDireccionEnvio($direccionEnvio);
             } else {
                 $orden->setDireccionEnvio(NULL);
             }
             
+            $orden->setCookie($val);
+            $galleta = new \DG\ImpresionBundle\Entity\Cookie();
+            
+            $galleta->setNombre('expressionsPrint');
+            $galleta->setValor($val);
+            $em->persist($galleta);
+            $em->flush();
+            
+            setcookie('expressionsPrint', $val);
+            
             $orden->setFechaAccion(new \DateTime ('now'));
             $orden->setEstado('ca');
             $em->persist($orden);
             $em->flush();
+           
+            
+            
+        }else {
+            $orden = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                'cookie'  => $_COOKIE['expressionsPrint']
+                                                                               ));
+            
         }
-        else {
-            $orden = $cart;
-        }
-        var_dump($_POST);
+
+//        die();
+        
+//        if($cart == NULL) {
+//            
+//            $cookie = new Cookie('expressionsPrint', $val);
+//            $response = new Response();
+//            $response->headers->setCookie($cookie);
+//            $response->send(); 
+//            
+//        }
+//        else {
+//            $orden = $cart;
+//        }
+//        var_dump($_POST);
         $path = $this->container->getParameter('photo.promotion');
         $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
         $aux = explode('.', $nombre_archivo);
@@ -540,7 +595,7 @@ class OrdenController extends Controller
         
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
         
-        $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['order-now']);
+        $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['orden-now']);
         $detalleorden->setArchivo($archivo_subir);
         move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
 
@@ -554,16 +609,18 @@ class OrdenController extends Controller
         
         foreach($parameters as $key => $p){
             $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
-            
+            //var_dump($key);
+            //var_dump($p);
             $val = explode("-", $key);
             if($val[0] == 'attributes') {
-                $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($p);
-                $atributo->setDetalleParametro($detalleParametro);
+                $opcion = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
+                //var_dump($opcion);
+                $atributo->setOpcionProducto($opcion);
                 $atributo->setDetalleOrden($detalleorden);
                 $em->persist($atributo);
                 $em->flush();
-                
-                $total+=$atributo->getDetalleParametro()->getValor();
+               // var_dump($atributo);
+                $total+=$atributo->getOpcionProducto()->getCosto();
             }    
         }
         
@@ -571,18 +628,42 @@ class OrdenController extends Controller
         $em->merge($detalleorden);
         $em->flush();
         
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL));
-        
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+                                                                                 'estado'    => 1
+                                                                                ));
+
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
-                . "WHERE p.categoria IS NOT NULL ";
+                . "WHERE p.categoria IS NOT NULL "
+                . "AND p.estado = 1 ";
         
         $categorias = $em->createQuery($dql)
                    ->getResult();
         
+//        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL));
+//        
+//        $dql = "SELECT p "
+//                . "FROM DGImpresionBundle:Categoria p "
+//                . "WHERE p.categoria IS NOT NULL ";
+//        
+//        $categorias = $em->createQuery($dql)
+//                   ->getResult();
+        
         $promotion = $this->get('promotion_img')->searchPromotion();
         
-        return $this->render('categoria/productslist.html.twig', array(
+        //$cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                  //             'usuario'  => $usuario
+        //                                                                      ));
+        $carrito = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                'cookie'  => $_COOKIE['expressionsPrint']
+                                                                               ));
+        
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $carrito
+                                                                              ));
+        
+        return $this->render('orden/show.html.twig', array(
+            'ord' => $carrito,
+            'products' => $products,
             'promotion' => $promotion,
             'types' => $types,
             'categorias' => $categorias,
@@ -593,7 +674,7 @@ class OrdenController extends Controller
     /**
     * Ajax utilizado para buscar informacion del producto
     *  
-    * @Route("/admin/show-cart", name="show-cart")
+    * @Route("/show-cart", name="show-cart")
     */
     public function showCartAction()
     {
@@ -611,15 +692,22 @@ class OrdenController extends Controller
                     . "from orden ord "
                     . "inner join detalle_orden do on ord.id = do.orden "
                     . "inner join categoria ca on do.categoria = ca.id "
-                    . "where ord.usuario = ? "
-                    . "and ord.estado = 'ca' ";
+                    . "where ord.estado = 'ca'"
+                    . "and ord.cookie = :cookie ";
             
             $rsm->addScalarResult('product','product');
             $rsm->addScalarResult('image','image');
             $rsm->addScalarResult('monto','monto');
             
             $query = $em->createNativeQuery($sql, $rsm);
-            $query->setParameter(1, $usuario->getId());
+            
+            if(isset($_COOKIE['expressionsPrint'])){
+                $query->setParameters(array('cookie'=>$_COOKIE['expressionsPrint']));
+            } 
+            else {
+                $query->setParameters(array('cookie' => -1));
+            }
+            
             $param = $query->getResult();
             
             $response = new JsonResponse();
@@ -678,7 +766,7 @@ class OrdenController extends Controller
     /**
      * Displays a form to edit an existing Orden entity.
      *
-     * @Route("/admin/orders/delete/deletedetalle", name="orden_delete")
+     * @Route("/orders/delete/deletedetalle", name="orden_delete")
      */
     public function deleteDetalleAction()
     {

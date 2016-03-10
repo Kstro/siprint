@@ -31,7 +31,7 @@
     <div id="resultado"></div>
     <div class="acc-title lg">
         <div class="col-md-5 pull-left">
-            <h3 class="" style="color:#FFF;">Products list</h3>
+            <h3 class="" style="color:#FFF;">Categories and products</h3>
         </div>
         <div class="col-md-7 pull-right" >
             <a href="{{ path('categoria_new') }}" class="pull-right nuevo-registro" style="color:#FFF;">
@@ -39,45 +39,123 @@
             </a>
         </div>
     </div>
-                
-    
-                
-    <div class="form-edit-info" style="padding-top: 20px;">
-        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
-            <thead>
-                <tr>
-{#                    <th>Id</th>#}
-                    <th>Name</th>
-                    <th>Attributes</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for categorium in categorias %}
-                <tr>
-{#                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>#}
-                    <td>{{ categorium.nombre }}</td>
-                    <td>
-                        {% for param in categorium.parametro%}
-                            {% if loop.last %}
-                                {{param.nombre}}
-                            {% else %}
-                                {{param.nombre}},
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                <div class="form-edit-info">            
+          
+    <ul class="nav nav-tabs" style="margin-top: 30px;">
+        <li class="active"><a data-toggle="tab" href="#home">Products</a></li>
+        <li><a data-toggle="tab" href="#menu1">Categories</a></li>
+    </ul>          
+       
 
-    
+        <div class="tab-content">            
+            <div id="home" class="tab-pane fade in active" style="margin-top: 20px;">
+                
+                <div class="page-header">
+                    <h3 style="font-size: 20px;">Products List</h3>
+                </div> 
+                <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+        {#                    <th>Id</th>#}
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Attributes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for categorium in categorias %}
+                        <tr>
+        {#                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>#}
+                            <td>{{ categorium.nombre }}</td>
+                            <td>{{ categorium.categoria }}</td>
+                            <td>
+                                {% set total = 0 %}
+                                {% for atributo in atributos if atributo.categoria.id == categorium.id %}
+                                    {% set total = total + 1 %}
+                                {% endfor %}    
+
+                                {% set key = 0 %}
+                                {% for atributo in atributos if atributo.categoria.id == categorium.id %}
+                                    {% if key + 1 == total%}
+                                        {{atributo.parametro.nombre}}
+                                    {% else %}
+                                        {{atributo.parametro.nombre}},
+                                    {% endif %}
+
+                                    {% set key = key + 1 %}
+                                {% endfor %}    
+
+                            </td>
+                            <td>
+
+                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                    <i class="fa fa-times"></i>
+                                </a>  
+                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div id="menu1" class="tab-pane fade" style="margin-top: 20px;">
+                <div class="page-header">
+                    <h3 style="font-size: 20px;">Categories List</h3>
+                </div>                 
+                
+                <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+        {#                    <th>Id</th>#}
+                            <th style="width: 150px;">Name</th>
+                            <th>Products</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for categorium in types %}
+                        <tr>
+        {#                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>#}
+                            <td style="width: 150px;">{{ categorium.nombre }}</td>
+                            <td>
+                                {% set total = 0 %}
+                                {% for atributo in categorias if atributo.categoria.id == categorium.id %}
+                                    {% set total = total + 1 %}
+                                {% endfor %}    
+
+                                {% set key = 0 %}
+                                {% for atributo in categorias if atributo.categoria.id == categorium.id %}
+                                    {% if key + 1 == total%}
+                                        {{atributo.nombre}}
+                                    {% else %}
+                                        {{atributo.nombre}},
+                                    {% endif %}
+
+                                    {% set key = key + 1 %}
+                                {% endfor %}    
+
+                            </td>
+                            <td>
+
+                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                    <i class="fa fa-times"></i>
+                                </a>  
+                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts_step %}
@@ -85,6 +163,9 @@
     
     <script>
                 $(document).ready(function(){
+                    //$('#profile a[href="#profile"]').tab('show') // Select tab by name
+                    //$('#home a:first').tab('show')
+                    
                     
                     $('.listados').DataTable({ 
                         searching:true,
@@ -151,7 +232,7 @@
                         $('#resultado').load(href, function(){
                             $(this).dialog({
                                 modal: true, 
-                                width: 600,
+                                width: 900,
                                 title: "New product",
                                 resizable: false,
                                 position: { 
@@ -191,7 +272,7 @@
                         $('#resultado').load(href, function(){
                             $(this).dialog({
                                 modal: true, 
-                                width: 600,
+                                width: 900,
                                 title: "Edit product",
                                 resizable: false,
                                 position: { 

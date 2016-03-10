@@ -35,6 +35,7 @@ class CategoriaType extends AbstractType
                     'query_builder' => function(EntityRepository $r) {
                         return $r->createQueryBuilder('s')
                                 ->where('s.categoria is NULL')
+                                ->andWhere('s.estado = 1')
                                //->setParameter('cat', NULL)
                                 ;   
                         } ,
@@ -42,14 +43,14 @@ class CategoriaType extends AbstractType
                         'class'=>'form-control input-sm'
                      )            
                     ))
-            ->add('parametro','entity',array('required'=>false,
-                'class'=>'DGImpresionBundle:Parametro','property'=>'nombre',
-                'multiple'=>true,
-                'expanded'=>true,
-                
-                    'attr'=>array(
-                    'class'=>'parametros'
-                    )))
+//            ->add('parametro','entity',array('required'=>false,
+//                'class'=>'DGImpresionBundle:Parametro','property'=>'nombre',
+//                'multiple'=>true,
+//                'expanded'=>true,
+//                
+//                    'attr'=>array(
+//                    'class'=>'parametros'
+//                    )))
             ->add('file',null, array(
                     'required' => false,
                     'attr'=>array('class'=>'Product'

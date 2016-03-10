@@ -21,7 +21,7 @@ class EmailService
       
         $this->mail   = $mail;
         $this->subject = 'Expressions Print';
-        $this->from   = 'anthony@digitalitygarage.com'; //Cambiar este correo tambien
+        $this->from   = 'system@digitalitygarage.com'; //Cambiar este correo tambien
     }  
     
     public function setEmail($to,$bcc=null){
@@ -45,7 +45,7 @@ class EmailService
         if($replay != null ){
         $email->setReplyTo($replay);
         }else{
-        $email->setReplyTo('anthony@digitalitygarage.com');            
+        $email->setReplyTo('system@digitalitygarage.com');            
         }
         if($bcc != null ){
         $email->setBcc($bcc);

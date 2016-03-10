@@ -26,6 +26,7 @@ class GeneralController extends Controller
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NOT NULL "
+                . "AND p.estado = 1 "
                 . "ORDER BY p.id DESC ";
         
         $products = $em->createQuery($dql)
@@ -80,7 +81,7 @@ class GeneralController extends Controller
     /**
      * Muestra la pagina de Contact us
      *
-     * @Route("/contact-us", name="dg_general_contact")
+     * @Route("/contacto-us", name="dg_general_contacto")
      * 
      */
     public function contactUsAction()
