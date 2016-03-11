@@ -293,7 +293,19 @@ class OrdenController extends Controller
         
         $promotion = $this->get('promotion_img')->searchPromotion();  
                                                                           
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL, 'estado' => 1));
+        //$types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+        //                                                                         'estado'    => 1
+        //                                                                        ));
+
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
         
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
@@ -587,17 +599,20 @@ class OrdenController extends Controller
 //            $orden = $cart;
 //        }
 //        var_dump($_POST);
-        $path = $this->container->getParameter('photo.promotion');
-        $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
-        $aux = explode('.', $nombre_archivo);
-        $extension = end($aux);
-        $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
         
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
-        
         $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['orden-now']);
-        $detalleorden->setArchivo($archivo_subir);
-        move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
+        $path = $this->container->getParameter('photo.promotion');
+        
+        if(isset($_FILES["file-design"]["name"])){
+            $nombre_archivo = strtolower($_FILES["file-design"]["name"]);
+            $aux = explode('.', $nombre_archivo);
+            $extension = end($aux);
+            $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
+
+            $detalleorden->setArchivo($archivo_subir);
+            move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
+        }    
 
         $detalleorden->setEstado('ad');
         $detalleorden->setCategoria($product);
@@ -628,9 +643,19 @@ class OrdenController extends Controller
         $em->merge($detalleorden);
         $em->flush();
         
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
-                                                                                 'estado'    => 1
-                                                                                ));
+        //$types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+        //                                                                         'estado'    => 1
+        //                                                                        ));
+
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
 
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
@@ -750,12 +775,15 @@ class OrdenController extends Controller
         //var_dump($totalOrden);
         //var_dump($direcciones);
 
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('orden/checkout.html.twig', array(
             'ord' => $registro,
             'ordenId'=>$orden,
             'tarjetas'=>$tarjetas,
             'direcciones' => $direcciones,
             'totalOrden' => $totalOrden,
+            'promotion' => $promotion,
         ));
     }
     

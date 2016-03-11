@@ -108,6 +108,23 @@ class GeneralController extends Controller
      */
     public function tShirtPrintingAction()
     {
-        return $this->render(':General:tshirtPrinting.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria = :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render(':General:tshirtPrinting.html.twig', array(
+            'categorias' => $categorias,
+            'promotion' => $promotion,
+            'registro'=>null
+        ));
     }
 }

@@ -88,7 +88,7 @@
                             <label style="font-size: 1.22em; color: #FFF">Total order:</label> <label id="totalOrden" style="width: 100px; max-height: 100%;position: relative;float:right; font-size: 1.3em;" class="text-bold">$ {{total|number_format('2','.',',')}}</label>
                         </div>
                         <div class="col-md-5 text-right">
-                            <a id="{{ord.id}}" href="{{path('orden_checkout',{orden:ord.id})}}" class="checkout" href="" style="text-decoration: none;color: #FFF;">Checkout</a>
+                            <a id="{{ord.id}}" href="{{path('orden_checkout',{orden:ord.id})}}" class="check-out" style="text-decoration: none; color: #FFF;">Checkout</a>
                             {#<i class="fa fa-cc-stripe"></i>  ID Pago: <a href="https://dashboard.stripe.com/test/payments/{{ord.idPago}}" class="idpago acc-edit edit-registro text-right" title="edit information"> {{ord.idPago}} </a>#}
                         </div>
                     </h3>
@@ -132,14 +132,13 @@
                                             </div>
                                         {% endfor %}
                                     </div>
-                                    
-                                    
-                                    <div class="short-description">
-                                        <div style="cursor: default; margin-top: 10px;" class="fa fa-file-image-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
-                                            <strong>Design: </strong>{#<a id="designU" href="{{ asset('Photos/promotions/')}}{{ row.archivo}}">#}{{ row.archivo}}{#</a>#}
+                                    {% if row.archivo %}                                    
+                                        <div class="short-description">
+                                            <div style="cursor: default; margin-top: 10px;" class="fa fa-file-image-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
+                                                <strong>Design: </strong>{#<a id="designU" href="{{ asset('Photos/promotions/')}}{{ row.archivo}}">#}{{ row.archivo}}{#</a>#}
+                                            </div>
                                         </div>
-                                    </div>
-                                    
+                                    {% endif %}
                                     
                                 </div>
                                     
@@ -159,20 +158,13 @@
         
     {% endif %}
     
-    
-    
-        
-    
-    
+   
 {% endblock %}
-
 
 {% block javascripts_step %}
     {{parent()}}
         <script>
-            $(document).ready(function () {
-                
-
+            $(document).ready(function () {                
                 var direccionId= 0;
                 var tarjetaId= 0;
                 $(document).on('click','.borrarDetalle', function(){
@@ -235,10 +227,7 @@
                     return false;
                 });
                 
-                
-                
-                
-                
+             
                 $(document).on('click','.checkout', function(){
                     var mas = $(this);
                     
@@ -283,27 +272,13 @@
 {#                            $(link).parent().parent().parent().parent().css('opacity','0.7');#}
                             
                     return false;
-                });
-                
-                
-                
-                
-                    
-                    
-                
-                    
+                });                     
                     
             });
         </script>    
-        
-        
-     
-        
+    
 <script>
     $(document).ready(function () {  
-        
-        
-        
             
         
         $(document).on('change','#selectTarjetas', function(){

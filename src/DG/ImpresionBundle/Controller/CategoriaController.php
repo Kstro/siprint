@@ -36,22 +36,43 @@ class CategoriaController extends Controller
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NOT NULL "
-                . "AND p.estado = 1 ";
+                . "AND p.estado = 1 AND p.categoria <> :tshirt ";
         
         $categorias = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
                    ->getResult();
 
         $atributos = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findAll();
         
         $promotion = $this->get('promotion_img')->searchPromotion();
         
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
-                                                                                 'estado'    => 1
-                                                                                ));
+//        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+//                                                                                 'estado'    => 1
+//                                                                                ));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria = :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $tshirts = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
         
         return $this->render('categoria/index.html.twig', array(
             'categorias' => $categorias,
             'types' => $types,
+            'tshirts' => $tshirts,
             'atributos' => $atributos,
             'promotion' => $promotion,
         ));
@@ -67,16 +88,29 @@ class CategoriaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
-                                                                                 'estado'    => 1
-                                                                                ));
+        //$types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+        //                                                                         'estado'    => 1
+        //                                                                        ));
 //        var_dump($_COOKIE);
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NOT NULL "
+                . "AND p.categoria <> :tshirt "
                 . "AND p.estado = 1 ";
         
         $categorias = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
                    ->getResult();
         
         $promotion = $this->get('promotion_img')->searchPromotion();
@@ -85,6 +119,60 @@ class CategoriaController extends Controller
             'types' => $types,
             'categorias' => $categorias,
             'promotion' => $promotion,
+            'registro'=>null
+        ));
+    }
+    
+    /**
+     * Filtro de categoria de productos
+     *
+     * @Route("/filter-products/{id}", name="filter_products_list")
+     * @Method("GET")
+     */
+    public function filterProductsAction(Categoria $categorium)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        //$types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+        //                                                                         'estado'    => 1
+        //                                                                        ));
+
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL "
+                . "AND p.categoria <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria = :product "
+                . "AND p.estado = 1 ";
+        
+        $products = $categorias = $em->createQuery($dql)
+                   ->setParameters(array('product' => $categorium->getId()))
+                   ->getResult();
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('categoria/filter_products_list.html.twig', array(
+            'types'      => $types,
+            'categorias' => $categorias,
+            'products'   => $products,
+            'promotion'  => $promotion,
             'registro'=>null
         ));
     }
@@ -228,6 +316,60 @@ class CategoriaController extends Controller
         $deleteForm = $this->createDeleteForm($categorium);
 
         return $this->render('categoria/show.html.twig', array('categorium' => $categorium, 'opciones' => $opciones, 'delete_form' => $deleteForm->createView(), 'types' => $types, 'categorias' => $categorias, 'atributos' => $atributos, 'promotion' => $promotion, 'registro'=>null ));
+    }
+    
+    /**
+     * Finds and displays a Categoria entity.
+     *
+     * @Route("/t-shirt-printing/{id}", name="t_shirt_show")
+     * @Method("GET")
+     */
+    public function showTshirtAction(Categoria $categorium)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL, 'estado' => 1));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NOT NULL AND p.estado = 1 ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->getResult();
+        
+        $rsm = new ResultSetMapping();
+        $sql = "select p.id as idParam, p.nombre as parametro "
+                . "from categoria_parametro cp inner join parametro p on cp.parametro = p.id "
+                . "where cp.categoria = ? ";
+
+        $rsm->addScalarResult('idParam','idParam');
+        $rsm->addScalarResult('parametro','parametro');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter(1, $categorium->getId());
+        $atributos = $query->getResult();
+        
+        $opciones = array();
+        foreach ($atributos as $value) {
+            $rsm2 = new ResultSetMapping();
+            $sql = "select dp.parametro as parametro, op.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
+                    . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
+                    . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
+                    . "where dp.parametro = ? ";
+
+            $rsm2->addScalarResult('parametro','parametro');
+            $rsm2->addScalarResult('idValorParam','idValorParam');
+            $rsm2->addScalarResult('valorParam','valorParam');
+            $rsm2->addScalarResult('precio','precio');
+            $rsm2->addScalarResult('tipo','tipo');
+            $query2 = $em->createNativeQuery($sql, $rsm2);
+            $query2->setParameter(1, $value['idParam']);
+            $param = $query2->getResult(); 
+            array_push($opciones, $param);
+        }
+        //var_dump($opciones);
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        $deleteForm = $this->createDeleteForm($categorium);
+
+        return $this->render('categoria/show_tshirt.html.twig', array('categorium' => $categorium, 'opciones' => $opciones, 'delete_form' => $deleteForm->createView(), 'types' => $types, 'categorias' => $categorias, 'atributos' => $atributos, 'promotion' => $promotion, 'registro'=>null ));
     }
 
     /**

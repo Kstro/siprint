@@ -70,26 +70,28 @@
     <div id="resultado"></div>
     
     <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto"> 
-        <div class="row" style="margin-bottom: 35px;">
-            <div class="col-md-5 col-sm-4 col-xs-4 type-filter">
-                <span class="cate-filter-title hidden-xs">Category:</span>
-                <div class="cate-filter-content">
-                    <span class="current-filter hidden-xs">Select a category <i class="fa fa-angle-down"></i></span>
-                    <span class="current-filter visible-xs">Type: <i class="fa fa-angle-down"></i></span>
-                    <ul class="product-type-filter">
-                        <li class="selected">
-                            <a href="{{ path('products_list')}}">All products</a>
-                        </li>
-                        
-                        {% for type in types %}
+        {% if products %}
+            <div class="row" style="margin-bottom: 35px;">
+                <div class="col-md-5 col-sm-4 col-xs-4 type-filter">
+                    <span class="cate-filter-title hidden-xs">Category:</span>
+                    <div class="cate-filter-content">
+                        <span class="current-filter hidden-xs">Select a category <i class="fa fa-angle-down"></i></span>
+                        <span class="current-filter visible-xs">Type: <i class="fa fa-angle-down"></i></span>
+                        <ul class="product-type-filter">
                             <li>
-                                <a href="{{ path('filter_products_list', { 'id': type.id })}}">{{ type.nombre }}</a>
+                                <a href="{{ path('products_list')}}">All products</a>
                             </li>
-                        {% endfor %}    
-                    </ul>
+
+                            {% for type in types %}                            
+                                <li {% if type.id == products[0].categoria.id %} class="selected" {% endif %} >
+                                    <a href="{{ path('filter_products_list', { 'id': type.id })}}">{{ type.nombre }}</a>
+                                </li>                            
+                            {% endfor %}    
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}            
         <div class="row products-grid category-product" id="contenidoProductos">
             {% if registro %}
                 <img src="{{ asset('Photos/promotions/')}}{{ registro.imagen }}" alt="{{ registro.nombre }}">
@@ -97,15 +99,15 @@
             {% else %}      
                 <ul>
                     {#{% if categorias %}#}
-                    {% for categorium in categorias %}
+                    {% for product in products %}
                         <li class="pro-item col-md-4 col-sm-6 col-xs-12">
                             <div class="img-product" style="height: 225px;">
-                                <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="prod-{{ categorium.id }}">
-                                    <img src="{{ asset('Photos/promotions/')}}{{ categorium.imagen }}" alt="{{ categorium.nombre }}">
+                                <a href="{{ path('categoria_show', { 'id': product.id }) }}" title="{{ product.nombre }}" class="product-name" id="prod-{{ product.id }}">
+                                    <img src="{{ asset('Photos/promotions/')}}{{ product.imagen }}" alt="{{ product.nombre }}">
                                 </a>    
                             </div> 
                             <div class="product-info">
-                                <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="prod-{{ categorium.id }}">{{ categorium.nombre }}</a>
+                                <a href="{{ path('categoria_show', { 'id': product.id }) }}" title="{{ product.nombre }}" class="product-name" id="prod-{{ product.id }}">{{ product.nombre }}</a>
                             </div>
                         </li>
                         {% if loop.index is divisibleby(3) %}
