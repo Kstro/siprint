@@ -51,9 +51,16 @@
                                 <a href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">edit</a>
                             </li>
                         </ul>#}
-                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">
-                            <i class="fa fa-edit"></i>
+                         
+                        <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('delete_parametro', { 'id': parametro.id }) }}">
+                            <i class="fa fa-times"></i>
                         </a>
+                        <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>     
+                        {#<a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_parametro_edit', { 'id': parametro.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>#}
                     </td>
                 </tr>
             {% endfor %}

@@ -60,6 +60,12 @@ class Usuario implements AdvancedUserInterface, \Serializable
      */
     private $persona;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     */
+    private $estado;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -190,6 +196,30 @@ class Usuario implements AdvancedUserInterface, \Serializable
     public function getEmail()
     {
         return $this->email;
+    }
+    
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Usuario  
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
     
     /**
@@ -324,10 +354,10 @@ class Usuario implements AdvancedUserInterface, \Serializable
 
     public function isEnabled()
     {
-        //if ((int)$this->estado == 1)
-        $this->isEnabled = true;
-       // else
-        //$this->isEnabled  = false;
+        if ((int)$this->estado == 1)
+            $this->isEnabled = true;
+        else
+            $this->isEnabled  = false;
         return  $this->isEnabled;
     }
     

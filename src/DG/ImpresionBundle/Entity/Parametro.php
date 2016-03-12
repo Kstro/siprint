@@ -29,6 +29,13 @@ class Parametro
     private $nombre;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     */
+    private $estado;
+    
+    /**
      * @var \Parametro
      *
      * @ORM\ManyToOne(targetEntity="Parametro")
@@ -302,6 +309,30 @@ class Parametro
     public function getFormatoPlantilla()
     {
         return $this->formatoPlantilla;
+    }
+    
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Parametro
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
     
     public function __toString() {

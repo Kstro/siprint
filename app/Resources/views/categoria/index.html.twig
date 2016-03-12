@@ -90,7 +90,7 @@
                             </td>
                             <td>
 
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
                                     <i class="fa fa-times"></i>
                                 </a>  
                                 <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
@@ -142,7 +142,7 @@
                             </td>
                             <td>
 
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
                                     <i class="fa fa-times"></i>
                                 </a>  
                                 <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
@@ -160,54 +160,58 @@
                 <div class="page-header">
                     <h3 style="font-size: 20px;">T-Shirt List</h3>
                 </div> 
-                <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
-                    <thead>
-                        <tr>
-        {#                    <th>Id</th>#}
-                            <th style="width: 150px;">Name</th>
-                            <th>Category</th>
-                            <th>Attributes</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for tshirt in tshirts %}
-                        <tr>
-        {#                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>#}
-                            <td>{{ tshirt.nombre }}</td>
-                            <td>{{ tshirt.categoria }}</td>
-                            <td>
-                                {% set total = 0 %}
-                                {% for atributo in atributos if atributo.categoria.id == tshirt.id %}
-                                    {% set total = total + 1 %}
-                                {% endfor %}    
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
+                            <thead>
+                                <tr>
+                {#                    <th>Id</th>#}
+                                    <th style="width: 225PX;">Name</th>
+                                    <th>Category</th>
+                                    {#<th>Attributes</th>#}
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for tshirt in tshirts %}
+                                <tr>
+                {#                    <td><a href="{{ path('categoria_show', { 'id': categorium.id }) }}">{{ categorium.id }}</a></td>#}
+                                    <td style="width: 225px;">{{ tshirt.nombre }}</td>
+                                    <td>{{ tshirt.categoria }}</td>
+                                    {#<td>
+                                        {% set total = 0 %}
+                                        {% for atributo in atributos if atributo.categoria.id == tshirt.id %}
+                                            {% set total = total + 1 %}
+                                        {% endfor %}    
 
-                                {% set key = 0 %}
-                                {% for atributo in atributos if atributo.categoria.id == tshirt.id %}
-                                    {% if key + 1 == total%}
-                                        {{atributo.parametro.nombre}}
-                                    {% else %}
-                                        {{atributo.parametro.nombre}},
-                                    {% endif %}
+                                        {% set key = 0 %}
+                                        {% for atributo in atributos if atributo.categoria.id == tshirt.id %}
+                                            {% if key + 1 == total%}
+                                                {{atributo.parametro.nombre}}
+                                            {% else %}
+                                                {{atributo.parametro.nombre}},
+                                            {% endif %}
 
-                                    {% set key = key + 1 %}
-                                {% endfor %}    
+                                            {% set key = key + 1 %}
+                                        {% endfor %}    
 
-                            </td>
-                            <td>
+                                    </td>#}
+                                    <td>
 
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': tshirt.id }) }}">
-                                    <i class="fa fa-times"></i>
-                                </a>  
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': tshirt.id }) }}">
-                                    <i class="fa fa-edit"></i>
-                                </a>
+                                        <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': tshirt.id }) }}">
+                                            <i class="fa fa-times"></i>
+                                        </a>  
+                                        {#<a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': tshirt.id }) }}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>#}
 
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>        
+                </div>        
             </div>        
         </div>
     </div>

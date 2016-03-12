@@ -165,4 +165,29 @@ class ProveedorController extends Controller
         //return new Response(json_encode($entidad));
     }
     
+    /**
+     * Eliminar un proveedor 
+     *
+     * @Route("/delete/{id}", name="delete_proveedor")
+     * @Method("GET")
+     */
+    public function deleteProveedorAction(Proveedor $proveedor)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $prov = $em->getRepository('DGImpresionBundle:Proveedor')->find($proveedor->getId());
+        
+        $prov->setEstado(FALSE);
+
+        $em->merge($prov);
+        $em->flush();
+        
+        $proveedors = $em->getRepository('DGImpresionBundle:Proveedor')->findBy(array('estado' => 1));
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('proveedor/index.html.twig', array(
+            'proveedors' => $proveedors,
+            'promotion' => $promotion,
+        ));
+    }
 }

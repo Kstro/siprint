@@ -26,7 +26,7 @@ class ParametroController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $parametros = $em->getRepository('DGImpresionBundle:Parametro')->findAll();
+        $parametros = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('estado' => 1));
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('parametro/index.html.twig', array(
@@ -140,5 +140,31 @@ class ParametroController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+     * Eliminar un atributo 
+     *
+     * @Route("/delete/{id}", name="delete_parametro")
+     * @Method("GET")
+     */
+    public function deleteParametroAction(Parametro $parametro)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $atributo = $em->getRepository('DGImpresionBundle:Parametro')->find($parametro->getId());
+        
+        $atributo->setEstado(FALSE);
+
+        $em->merge($atributo);
+        $em->flush();
+        
+        $parametros = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('estado' => 1));
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('parametro/index.html.twig', array(
+            'parametros' => $parametros,
+            'promotion' => $promotion,
+        ));
     }
 }

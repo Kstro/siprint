@@ -26,7 +26,7 @@ class ProductoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $productos = $em->getRepository('DGImpresionBundle:Producto')->findAll();
+        $productos = $em->getRepository('DGImpresionBundle:Producto')->findBy(array('estado' => 1));
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('producto/index.html.twig', array(
@@ -140,5 +140,31 @@ class ProductoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+     * Eliminar un producto 
+     *
+     * @Route("/delete/{id}", name="delete_producto")
+     * @Method("GET")
+     */
+    public function deleteProductoAction(Producto $producto)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $prod = $em->getRepository('DGImpresionBundle:Producto')->find($producto->getId());
+        
+        $prod->setEstado(FALSE);
+
+        $em->merge($prod);
+        $em->flush();
+        
+        $productos = $em->getRepository('DGImpresionBundle:Producto')->findBy(array('estado' => 1));
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+        return $this->render('producto/index.html.twig', array(
+            'productos' => $productos,
+            'promotion' => $promotion,
+        ));
     }
 }

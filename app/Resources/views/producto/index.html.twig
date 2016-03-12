@@ -64,7 +64,13 @@
                                 <a href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">edit</a>
                             </li>
                         </ul>#}
-                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">
+                        {#<a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>#}
+                        <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px; margin-left: 3px;"  href="{{ path('delete_producto', { 'id': producto.id }) }}">
+                            <i class="fa fa-times"></i>
+                        </a>
+                        <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('admin_producto_edit', { 'id': producto.id }) }}">
                             <i class="fa fa-edit"></i>
                         </a>
                     </td>

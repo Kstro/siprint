@@ -42,7 +42,12 @@ class Proveedor
      */
     private $telefono;
 
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     */
+    private $estado;
 
     /**
      * Get id
@@ -126,6 +131,29 @@ class Proveedor
         return $this->telefono;
     }
     
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Proveedor
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
     
     public function __toString(){
         return $this->getEmpresa();

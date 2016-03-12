@@ -51,7 +51,13 @@
                     <td>{{ usuario.username }}</td>
                     <td>{{ usuario.email }}</td>
                     <td>
-                        <a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_usuario_edit', { 'id': usuario.id }) }}">
+                        {#<a class="text-center edit-registro pull-right" style="margin-top: 3px;"  href="{{ path('admin_usuario_edit', { 'id': usuario.id }) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>#}
+                        <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px; margin-left: 3px;"  href="{{ path('delete_usuario', { 'id': usuario.id }) }}">
+                            <i class="fa fa-times"></i>
+                        </a>
+                        <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('admin_usuario_edit', { 'id': usuario.id }) }}">
                             <i class="fa fa-edit"></i>
                         </a>
                     </td>
