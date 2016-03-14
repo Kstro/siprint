@@ -95,10 +95,10 @@
                             </div>
                             <div class="col-md-7" style="margin-bottom: 3px">
                                 <select class="attributes-inf form-control" id="attributes-{{ atributo.idParam }}" name="attributes-{{ atributo.idParam }}">
-                                    <option value="0" disabled selected >Select an option ...</option>
+                                    <option value="" disabled selected >Select an option ...</option>
                                     
-                                    {% for opcion in opciones  if opcion[key].parametro == atributo.idParam %}
-                                        <option value="{{ opcion[key].idValorParam }}">{{ opcion[key].valorParam }}</option>
+                                    {% for clave, opcion in opciones[key]  if opcion.parametro == atributo.idParam %}
+                                        <option value="{{ opcion.idValorParam }}">{{ opcion.valorParam }}</option>
                                     {% else %}
                                         <option value="0" disabled>No found</option>
                                     {% endfor %}    
@@ -154,10 +154,16 @@
     <script type="text/javascript" src="{{ asset('Resources/js/jquery.blockUI.js') }}"></script>  
     <script src="{{ asset('Resources/js/validaciones/carrito_compras.js') }}"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function () {            
             validar();
             $(".attributes-inf").select2();
-            
+            //$(".attributes-inf select").val("");
+            {#var text1 = '';
+            $("select option").filter(function() {
+                //may want to use $.trim in here
+                return $(this).text() == text1; 
+            }).attr('selected', true);#}
+
             $(".attributes-inf" ).change(function() {
                 var total_pagar = 0;
                 var acum = 0;

@@ -82,6 +82,62 @@ class CategoriaController extends Controller
     /**
      * Lists all Categoria entities.
      *
+     * @Route("/admin/t-shirt-printing", name="admin_tshirtprinting_index")
+     * @Method("GET")
+     */
+    public function indexShirtAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        //$categorias = $em->getRepository('DGImpresionBundle:Categoria')->findAll();
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "INNER JOIN p.categoria cat "
+                . "WHERE p.categoria IS NOT NULL "
+                . "AND p.estado = 1 AND cat.estado = 1 AND p.categoria <> :tshirt ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+
+        $atributos = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findAll();
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+//        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+//                                                                                 'estado'    => 1
+//                                                                                ));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria = :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $tshirts = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        return $this->render('categoria/index_tshirt.html.twig', array(
+            'categorias' => $categorias,
+            'types' => $types,
+            'tshirts' => $tshirts,
+            'atributos' => $atributos,
+            'promotion' => $promotion,
+        ));
+    }
+    /**
+     * Lists all Categoria entities.
+     *
      * @Route("/products", name="products_list")
      * @Method("GET")
      */
@@ -249,7 +305,13 @@ class CategoriaController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         //$atributos = $em->getRepository('DGImpresionBundle:Parametro')->findAll();
-        $atributos = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('estado' => 1));
+        //$atributos = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('estado' => 1));
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Parametro p "
+                . "WHERE p.id <> 1 AND p.id <> 2 AND p.estado = 1";
+        
+        $atributos = $em->createQuery($dql)
+                   ->getResult();
         
         $dql = "SELECT dp.id iddp, dp.nombre nomdp, p.id idpar, p.nombre nompar "
                 . "FROM DGImpresionBundle:DetalleParametro dp "
@@ -260,6 +322,106 @@ class CategoriaController extends Controller
        
         return $this->render('categoria/new.html.twig', array(
             'categorium' => $categorium,
+            'atributos' => $atributos,
+            'attr_val' => $attr_val,
+            'form' => $form->createView(),
+        ));
+    }
+    
+    /**
+     * Creates a new Categoria entity.
+     *
+     * @Route("/admin/t-shirt-printing/new", name="tshirt_printing_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newTShirtPrintingAction(Request $request)
+    {
+        $categorium = new Categoria();
+        $form = $this->createForm('DG\ImpresionBundle\Form\TShirtPrintingType', $categorium);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $parameters = $request->request->all();
+            
+            $em = $this->getDoctrine()->getManager();
+            $categoria = $em->getRepository('DGImpresionBundle:Categoria')->find(38);
+            $categorium->setCategoria($categoria);
+            $categorium->setEstado(1);
+            $em->persist($categorium);
+            $em->flush();
+            
+            if($categorium->getFile()!=null){
+                $path = $this->container->getParameter('photo.promotion');
+
+                $fecha = date('Y-m-d His');
+                $extension = $categorium->getFile()->getClientOriginalExtension();
+                $nombreArchivo = "product_".$fecha.".".$extension;
+                $em->persist($categorium);
+                $em->flush();
+                //var_dump($path.$nombreArchivo);
+
+                $categorium->setImagen($nombreArchivo);
+                $categorium->getFile()->move($path,$nombreArchivo);
+                $em->persist($categorium);
+                $em->flush();
+                
+                
+                //$em->merge($categorium);
+                //$em->flush();
+            }
+            
+            if(isset($parameters['chk'])){
+                $detalle = 0;
+                foreach ($parameters['chk'] as $key => $value) {
+                    $categoriaParametro = new \DG\ImpresionBundle\Entity\CategoriaParametro;
+                    $opcionProducto = new \DG\ImpresionBundle\Entity\OpcionProducto;
+                    $costo = $parameters['costo'][$value];
+                    $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($value);
+
+                    if($detalle != $detalleParametro->getParametro()->getId()){
+                        $detalle = $detalleParametro->getParametro()->getId();
+
+                        $categoriaParametro->setCategoria($categorium);
+                        $categoriaParametro->setParametro($detalleParametro->getParametro());
+                        $em->persist($categoriaParametro);
+                        $em->flush();
+                    }
+
+                    $opcionProducto->setCosto($costo);
+                    $opcionProducto->setCategoria($categorium);
+                    $opcionProducto->setDetalleParametro($detalleParametro);
+
+                    $em->persist($opcionProducto);
+                    $em->flush();
+                }
+            }
+//            return $this->redirectToRoute('categoria_show', array('id' => $categorium->getId()));
+            return $this->redirectToRoute('admin_tshirtprinting_index');
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        //$atributos = $em->getRepository('DGImpresionBundle:Parametro')->findAll();
+        //$atributoCant = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('id' => 1));
+        //$atributoTalla = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('id' => 2));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Parametro p "
+                . "WHERE p.id = 1 OR p.id = 2 ";
+        
+        $atributos = $em->createQuery($dql)
+                   ->getResult();
+        
+        $dql2 = "SELECT dp.id iddp, dp.nombre nomdp, p.id idpar, p.nombre nompar "
+                . "FROM DGImpresionBundle:DetalleParametro dp "
+                . "INNER JOIN dp.parametro p "
+                . "WHERE p.id = 1 OR p.id = 2 ";
+        
+        $attr_val = $em->createQuery($dql2)
+                   ->getResult();
+       
+        return $this->render('categoria/new_tshirt.html.twig', array(
+            'categorium' => $categorium,
+            //'atributoCant' => $atributoCant,
             'atributos' => $atributos,
             'attr_val' => $attr_val,
             'form' => $form->createView(),
@@ -301,7 +463,7 @@ class CategoriaController extends Controller
             $sql = "select dp.parametro as parametro, op.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
                     . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? ";
 
             $rsm2->addScalarResult('parametro','parametro');
             $rsm2->addScalarResult('idValorParam','idValorParam');
@@ -310,10 +472,13 @@ class CategoriaController extends Controller
             $rsm2->addScalarResult('tipo','tipo');
             $query2 = $em->createNativeQuery($sql, $rsm2);
             $query2->setParameter(1, $value['idParam']);
+            $query2->setParameter(2, $categorium->getId());
             $param = $query2->getResult(); 
             array_push($opciones, $param);
         }
+        //var_dump($atributos);
         //var_dump($opciones);
+        
         $promotion = $this->get('promotion_img')->searchPromotion();
         $deleteForm = $this->createDeleteForm($categorium);
 
@@ -455,6 +620,73 @@ class CategoriaController extends Controller
     }
     
     /**
+     * Eliminar un producto de t-shirt
+     *
+     * @Route("/admin/delete/t-shirt/{id}", name="delete_tshirt")
+     * @Method("GET")
+     */
+    public function deleteTShirtAction(Categoria $categorium)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $producto = $em->getRepository('DGImpresionBundle:Categoria')->find($categorium->getId());
+        
+        $producto->setEstado(FALSE);
+//        var_dump($producto);
+//        die();
+        
+        $em->merge($producto);
+        $em->flush();
+        
+//        var_dump($producto);
+//        die();
+        
+         $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "INNER JOIN p.categoria cat "
+                . "WHERE p.categoria IS NOT NULL "
+                . "AND p.estado = 1 AND cat.estado = 1 AND p.categoria <> :tshirt ";
+        
+        $categorias = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+
+        $atributos = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findAll();
+        
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
+//        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
+//                                                                                 'estado'    => 1
+//                                                                                ));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria = :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $tshirts = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
+        
+        return $this->render('categoria/index_tshirt.html.twig', array(
+            'categorias' => $categorias,
+            'types' => $types,
+            'tshirts' => $tshirts,
+            'atributos' => $atributos,
+            'promotion' => $promotion,
+        ));
+    }
+    
+    /**
      * Eliminar un producto, categoria o t-shirt
      *
      * @Route("/admin/delete/product/{id}", name="delete_categoria")
@@ -590,12 +822,12 @@ class CategoriaController extends Controller
             $sql = "select p.id as idParam, "
                     . "p.nombre as parametro "
                     . "from categoria_parametro cp "
-                    . "inner join parametro p on cp.parametro_id = p.id "
-                    . "where cp.categoria_id = ? ";
+                    . "inner join parametro p on cp.parametro = p.id "
+                    . "where cp.categoria = ? ";
             
             $rsm->addScalarResult('idParam','idParam');
             $rsm->addScalarResult('parametro','parametro');
-            //var_dump($cat);
+            
             $query = $em->createNativeQuery($sql, $rsm);
             $query->setParameter(1, $id);
             $param = $query->getResult();

@@ -1,6 +1,6 @@
 {% extends ':Layout:layout.html.twig' %}
 
-{% block css -%}
+{#{% block css -%}
     {{parent()}}
     <style>
         .acc-title.lg > div:nth-child(2)> a:hover >i {
@@ -39,10 +39,10 @@
                          {% for key, categorium in categorias %}
                             {% if categorium.categoria.id == type.id %} 
                                 <li class="level1 nav-1-1 first item">
-                                    {#<a href="" title="{{ categorium.nombre }}" id="{{ categorium.id }}"  class="productLink">#}
+                                    <a href="" title="{{ categorium.nombre }}" id="{{ categorium.id }}"  class="productLink">
                                     <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="menu-{{ categorium.id }}">
                                         {{ categorium.nombre }}
-                                        {#<span class="count-item">(22)</span>#}
+                                        <span class="count-item">(22)</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -64,90 +64,137 @@
             </a>
         </div>    
     </aside>
+{% endblock %}#}
+{% block section %}
+    T-Shirt Printing / {{ categorium.nombre }}
 {% endblock %}
 
+{% block section2 %}
+    T-Shirt Printing
+{% endblock %}
+{% block sidebar %}{% endblock %}
 {% block contenido %}
-    <div id="resultado"></div>
-    <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto" >
-        <div class="row">
-            <div class="acc-title lg">
-                <div class="col-md-9 pull-left">
-                    <h3 class="" style="color:#FFF;">{{ categorium.categoria.nombre }} > {{ categorium.nombre }}</h3>
+    <div>
+        {#<div class="container-fluid">
+            <div class="row-fluid">
+                <div id="img-tshirt" style="margin-top: 10px; margin-bottom: 10px;">
+                    <img src="{{ asset('Resources/images/banner2.jpg') }}" style="width: 100%; background-size: cover; background-position: center;">
                 </div>
-
             </div>
         </div>
-        <div class="row" style="margin-top: 25px; margin-bottom: 50px;">
-            <div class="col-md-6">
-                <img src="{{ asset('Photos/promotions/')}}{{ categorium.imagen }}" alt="{{ categorium.nombre }}">
-            </div>
-            {% set total = 0 %}
-            <div class="col-md-6 well" id="configure-price">
-                <div class="row" id="title-attributes">
-                    <h4 class="text-center" style="color:#25bce9; font-size: 20px;">CONFIGURE & PRICE</h4>
-                </div>
-                <hr>
-                <form id="fileupload" action="{{ path('admin_carrito_order') }}" method="POST" enctype="multipart/form-data">
-                    <div class="row" id="info-attributes"  style="margin-bottom: 15px">
-                        {% for key, atributo in atributos %}
-                            <div class="col-md-5" style="margin-bottom: 3px">
-                                <p>{{ atributo.parametro }}</p>
+        </br>#}
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="{{ asset('Resources/images/print.jpg') }}">
                             </div>
-                            <div class="col-md-7" style="margin-bottom: 3px">
-                                <select class="attributes-inf form-control" id="attributes-{{ atributo.idParam }}" name="attributes-{{ atributo.idParam }}">
-                                    <option value="0" disabled selected >Select an option ...</option>
-                                    
-                                    {% for opcion in opciones  if opcion[key].parametro == atributo.idParam %}
-                                        <option value="{{ opcion[key].idValorParam }}">{{ opcion[key].valorParam }}</option>
-                                    {% else %}
-                                        <option value="0" disabled>No found</option>
-                                    {% endfor %}    
-                                </select>
-                            </div>
-                            <div class="clearfix"></div>    
-                        {% else %}
-                            <p class="text-center" style="font-size: 1.5em; font-weight: bold;">No attributes product found</p>
-                        {% endfor %}    
-                        
-                        
-                    </div>
-                        <div class="clearfix"></div>
-                    <div class="row">
-                        <div class="col-md-7 col-md-offset-5" style="margin-top: 20px">
-                            <div class="col-md-7"><p>Printing Cost:</p></div>
-                            <div class="col-md-5 printing-cost"><p class="text-right"><strong>$ {{ total|number_format(2, '.', ',') }}</strong></p></div>
-                        </div>  
-                    </div>  
-                    <hr>
-                    {#<div class="row">
-                        <div class="col-md-5" style="margin-top: 20px">
-                            <div class="row">
-                                <div class="col-md-11 col-md-offset-1">
-                                    <p>Upload your design</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="category-left-banner">
+                                    <a href="#" title="category left banner">
+                                        {% block img_prom %}
+                                            {% if promotion['promotion'] %}
+                                                <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+                                            {% else %}    
+                                                <img src="http://placehold.it/263x263" alt="promotions">
+                                            {% endif %}    
+                                        {% endblock %}
+                                    </a>
                                 </div>    
-                            </div>    
-                        </div> 
-                        <div class="col-md-7" style="margin-top: 20px">
-                            <input type="file" name="file-design" id="file-design" />
+                            </div>
                         </div>    
                     </div>
-                    <div class="clearfix"></div>
-                    <hr>#}
-                    <div class="row">
-                        <div class="col-md-4  col-md-offset-2 pull-center" style="margin-top: 15px">
-                            <a href="{{ path('dg_general_tshirt_printing') }}">
-                            <button type="button" value="" class="form-control text-center" style="background-color: #262626; color: #FFFFFF;" id = "orden-now" name= "orden-now"><span><i class="fa fa-chevron-left" style="color: #FFFFFF;"></i></span> Back</button>
-                            </a>
-                        </div>  
-                        <div class="col-md-4 pull-center" style="margin-top: 15px; margin-bottom: 30px;">
-                            <button type="submit" value="{{ categorium.id }}" class="btn btn-info form-control text-center" id = "orden-now" name= "orden-now"><span><i class="fa fa-cart-plus" style="color: #FFFFFF"></i></span> Add Cart</button>
-                        </div>    
-                          
-                    </div>    
-                </form>
-            </div>    
-        </div>
-    </section>
+                    <div class="col-md-9">
+                         <div class="row">
+                             <div class="acc-title lg" style="background-color: #1a1a1a;">
+                                <div class="col-md-12 pull-left">
+                                    <h3 class="" style="color:#25bce9;">{{ categorium.categoria.nombre }} > {{ categorium.nombre }}</h3>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 25px; margin-bottom: 50px;">
+                            <div class="col-md-6">
+                                <img src="{{ asset('Photos/promotions/')}}{{ categorium.imagen }}" alt="{{ categorium.nombre }}">
+                            </div>
+                            {% set total = 0 %}
+                            <div class="col-md-6 well" id="configure-price">
+                                <div class="row" id="title-attributes">
+                                    <h4 class="text-center" style="color:#1a1a1a; font-size: 20px;">CONFIGURE & PRICE</h4>
+                                </div>
+                                <hr>
+                                <form id="fileupload" action="{{ path('admin_carrito_order') }}" method="POST" enctype="multipart/form-data">
+                                    <div class="row" id="info-attributes"  style="margin-bottom: 15px">
+                                        {% for key, atributo in atributos %}
+                                            <div class="col-md-5" style="margin-bottom: 3px">
+                                                {% if atributo.idParam == 1 %}
+                                                    <p>Quantity</p>
+                                                {% elseif atributo.idParam == 2 %}        
+                                                    <p>Size</p>
+                                                {% endif %}          
+                                            </div>
+                                            <div class="col-md-7" style="margin-bottom: 3px">
+                                                <select class="attributes-inf form-control" id="attributes-{{ atributo.idParam }}" name="attributes-{{ atributo.idParam }}">
+                                                    <option value="0" disabled selected >Select an option ...</option>
+
+                                                    {% for opcion in opciones[key]  if opcion.parametro == atributo.idParam %}
+                                                        <option value="{{ opcion.idValorParam }}">{{ opcion.valorParam }}</option>
+                                                    {% else %}
+                                                        <option value="0" disabled>No found</option>
+                                                    {% endfor %}    
+                                                </select>
+                                            </div>
+                                            <div class="clearfix"></div>    
+                                        {% else %}
+                                            <p class="text-center" style="font-size: 1.5em; font-weight: bold;">No attributes product found</p>
+                                        {% endfor %}    
+
+
+                                    </div>
+                                        <div class="clearfix"></div>
+                                    <div class="row">
+                                        <div class="col-md-7 col-md-offset-5" style="margin-top: 20px">
+                                            <div class="col-md-7"><p>Printing Cost:</p></div>
+                                            <div class="col-md-5 printing-cost"><p class="text-right"><strong>$ {{ total|number_format(2, '.', ',') }}</strong></p></div>
+                                        </div>  
+                                    </div>  
+                                    <hr>
+                                    {#<div class="row">
+                                        <div class="col-md-5" style="margin-top: 20px">
+                                            <div class="row">
+                                                <div class="col-md-11 col-md-offset-1">
+                                                    <p>Upload your design</p>
+                                                </div>    
+                                            </div>    
+                                        </div> 
+                                        <div class="col-md-7" style="margin-top: 20px">
+                                            <input type="file" name="file-design" id="file-design" />
+                                        </div>    
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>#}
+                                    <div class="row">
+                                        <div class="col-md-4  col-md-offset-2 pull-center" style="margin-top: 15px">
+                                            <a href="{{ path('dg_general_tshirt_printing') }}">
+                                            <button type="button" value="" class="form-control text-center" style="background-color: #1a1a1a; color: #25bce9;" id = "orden-now" name= "orden-now"><span><i class="fa fa-chevron-left" style="color: #25bce9;"></i></span> Back</button>
+                                            </a>
+                                        </div>  
+                                        <div class="col-md-4 pull-center" style="margin-top: 15px; margin-bottom: 30px;">
+                                            <button type="submit" value="{{ categorium.id }}" class="btn btn-info form-control text-center" id = "orden-now" name= "orden-now" style="color: #1a1a1a;"><span><i class="fa fa-cart-plus" style="color: #1a1a1a"></i></span> Add Cart</button>
+                                        </div>    
+
+                                    </div>    
+                                </form>
+                            </div>    
+                        </div>        
+                    </div>
+            </div>
+        </div>                        
+        </br></br>
+    </div>
 {% endblock %}
 {% block javascripts_step %}
     {{parent()}}

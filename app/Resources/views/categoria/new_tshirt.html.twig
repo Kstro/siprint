@@ -1,0 +1,232 @@
+
+{% block css %}
+    
+    
+    <style>
+        .parametros input{
+{#            margin: 3%;#}
+        }
+        .parametros label{
+            width: 145px;
+            margin-left:10px;
+            margin-right:10px;
+        }
+    </style>
+    
+{% endblock %}
+    
+{% block body %}
+    
+
+    {{ form_start(form, {'action': path('tshirt_printing_new')}) }}
+    {{ form_errors(form) }}
+    <div style=" height: 350px; margin-top: 30px;" >
+            {#<div class="col-md-5 col-xs-5 text-right" style="margin-bottom: 6px;">
+                Select an option:
+            </div>
+            <div class="col-md-5 col-xs-5" style="margin-bottom: 6px;">
+                <input type="radio" name="option" id="cat" value="Category" style="margin-bottom: 10px;" class="radio-inline"/> Category  
+                <input type="radio" name="option" id="prod" value="Product" style="margin-bottom: 10px;" class="radio-inline"/> Product 
+            </div>
+            <div class="clearfix"></div>#}
+            {#<div class="category-pr">
+                <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px; margin-top: 6px;">
+                    Category:
+                </div>
+                <div class="col-md-6 col-xs-6" style="margin-bottom: 6px; margin-top: 6px;">
+                    {{ form_widget(form.categoria) }}
+                </div>
+            </div>    
+            <div class="clearfix"></div>#}
+            <div class="name-pr">
+                <div class="col-md-3 col-xs-3 text-right" >
+                    Name:
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    {{ form_widget(form.nombre) }}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="text-center photo-pr">
+                <div class="col-md-3 text-right" style="margin-bottom: 4px;">
+                    Photo product:
+                </div>   
+                <div class="col-md-9 text-left" style=" margin-top: 10px;">
+                    {{ form_widget(form.file) }}
+                </div>
+            </div>
+            <div class="clearfix"></div>  
+            <div class="attributes-pr">
+                <div class="col-md-12 text-center" style="margin-top: 20px;">
+                    <p><strong>Attributes:</strong></p>
+                </div>
+
+                <div class="clearfix"></div>
+                <hr>
+                <div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
+                    <div class="row">
+                        {% for key, atributo in atributos %}
+                            {% if atributo.id == 1 %}
+                                <div class="col-md-6">
+                                    <p><strong>Quantity</strong></p>
+
+                                    {% for attr in attr_val %}
+                                        {% if attr.idpar == atributo.id %}
+                                            <div id="capa" class="row" style="margin-bottom: 3px;">
+                                                <div class="col-md-1">
+                                                    {% if key == 0 %}
+                                                        <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo-0" value="{{ attr.iddp }}">
+                                                    {% else %}    
+                                                        <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo" value="{{ attr.iddp }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>{{ attr.nomdp }}</label>
+                                                </div>
+
+                                                <div id="capa-text-{{ attr.iddp }}" class="col-md-4" style="display: none">
+                                                    <input type="text" id="costo-{{ attr.iddp }}" name="costo[{{ attr.iddp }}]" class="form-control costo-attr" placeholder="$">
+                                                </div>    
+                                            </div>
+                                        {% endif %}      
+                                    {% endfor %}      
+                                </div>
+                            {% elseif atributo.id == 2 %}    
+                                <div class="col-md-6">
+                                    <p><strong>Size</strong></p>
+
+                                    {% for attr in attr_val %}
+                                        {% if attr.idpar == atributo.id %}
+                                            <div id="capa" class="row" style="margin-bottom: 3px;">
+                                                <div class="col-md-1">
+                                                    {% if key == 0 %}
+                                                        <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo-0" value="{{ attr.iddp }}">
+                                                    {% else %}    
+                                                        <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo" value="{{ attr.iddp }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>{{ attr.nomdp }}</label>
+                                                </div>
+
+                                                <div id="capa-text-{{ attr.iddp }}" class="col-md-4" style="display: none">
+                                                    <input type="text" id="costo-{{ attr.iddp }}" name="costo[{{ attr.iddp }}]" class="form-control costo-attr" placeholder="$">
+                                                </div>    
+                                            </div>
+                                        {% endif %}      
+                                    {% endfor %}      
+                                </div>
+                            {% endif %}
+                            {#{% if loop.index is divisibleby(3) %}
+                                <div class="clearfix"></div>
+                            {% endif %} #}         
+                        {% endfor %}  
+                    </div>
+                </div>
+                {#<div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
+                    {{ form_widget(form.parametro) }}
+                </div>#}
+            </div>
+                
+            {#<div class="col-md-6 col-xs-6 text-right" style="margin-top: 20px;">
+                Producto:
+            </div>
+            <div class="col-md-6 col-xs-6" style="margin-top: 20px;">
+                {{ form_widget(form.categoriaproducto) }}
+            </div>
+            
+            <div class="clearfix"></div>   #}
+            
+            {#<div class="clearfix"></div>#}
+            {#<div class="col-md-6 text-right">
+                Formato plantilla:
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_widget(form.formatoPlantilla) }}
+            </div>
+            
+            <div class="clearfix"></div>#}
+            
+            {#<div class="col-md-6 text-right">
+                Detalle:
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_widget(form.detalleCategoria) }}
+            </div>#}
+            
+        </div>
+        
+            
+        <hr>
+        <input type="submit" value="Create" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+{% block javascripts %}
+   <script src="{{ asset('Resources/js/validaciones/t_shirt.js') }}"></script>
+
+    <script>
+        $(document).ready(function(){
+            {#$('.attributes-pr').hide();
+            $('.photo-pr').hide();
+            $('.name-pr').hide();
+            $('.category-pr').hide();
+            $( ".btn-nuevo" ).prop( "disabled", true );#}
+            validar();   
+            
+            $( "#cat" ).on( "click", function() {
+                $('.name-pr').show();
+                $('.category-pr').hide();
+                $('.photo-pr').hide();
+                $('.attributes-pr').hide();
+                $( ".btn-nuevo" ).prop( "disabled", false );
+            });
+            
+            $( "#prod" ).on( "click", function() {
+                $('.name-pr').show();
+                $('.category-pr').show();
+                $('.photo-pr').show();
+                $('.attributes-pr').show();
+                
+                $('#categoria_categoria').
+                    attr('data-bvalidator', 'required,required');
+            
+                $('#categoria_file').
+                    attr('data-bvalidator', 'required,required');
+            
+                $('#categoria_parametro').
+                    attr('data-bvalidator', 'min[1],required,required');
+        
+                $('#categoria_parametro').
+                    attr('data-bvalidator-msg', 'Select at least one checkbox');
+        
+                $( ".btn-nuevo" ).prop( "disabled", false );
+            });
+            
+            $( ".valor-atributo" ).on( "click", function() {
+                var id = $(this).attr('id');
+                var capaid = id.split('-');
+                var capa = document.getElementById('capa-text-'+capaid[1]);
+                
+                if($("#"+id).is(':checked')) {  
+                    capa.style.display = 'block';
+                } else {  
+                    capa.style.display = 'none';
+                }  
+            });
+            
+            $( ".valor-atributo-0" ).on( "click", function() {
+                var id = $(this).attr('id');
+                var capaid = id.split('-');
+                var capa = document.getElementById('capa-text-'+capaid[1]);
+                
+                if($("#"+id).is(':checked')) {  
+                    capa.style.display = 'block';
+                } else {  
+                    capa.style.display = 'none';
+                }  
+            });
+        });
+    </script>
+{% endblock %}

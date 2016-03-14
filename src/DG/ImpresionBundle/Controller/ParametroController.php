@@ -26,7 +26,15 @@ class ParametroController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $parametros = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('estado' => 1));
+        //$parametros = $em->getRepository('DGImpresionBundle:Parametro')->findBy(array('estado' => 1));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Parametro p "
+                . "WHERE p.id <> 1 AND p.id <> 2 AND p.estado = 1";
+        
+        $parametros = $em->createQuery($dql)
+                   ->getResult();
+        
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('parametro/index.html.twig', array(
@@ -48,6 +56,7 @@ class ParametroController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $parametro->setEstado(TRUE);
             $em = $this->getDoctrine()->getManager();
             $em->persist($parametro);
             $em->flush();

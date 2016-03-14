@@ -162,25 +162,27 @@ class OrdenController extends Controller
                 $cliente->setTelefono($parameters['cliente']['phone']);
                 $cliente->setEstado(1);
                 
-                $em->persist($direccion);
-                $em->flush();
-                $orden->setDireccionEnvio($direccion);
+                if(isset($direccion)){
+                    $em->persist($direccion);
+                    $em->flush();
+                    $orden->setDireccionEnvio($direccion);
                 
-                $direccion = new \DG\ImpresionBundle\Entity\Direccion();
-                $direccion->setName($parameters['direccion']['name']);
-                $direccion->setLinea1($parameters['direccion']['linea1']);
-                $direccion->setLinea2($parameters['direccion']['linea2']);
-                $direccion->setCity($parameters['direccion']['city']);
-                $direccion->setState($parameters['direccion']['state']);
-                $direccion->setCountry($parameters['direccion']['country']);
-                $direccion->setPhoneNumber($parameters['direccion']['phoneNumber']);
-                $direccion->setZipCode($parameters['direccion']['zipCode']);
-                $direccion->setSecurityAccessCode($parameters['direccion']['securityAccessCode']);
-                $direccion->setDefaultDir(1);
+                    $direccion = new \DG\ImpresionBundle\Entity\Direccion();
+                    $direccion->setName($parameters['direccion']['name']);
+                    $direccion->setLinea1($parameters['direccion']['linea1']);
+                    $direccion->setLinea2($parameters['direccion']['linea2']);
+                    $direccion->setCity($parameters['direccion']['city']);
+                    $direccion->setState($parameters['direccion']['state']);
+                    $direccion->setCountry($parameters['direccion']['country']);
+                    $direccion->setPhoneNumber($parameters['direccion']['phoneNumber']);
+                    $direccion->setZipCode($parameters['direccion']['zipCode']);
+                    $direccion->setSecurityAccessCode($parameters['direccion']['securityAccessCode']);
+                    $direccion->setDefaultDir(1);
 
-                $em->persist($direccion);
-                $em->flush();
-                $orden->setDireccionEnvio($direccion);
+                    $em->persist($direccion);
+                    $em->flush();
+                    $orden->setDireccionEnvio($direccion);
+                }
             }
             $orden->setReembolso(0);
             $orden->setFechaPago(new \DateTime ('now'));
@@ -227,12 +229,14 @@ class OrdenController extends Controller
             $total = 0;
 
             foreach($parameters as $key => $p){
+                
                 $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
-
+                var_dump($p);
                 $val = explode("-", $key);
                 if($val[0] == 'attributes') {
-                    $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($p);
-                    $atributo->setDetalleParametro($detalleParametro);
+                    
+                    $detalleParametro = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
+                    $atributo->setOpcionProducto($detalleParametro);
                     $atributo->setDetalleOrden($detalleorden);
                     $em->persist($atributo);
                     $em->flush();
@@ -255,14 +259,19 @@ class OrdenController extends Controller
 
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
-                . "WHERE p.categoria IS NOT NULL ";
+                . "WHERE p.categoria IS NOT NULL AND p.estado = 1 ";
+        
+        
         
         $categorias = $em->createQuery($dql)
                    ->getResult();
         
+        $promocions = $em->getRepository('DGImpresionBundle:Promocion')->findAll();
+        
         return $this->render('orden/new.html.twig', array(
             'orden' => $orden,
             'categorias' => $categorias,
+            'promociones' => $promocions,
             'form' => $form->createView(),
             'promotion' => $promotion,
         ));
@@ -533,13 +542,10 @@ class OrdenController extends Controller
                                                                                           'usuario'    => $usuario
                                                                                           ));
         
-        
-        
         $parameters = $request->request->all();
 
         if(!isset($_COOKIE['expressionsPrint'])){
             $val = 1;
-                    
             $valorCookie = $em->getRepository('DGImpresionBundle:Cookie')->findBy(array(),array('valor' => 'DESC'));
             
             if(isset($valorCookie[0])){
@@ -563,20 +569,16 @@ class OrdenController extends Controller
             
             $orden->setCookie($val);
             $galleta = new \DG\ImpresionBundle\Entity\Cookie();
-            
             $galleta->setNombre('expressionsPrint');
             $galleta->setValor($val);
             $em->persist($galleta);
             $em->flush();
-            
             setcookie('expressionsPrint', $val);
             
             $orden->setFechaAccion(new \DateTime ('now'));
             $orden->setEstado('ca');
             $em->persist($orden);
             $em->flush();
-           
-            
             
         }else {
             $orden = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
@@ -585,8 +587,6 @@ class OrdenController extends Controller
             
         }
 
-//        die();
-        
 //        if($cart == NULL) {
 //            
 //            $cookie = new Cookie('expressionsPrint', $val);
@@ -598,7 +598,6 @@ class OrdenController extends Controller
 //        else {
 //            $orden = $cart;
 //        }
-//        var_dump($_POST);
         
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
         $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['orden-now']);
@@ -624,17 +623,16 @@ class OrdenController extends Controller
         
         foreach($parameters as $key => $p){
             $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
-            //var_dump($key);
-            //var_dump($p);
+            
             $val = explode("-", $key);
             if($val[0] == 'attributes') {
                 $opcion = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
-                //var_dump($opcion);
+                
                 $atributo->setOpcionProducto($opcion);
                 $atributo->setDetalleOrden($detalleorden);
                 $em->persist($atributo);
                 $em->flush();
-               // var_dump($atributo);
+               
                 $total+=$atributo->getOpcionProducto()->getCosto();
             }    
         }
@@ -664,9 +662,7 @@ class OrdenController extends Controller
         
         $categorias = $em->createQuery($dql)
                    ->getResult();
-        
-//        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL));
-//        
+ 
 //        $dql = "SELECT p "
 //                . "FROM DGImpresionBundle:Categoria p "
 //                . "WHERE p.categoria IS NOT NULL ";
@@ -676,9 +672,6 @@ class OrdenController extends Controller
         
         $promotion = $this->get('promotion_img')->searchPromotion();
         
-        //$cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
-                                                                  //             'usuario'  => $usuario
-        //                                                                      ));
         $carrito = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
                                                                                 'cookie'  => $_COOKIE['expressionsPrint']
                                                                                ));
@@ -745,8 +738,6 @@ class OrdenController extends Controller
             return new Response('0');              
         }  
     }
-    
-    
     
     //Realiza el checkout de la orden
     /**
