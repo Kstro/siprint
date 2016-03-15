@@ -36,6 +36,7 @@ class CategoriaType extends AbstractType
                         return $r->createQueryBuilder('s')
                                 ->where('s.categoria is NULL')
                                 ->andWhere('s.estado = 1')
+                                ->andWhere('s.id <> 38')
                                //->setParameter('cat', NULL)
                                 ;   
                         } ,

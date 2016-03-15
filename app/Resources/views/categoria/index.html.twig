@@ -44,7 +44,7 @@
     <ul class="nav nav-tabs" style="margin-top: 30px;">
         <li class="active"><a data-toggle="tab" href="#home">Products</a></li>
         <li><a data-toggle="tab" href="#menu1">Categories</a></li>
-        <li><a data-toggle="tab" href="#menu2">T-Shirt Printing</a></li>
+        {#<li><a data-toggle="tab" href="#menu2">T-Shirt Printing</a></li>#}
     </ul>          
        
 
@@ -90,7 +90,7 @@
                             </td>
                             <td>
 
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
+                                <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px; margin-left: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
                                     <i class="fa fa-times"></i>
                                 </a>  
                                 <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
@@ -142,7 +142,7 @@
                             </td>
                             <td>
 
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
+                                <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
                                     <i class="fa fa-times"></i>
                                 </a>  
                                 <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
@@ -198,7 +198,7 @@
                                     </td>#}
                                     <td>
 
-                                        <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': tshirt.id }) }}">
+                                        <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': tshirt.id }) }}">
                                             <i class="fa fa-times"></i>
                                         </a>  
                                         {#<a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': tshirt.id }) }}">

@@ -576,10 +576,30 @@ class CategoriaController extends Controller
             return $this->redirectToRoute('categoria_index');
         }
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Parametro p "
+                . "WHERE p.id <> 1 AND p.id <> 2 AND p.estado = 1";
+        
+        $atributos = $em->createQuery($dql)
+                   ->getResult();
+        
+        $dql = "SELECT dp.id iddp, dp.nombre nomdp, p.id idpar, p.nombre nompar "
+                . "FROM DGImpresionBundle:DetalleParametro dp "
+                . "INNER JOIN dp.parametro p ";
+        
+        $attr_val = $em->createQuery($dql)
+                   ->getResult();
+        
+        //$prod = $em->getRepository('DGImpresionBundle:Categoria')->find($categorium->getId());
+        
         return $this->render('categoria/edit.html.twig', array(
             'categorium' => $categorium,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'atributos' => $atributos,
+            'attr_val' => $attr_val,
         ));
     }
 
