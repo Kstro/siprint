@@ -35,7 +35,7 @@
                 <link rel="stylesheet" href="{{ asset('Resources/js/alertifyjs/css/themes/semantic.css') }}">
                 <!-- include boostrap theme  -->
                 <link rel="stylesheet" href="{{ asset('Resources/js/alertifyjs/css/themes/bootstrap.css') }}">
-                
+                <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
                 
             {%- endblock %}
             {% block estilos -%}    
@@ -180,7 +180,7 @@
             <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
             <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
             <script src="{{ asset('Resources/js/alertifyjs/alertify.js') }}"></script>
-
+            <script type="text/javascript" src="{{ asset('Resources/zebra/js/zebra_datepicker.js')}}" ></script>
             <script>
                 $(document).ready(function () {
                     //if ( $("#show-cart") ) {

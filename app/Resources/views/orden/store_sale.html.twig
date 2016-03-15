@@ -41,7 +41,7 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Customer name</th>
+                    {#<th>Customer name</th>#}
                     <th>Amount</th>
                     <th>Actions</th>
                 </tr>
@@ -50,7 +50,7 @@
                 {% for sale in sales %}
                 <tr>
                     <td class="text-center">{% if sale.fechaOrden %}{{ sale.fechaOrden|date('F d, Y') }}{% endif %}</td>
-                    <td>{{ sale.cliente }}</td>
+                    {#<td>{{ sale.cliente }}</td>#}
                     <td class="text-right">
                         {% set monto = 0 %}
                         {% for design in sale.detalleOrden %}

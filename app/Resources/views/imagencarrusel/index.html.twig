@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ImagenCarrusel list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Imagen</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imagenCarrusel in imagenCarrusels %}
+            <tr>
+                <td><a href="{{ path('admin_image-carousel_show', { 'id': imagenCarrusel.id }) }}">{{ imagenCarrusel.id }}</a></td>
+                <td>{{ imagenCarrusel.imagen }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_image-carousel_show', { 'id': imagenCarrusel.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_image-carousel_edit', { 'id': imagenCarrusel.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_image-carousel_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

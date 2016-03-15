@@ -136,8 +136,8 @@ class FPDFService {
             $this->pdf->setX(28);
             
             foreach ($value->getAtributoProductoOrden() as $clave => $valor) {
-                if($valor->getDetalleParametro()->getParametro() == 'Quantity') {
-                    $this->pdf->Cell(0, 10, $valor->getDetalleParametro(), 0, 0);
+                if($valor->getOpcionProducto()->getDetalleParametro()->getParametro() == 'Quantity') {
+                    $this->pdf->Cell(0, 10, $valor->getOpcionProducto()->getDetalleParametro(), 0, 0);
                 }    
             }
             
@@ -180,14 +180,14 @@ class FPDFService {
         $this->pdf->SetFont('Arial', '', 10);
         $this->pdf->setX(152);
         $this->pdf->Cell(0, 10, 'Tax applied', 0, 0);
-        $this->pdf->Cell(0, 10, '$ 0.00', 0, 0, 'R');
+        $this->pdf->Cell(0, 10, '$ ' .number_format($monto_cancelar * 0.085, 2), 0, 0, 'R');
         
         $this->pdf->Ln(12);
         $break+=12;
         $this->pdf->SetFont('Arial', 'B', 11);
         $this->pdf->setX(152);
         $this->pdf->Cell(0, 10, 'Total amount', 0, 0);
-        $this->pdf->Cell(0, 10, '$ ' . number_format($monto_cancelar, 2), 0, 0, 'R');
+        $this->pdf->Cell(0, 10, '$ ' . number_format($monto_cancelar + ($monto_cancelar * 0.085), 2), 0, 0, 'R');
         
         $this->pdf->Line(20, $break + 20, 207, $break + 20);
         

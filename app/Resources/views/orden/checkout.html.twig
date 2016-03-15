@@ -253,7 +253,7 @@
                             * Expiration date:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px;">
-                            <input readonly="readonly" id="tarjeta_expiracion" name="tarjeta[expiracion]" class="form-control input-sm calZebra" type="text">
+                            <input readonly="readonly" id="tarjeta_expiracion" name="tarjeta[expiracion]" class="form-control calZebra" type="text">
                         </div>
                         <div class="clearfix" style=""></div>
 
@@ -265,33 +265,6 @@
                         </div>
                         <div class="clearfix"></div>
 
-                        <script>
-                            $(document).ready(function(){
-                                $('.calZebra').Zebra_DatePicker({
-                                    format: 'm-Y',
-                                    show_clear_date:false,
-                                    direccion: 1,
-                                    show_select_today: "Today",
-                                    show_icon:false,
-                                    onSelect: function(){
-                                        var expiracion = $('#tarjeta_expiracion').val();
-                                        //alert(expiracion);
-                                        var fecha = expiracion.split("-");
-                                        //alert(fecha[0]);
-                                        var dia=0;
-                                        if(fecha[0]<10){
-                                            dia= parseInt(fecha[0]);
-                                            $('#stripe_view_credit_cart_expiration_month').val(dia);
-                                        }
-                                        else{
-                                            $('#stripe_view_credit_cart_expiration_month').val(fecha[0]);
-                                        }
-                                        $('#stripe_view_credit_cart_expiration_year').val(fecha[1]);
-                                    },
-                                    //offset: [0,0]
-                                });
-                            });
-                        </script>
 
                     </div>
                     <div class="col-md-5 text-right text-bold" style="margin-bottom: 4px; margin-top: 15px;">
@@ -661,6 +634,7 @@
 
 {% block javascripts_step %}
     {{parent()}}
+    {#<script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>#}
     <script>
         $(document).ready(function () {  
             $('#direccion_state').select2();
@@ -712,7 +686,33 @@
             }, "json");
         }
     </script>
-    
+    <script>
+        $(document).ready(function(){
+            $('.calZebra').Zebra_DatePicker({
+                format: 'm-Y',
+                show_clear_date:false,
+                direccion: 1,
+                show_select_today: "Today",
+                show_icon:false,
+                onSelect: function(){
+                    var expiracion = $('#tarjeta_expiracion').val();
+                    //alert(expiracion);
+                    var fecha = expiracion.split("-");
+                    //alert(fecha[0]);
+                    var dia=0;
+                    if(fecha[0]<10){
+                        dia= parseInt(fecha[0]);
+                        $('#stripe_view_credit_cart_expiration_month').val(dia);
+                    }
+                    else{
+                        $('#stripe_view_credit_cart_expiration_month').val(fecha[0]);
+                    }
+                    $('#stripe_view_credit_cart_expiration_year').val(fecha[1]);
+                },
+                //offset: [0,0]
+            });
+        });
+    </script>
     <script>
         {# Esto permite que al cargar el modal, se carga el form de stripe con los datos de la tarjeta #}
         $(document).ready(function(){

@@ -27,6 +27,7 @@ class GeneralController extends Controller
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NOT NULL "
                 . "AND p.estado = 1 "
+                . "AND p.categoria <> 38 "
                 . "ORDER BY p.id DESC ";
         
         $products = $em->createQuery($dql)

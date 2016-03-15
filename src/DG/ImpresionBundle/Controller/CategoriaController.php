@@ -437,7 +437,17 @@ class CategoriaController extends Controller
     public function showAction(Categoria $categorium)
     {
         $em = $this->getDoctrine()->getManager();
-        $types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL, 'estado' => 1));
+        //$types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL, 'estado' => 1));
+        
+        $dql = "SELECT p "
+                . "FROM DGImpresionBundle:Categoria p "
+                . "WHERE p.categoria IS NULL "
+                . "AND p.id <> :tshirt "
+                . "AND p.estado = 1 ";
+        
+        $types = $em->createQuery($dql)
+                   ->setParameters(array('tshirt' => 38))
+                   ->getResult();
         
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
@@ -516,11 +526,12 @@ class CategoriaController extends Controller
         
         $opciones = array();
         foreach ($atributos as $value) {
+//            var_dump($value);
             $rsm2 = new ResultSetMapping();
-            $sql = "select dp.parametro as parametro, op.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
+            $sql = "select distinct op.id as idValorParam, dp.parametro as parametro, dp.nombre as valorParam, op.costo as precio "
                     . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? ";
 
             $rsm2->addScalarResult('parametro','parametro');
             $rsm2->addScalarResult('idValorParam','idValorParam');
@@ -529,6 +540,7 @@ class CategoriaController extends Controller
             $rsm2->addScalarResult('tipo','tipo');
             $query2 = $em->createNativeQuery($sql, $rsm2);
             $query2->setParameter(1, $value['idParam']);
+            $query2->setParameter(2, $categorium->getId());
             $param = $query2->getResult(); 
             array_push($opciones, $param);
         }
@@ -878,6 +890,7 @@ class CategoriaController extends Controller
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
             $id = $this->get('request')->request->get('id');
+            $prod = $this->get('request')->request->get('cat');
              
             $em = $this->getDoctrine()->getManager();            
             $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
@@ -887,11 +900,13 @@ class CategoriaController extends Controller
                     . "dp.id as idValorParam, "
                     . "dp.nombre as valorParam, "
                     . "dp.valor as precio, "
-                    . "tp.nombre as tipo "
-                    . "from detalle_parametro dp "
+                    . "tp.nombre as tipo, "
+                    . "op.id as idValor "
+                    . "from opcion_producto op inner join detalle_parametro dp on op.detalle_parametro = dp.id "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? ";
             
+            $rsm->addScalarResult('idValor','idValor');
             $rsm->addScalarResult('parametro','parametro');
             $rsm->addScalarResult('idValorParam','idValorParam');
             $rsm->addScalarResult('valorParam','valorParam');
@@ -900,6 +915,7 @@ class CategoriaController extends Controller
             
             $query = $em->createNativeQuery($sql, $rsm);
             $query->setParameter(1, $id);
+            $query->setParameter(2, $prod);
             $param = $query->getResult();
             
             $response = new JsonResponse();
@@ -927,6 +943,7 @@ class CategoriaController extends Controller
             
             $em = $this->getDoctrine()->getManager();            
             $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
+            //var_dump($promo);
             $porcentaje = 0;
             
             if( $promo != NULL && $code != '' ){

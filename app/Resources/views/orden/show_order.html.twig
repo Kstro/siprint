@@ -57,7 +57,8 @@
                             <li class="pro-item row">
                                 <div class=" acc-info-content pad-1015 col-sm-10 col-sm-offset-2  col-xs-12">
                                     <ul>
-                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Name: {{ ord.usuario.persona }}</li>
+                                        
+                                        {% if ord.usuario is not empty %}<li style="font-size: 1.14em;"><i class="fa fa-check"></i> Name: {{ ord.usuario.persona }}</li>{% endif %}
                                         <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: 
                                             {% if ord.direccionEnvio %} 
                                                 {{ ord.direccionEnvio.linea1 }}
@@ -128,7 +129,7 @@
                                     <div class="short-description">
                                         {% for r in row.atributoProductoOrden %}
                                             <div style="cursor: default;" class=" fa fa-check-square-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
-                                                <span style="font-size: 1.14em;"><strong>{{ r.detalleParametro.parametro }}: </strong>{{ r.detalleParametro }}</span>
+                                                <span style="font-size: 1.14em;"><strong>{{ r.opcionProducto.detalleParametro.parametro }}: </strong>{{ r.opcionProducto.detalleParametro }}</span>
                                             </div>
                                         {% endfor %}
                                     </div>

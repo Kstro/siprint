@@ -26,13 +26,18 @@ class UsuarioController extends Controller
      */
     public function indexAction()
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser(); 
+        
         $em = $this->getDoctrine()->getManager();
 
         $dql = "SELECT p, u FROM DGImpresionBundle:Usuario u "
-                . "JOIN u.persona p WHERE p.estado=:estado ";
+                . "JOIN u.persona p WHERE p.estado=:pestado "
+                . "AND u.estado=:uestado AND u.id <> :usuario ";
         
         $usuarios = $em->createQuery($dql)
-                   ->setParameter('estado', 1)
+                   ->setParameter('pestado', 1)
+                   ->setParameter('uestado', 1)
+                   ->setParameter('usuario', $user->getId())
                    ->getResult();
 
         $promotion = $this->get('promotion_img')->searchPromotion();
@@ -53,6 +58,13 @@ class UsuarioController extends Controller
     {
         $usuario = new Usuario();
         $form = $this->createForm('DG\ImpresionBundle\Form\UsuarioType', $usuario);
+        $form->add('user_roles','entity',array('label' => 'Select a role','required'=>false,
+                'class'=>'DGImpresionBundle:Rol','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>'roles'
+                    )));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -89,8 +101,11 @@ class UsuarioController extends Controller
     {
         $deleteForm = $this->createDeleteForm($usuario);
 
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('usuario/show.html.twig', array(
             'usuario' => $usuario,
+            'promotion' => $promotion,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -126,7 +141,7 @@ class UsuarioController extends Controller
             $em->flush();
 
             //return $this->redirectToRoute('admin_usuario_edit', array('id' => $usuario->getId()));
-            return $this->redirectToRoute('admin_usuario_index');
+            return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
         }
 
         return $this->render('usuario/edit.html.twig', array(
@@ -349,7 +364,39 @@ class UsuarioController extends Controller
         
     }
     
-    
+    /**
+     * Eliminar un usuario 
+     *
+     * @Route("/delete/{id}", name="delete_usuario")
+     * @Method("GET")
+     */
+    public function deleteUsusarioAction(Usuario $usuario)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser(); 
+        
+        $em = $this->getDoctrine()->getManager();
+        $us = $em->getRepository('DGImpresionBundle:Usuario')->find($usuario->getId());
+        $us->setEstado(FALSE);
+        $em->merge($us);
+        $em->flush();
+        
+        $dql = "SELECT p, u FROM DGImpresionBundle:Usuario u "
+                . "JOIN u.persona p WHERE p.estado=:pestado "
+                . "AND u.estado=:uestado AND u.id <> :usuario ";
+        
+        $usuarios = $em->createQuery($dql)
+                   ->setParameter('pestado', 1)
+                   ->setParameter('uestado', 1)
+                   ->setParameter('usuario', $user->getId())
+                   ->getResult();
+
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        //var_dump($promotion);
+        return $this->render('usuario/index.html.twig', array(
+            'usuarios' => $usuarios,
+            'promotion' => $promotion,
+        ));
+    }
     
     
 }

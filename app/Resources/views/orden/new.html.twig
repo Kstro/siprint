@@ -177,7 +177,7 @@
                                 </div>
                                 <div class="col-md-8 col-sm-8" id = "num" name ="num">
                                     <select id="code-promo" name="code-promo" class="form-control input-sm">
-                                        <option value="0" disabled selected>Select an option ...</option>
+                                        <option value="0" selected>Select an option ...</option>
                                     {% for prom in promociones %}
                                         <option value="{{prom.id}}"> {{prom.nombre}}</option>
                                     {% endfor %}
@@ -205,7 +205,7 @@
                         <div class="col-md-6 col-sm-6" style="margin-bottom: 4px;">
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 4px;">
-                                     Design:
+                                     Product:
                                 </div>
                                 <div class="col-md-8 col-sm-8">
                                     <select id="selectDesigns" name="selectDesigns" class="form-control input-sm">
@@ -216,6 +216,15 @@
                                         </option>
                                     {% endfor %}
                                     </select>
+                                    {#<select class="attributes-inf form-control" id="attributes-{{ atributo.idParam }}" name="attributes-{{ atributo.idParam }}">
+                                        <option value="" disabled selected >Select an option ...</option>
+
+                                        {% for clave, opcion in opciones[key]  if opcion.parametro == atributo.idParam %}
+                                            <option value="{{ opcion.idValorParam }}">{{ opcion.valorParam }}</option>
+                                        {% else %}
+                                            <option value="0" disabled>No found</option>
+                                        {% endfor %}    
+                                    </select>#}
                                 </div>
                             </div>
                         </div>        
@@ -320,13 +329,13 @@
                         draw+='<select class="attributes-inf form-control" id="attributes-' + value.idParam + '" name="attributes-' + value.idParam + '">';
                         draw+='<option value="0" disabled selected >Select an option ...</option>';
                         
-                        $.post( "{{path('get_attributes_info')}}", { id: value.idParam }, function( val ) {
+                        $.post( "{{path('get_attributes_info')}}", { id: value.idParam, cat: id }, function( val ) {
                             $.each( val.paramsVal, function( clave, valor ) {
                                 if(value.idParam === valor.parametro) {
-                                    var opcion = '<option value="' + valor.idValorParam + '">' + valor.valorParam + '</option>';
-                                    //total_pagar+=valor.precio
-                                    $('#attributes-'+ value.idParam ).append(opcion);
+                                    //console.log(valor);
+                                    var opcion = '<option value="' + valor.idValor + '">' + valor.valorParam + '</option>';
                                     
+                                    $('#attributes-'+ value.idParam ).append(opcion);
                                 }
                             });
                             
@@ -335,9 +344,9 @@
                             if(acum_attr === total_attr) {
                                 $( ".show-attr" ).show();    
                                 $(".attributes-inf").select2();
-                                
                                 $(".attributes-inf" ).change(function() {
                                     var code_promo = $( "#code-promo" ).val();
+                                    
                                     total_pagar = 0;
                                     var acum = 0;
                                     var total_price = $(".attributes-inf").length;
@@ -349,15 +358,16 @@
                                         if($(this).val() !== null) {
                                             aux = $(this).val();
                                         }
-                                        
+                                        //console.log($(this).val());
                                         $.post( "{{path('get_attributes_precio')}}", { id: aux, code: code_promo }, function( det ) {
+                                            //console.log(det);
                                             acum++;
                                             
                                             if(det.flag === 0) {
                                                 total_pagar+= 0;
                                             }
                                             else {
-                                                total_pagar+= parseFloat(det.values[0].precio);
+                                                total_pagar+= parseFloat(det.values);
                                             } 
                                             //total = total_pagar;
                                             

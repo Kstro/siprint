@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ImagenCarrusel</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ imagenCarrusel.id }}</td>
+            </tr>
+            <tr>
+                <th>Imagen</th>
+                <td>{{ imagenCarrusel.imagen }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_image-carousel_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_image-carousel_edit', { 'id': imagenCarrusel.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

@@ -228,31 +228,41 @@ class OrdenController extends Controller
             $em->flush();
             $total = 0;
 
+//            foreach($parameters as $key => $p){
+//                
+//                $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
+//                //var_dump($p);
+//                $val = explode("-", $key);
+//                if($val[0] == 'attributes') {
+//                    
+//                    $detalleParametro = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
+//                    $atributo->setOpcionProducto($detalleParametro);
+//                    $atributo->setDetalleOrden($detalleorden);
+//                    $em->persist($atributo);
+//                    $em->flush();
+//                    
+//                    $total+=$atributo->getDetalleParametro()->getValor();
+//                }    
+//            }
             foreach($parameters as $key => $p){
+            $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
+            
+            $val = explode("-", $key);
+            if($val[0] == 'attributes') {
+                $opcion = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
                 
-                $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
-                var_dump($p);
-                $val = explode("-", $key);
-                if($val[0] == 'attributes') {
-                    
-                    $detalleParametro = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
-                    $atributo->setOpcionProducto($detalleParametro);
-                    $atributo->setDetalleOrden($detalleorden);
-                    $em->persist($atributo);
-                    $em->flush();
-                    
-                    $total+=$atributo->getDetalleParametro()->getValor();
-                }    
-            }
+                $atributo->setOpcionProducto($opcion);
+                $atributo->setDetalleOrden($detalleorden);
+                $em->persist($atributo);
+                $em->flush();
+               
+                $total+=$atributo->getOpcionProducto()->getCosto();
+            }    
+        }
 
             $detalleorden->setMonto($total);
             $em->merge($detalleorden);
             $em->flush();
-            
-            //var_dump($orden);
-            //var_dump($detalleorden);
-            //var_dump($parameters);
-            //  die();
             
             return $this->redirectToRoute('admin_store_sale');
         }
@@ -260,8 +270,6 @@ class OrdenController extends Controller
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NOT NULL AND p.estado = 1 ";
-        
-        
         
         $categorias = $em->createQuery($dql)
                    ->getResult();
@@ -543,7 +551,7 @@ class OrdenController extends Controller
                                                                                           ));
         
         $parameters = $request->request->all();
-
+        var_dump($_COOKIE['expressionsPrint']);
         if(!isset($_COOKIE['expressionsPrint'])){
             $val = 1;
             $valorCookie = $em->getRepository('DGImpresionBundle:Cookie')->findBy(array(),array('valor' => 'DESC'));
@@ -598,7 +606,7 @@ class OrdenController extends Controller
 //        else {
 //            $orden = $cart;
 //        }
-        
+        var_dump($orden);
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
         $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['orden-now']);
         $path = $this->container->getParameter('photo.promotion');
