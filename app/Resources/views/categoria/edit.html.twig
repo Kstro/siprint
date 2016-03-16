@@ -154,6 +154,16 @@
    <script>
         $(document).ready(function(){
             validar(); 
+            
+            {% for key, atributo in atributes %}
+                {% for clave, opcion in opciones[key]  if opcion.parametro == atributo.idParam %}
+                    $('#chk-{{ opcion.idValorParam }}').attr('checked', true);
+                    var capa = document.getElementById('capa-text-{{ opcion.idValorParam }}');
+                    capa.style.display = 'block';
+                    $('#costo-{{ opcion.idValorParam }}').val({{ opcion.precio }});
+                {% endfor %}        
+            {% endfor %}
+                
             $('#categoria_nombre').
                     attr('data-bvalidator', 'required,required');
             {% if categorium.categoria is empty %}

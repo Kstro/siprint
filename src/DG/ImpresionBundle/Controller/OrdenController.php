@@ -551,7 +551,7 @@ class OrdenController extends Controller
                                                                                           ));
         
         $parameters = $request->request->all();
-        var_dump($_COOKIE['expressionsPrint']);
+        //var_dump($_COOKIE['expressionsPrint']);
         if(!isset($_COOKIE['expressionsPrint'])){
             $val = 1;
             $valorCookie = $em->getRepository('DGImpresionBundle:Cookie')->findBy(array(),array('valor' => 'DESC'));
@@ -606,7 +606,7 @@ class OrdenController extends Controller
 //        else {
 //            $orden = $cart;
 //        }
-        var_dump($orden);
+        //var_dump($orden);
         $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
         $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['orden-now']);
         $path = $this->container->getParameter('photo.promotion');

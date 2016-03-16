@@ -547,6 +547,8 @@ class CategoriaController extends Controller
         //var_dump($opciones);
         $promotion = $this->get('promotion_img')->searchPromotion();
         $deleteForm = $this->createDeleteForm($categorium);
+        
+        
 
         return $this->render('categoria/show_tshirt.html.twig', array('categorium' => $categorium, 'opciones' => $opciones, 'delete_form' => $deleteForm->createView(), 'types' => $types, 'categorias' => $categorias, 'atributos' => $atributos, 'promotion' => $promotion, 'registro'=>null ));
     }
@@ -582,6 +584,34 @@ class CategoriaController extends Controller
                 $categorium->getFile()->move($path,$nombreArchivo);
                 $em->persist($categorium);
                 $em->flush();
+                
+                if(isset($parameters['chk'])){
+                    $detalle = 0;
+                    foreach ($parameters['chk'] as $key => $value) {
+                        
+                        $categoriaParametro = new \DG\ImpresionBundle\Entity\CategoriaParametro;
+                        $opcionProducto = new \DG\ImpresionBundle\Entity\OpcionProducto;
+                        $costo = $parameters['costo'][$value];
+                        $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($value);
+
+                        if($detalle != $detalleParametro->getParametro()->getId()){
+                            $detalle = $detalleParametro->getParametro()->getId();
+
+                            $categoriaParametro->setCategoria($categorium);
+                            $categoriaParametro->setParametro($detalleParametro->getParametro());
+                            $em->persist($categoriaParametro);
+                            $em->flush();
+                        }
+
+                        $opcionProducto->setCosto($costo);
+                        $opcionProducto->setCategoria($categorium);
+                        $opcionProducto->setDetalleParametro($detalleParametro);
+
+                        $em->persist($opcionProducto);
+                        $em->flush();
+                    }
+                }
+                
             }
 
 //            return $this->redirectToRoute('categoria_edit', array('id' => $categorium->getId()));
@@ -599,18 +629,52 @@ class CategoriaController extends Controller
         
         $dql = "SELECT dp.id iddp, dp.nombre nomdp, p.id idpar, p.nombre nompar "
                 . "FROM DGImpresionBundle:DetalleParametro dp "
-                . "INNER JOIN dp.parametro p ";
+                . "INNER JOIN dp.parametro p "
+                . "WHERE p.id <> 1 AND p.id <> 2 AND p.estado = 1";
         
         $attr_val = $em->createQuery($dql)
                    ->getResult();
-        
+        //   var_dump($attr_val);
         //$prod = $em->getRepository('DGImpresionBundle:Categoria')->find($categorium->getId());
         
+        $rsm = new ResultSetMapping();
+        $sql = "select p.id as idParam, p.nombre as parametro "
+                . "from categoria_parametro cp inner join parametro p on cp.parametro = p.id "
+                . "where cp.categoria = ? ";
+
+        $rsm->addScalarResult('idParam','idParam');
+        $rsm->addScalarResult('parametro','parametro');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter(1, $categorium->getId());
+        $atributes = $query->getResult();
+        
+        $opciones = array();
+        foreach ($atributes as $value) {
+            $rsm2 = new ResultSetMapping();
+            $sql = "select dp.parametro as parametro, dp.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
+                    . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
+                    . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
+                    . "where dp.parametro = ? and op.categoria = ? ";
+
+            $rsm2->addScalarResult('parametro','parametro');
+            $rsm2->addScalarResult('idValorParam','idValorParam');
+            $rsm2->addScalarResult('valorParam','valorParam');
+            $rsm2->addScalarResult('precio','precio');
+            $rsm2->addScalarResult('tipo','tipo');
+            $query2 = $em->createNativeQuery($sql, $rsm2);
+            $query2->setParameter(1, $value['idParam']);
+            $query2->setParameter(2, $categorium->getId());
+            $param = $query2->getResult(); 
+            array_push($opciones, $param);
+        }
+        //var_dump($opciones);
         return $this->render('categoria/edit.html.twig', array(
             'categorium' => $categorium,
+            'opciones' => $opciones,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'atributos' => $atributos,
+            'atributes' => $atributes,
             'attr_val' => $attr_val,
         ));
     }

@@ -81,9 +81,9 @@ class Orden
     private $promocion;
     
     /**
-     * @var \Persona
+     * @var \Cliente
      *
-     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\ManyToOne(targetEntity="Cliente")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cliente", referencedColumnName="id")
      * })
@@ -488,13 +488,13 @@ class Orden
     }
     
      /**
-     * Set persona
+     * Set cliente
      *
-     * @param \DG\ImpresionBundle\Entity\Persona $cliente
+     * @param \DG\ImpresionBundle\Entity\Cliente $cliente
      *
      * @return Orden
      */
-    public function setCliente(\DG\ImpresionBundle\Entity\Persona $cliente = null)
+    public function setCliente(\DG\ImpresionBundle\Entity\Cliente $cliente = null)
     {
         $this->cliente = $cliente;
 
@@ -502,9 +502,9 @@ class Orden
     }
 
     /**
-     * Get persona
+     * Get cliente
      *
-     * @return \DG\ImpresionBundle\Entity\Persona 
+     * @return \DG\ImpresionBundle\Entity\Cliente 
      */
     public function getCliente()
     {

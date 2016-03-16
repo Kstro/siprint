@@ -5,6 +5,7 @@ namespace DG\ImpresionBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Doctrine\ORM\EntityRepository;
 
 class OrdenType extends AbstractType
 {
@@ -16,11 +17,18 @@ class OrdenType extends AbstractType
     {
         $builder
             //->add('nombreProyecto')
-            ->add('cliente', null, array(
+            ->add('cliente','entity',array('required'=>false,
+                    'empty_value'   => 'Select an option...',
+                    'class'=>'DGImpresionBundle:Cliente',
+                    'query_builder' => function(EntityRepository $r) {
+                        return $r->createQueryBuilder('s')
+                                ->where('s.estado = 1')
+                                ;   
+                        } ,
                     'attr'=>array(
-                    'class'=>'form-control'
-                    )
-                ))    
+                        'class'=>'form-control input-sm'
+                     )            
+                    ))   
             ->add('direccionEnvio', null, array(
                     'attr'=>array(
                     'class'=>'form-control'

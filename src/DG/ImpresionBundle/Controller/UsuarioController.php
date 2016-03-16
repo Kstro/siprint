@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Usuario;
 use DG\ImpresionBundle\Entity\Persona;
+use DG\ImpresionBundle\Entity\Cliente;
 use DG\ImpresionBundle\Form\UsuarioType;
 
 /**
@@ -264,7 +265,7 @@ class UsuarioController extends Controller
                     $persona->setTelefono(null);
 
                     $persona->setEstado(1);
-
+                    $usuario->setEstado(1);
                     //evalua si la contraseña fue modificada: ------------------------
                     $this->setSecurePassword($usuario);
 
@@ -291,6 +292,13 @@ class UsuarioController extends Controller
                     $em->persist($usuario);
                     //$em->persist($usuario);
                     $em->flush();
+                    
+                    $cliente = new Cliente();
+                    $cliente->setEstado(1);
+                    $cliente->setPersona($persona);
+                    $em->persist($cliente);
+                    $em->flush();
+                    
                     $mensaje="Cuenta creada con éxito";
                     //return $this->redirectToRoute('admin_usuario_show', array('id' => $usuario->getId()));
                     //return $this->redirectToRoute('admin_account_created');
