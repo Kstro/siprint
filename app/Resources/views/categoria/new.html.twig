@@ -175,10 +175,12 @@
                 $('.category-pr').hide();
                 $('.photo-pr').hide();
                 $('.attributes-pr').hide();
+                $('#categoria_nombre').val('');
                 $( ".btn-nuevo" ).prop( "disabled", false );
             });
             
             $( "#prod" ).on( "click", function() {
+                $('#categoria_nombre').val('');
                 $('.name-pr').show();
                 $('.category-pr').show();
                 $('.photo-pr').show();

@@ -76,7 +76,7 @@
     <div class="form-edit-info" style="padding-top: 20px;">
         <div class="col-md-5 text-right" style="margin-bottom: 45px;"><label>Shipping address: </label> </div>
         <div class="col-md-6" style="margin-bottom: 45px;">
-            <select id="selectDirecciones" class="form-control input-sm">
+            <select id="selectDirecciones" class="form-control">
                 <option value="0">New address...</option>
             {% for dir in direcciones %}
                 <option value="{{dir.id}}"> {{dir.linea1}}, {{dir.linea2}}, {{dir.city}} {{dir.country}}</option>
@@ -90,42 +90,42 @@
                         * Full Name:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control input-sm" type="text">
+                        <input id="direccion_name" name="direccion[name]" maxlength="200" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         * Phone Number:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_phoneNumber" name="direccion[phoneNumber]" maxlength="25" class="form-control input-sm" type="text">
+                        <input id="direccion_phoneNumber" name="direccion[phoneNumber]" maxlength="25" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         * Line 1:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_linea1" name="direccion[linea1]" maxlength="150" class="form-control input-sm" type="text">
+                        <input id="direccion_linea1" name="direccion[linea1]" maxlength="150" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         * Line 2:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_linea2" name="direccion[linea2]" maxlength="150" class="form-control input-sm" type="text">
+                        <input id="direccion_linea2" name="direccion[linea2]" maxlength="150" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         * City:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_city" name="direccion[city]" maxlength="150" class="form-control input-sm" type="text">
+                        <input id="direccion_city" name="direccion[city]" maxlength="150" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         * State / Province / Region:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <select id="direccion_state" name="direccion[state]" maxlength="150" class="form-control input-sm" type="text">
+                        <select id="direccion_state" name="direccion[state]" maxlength="150" class="form-control" type="text">
                             <option value="AL">Alabama</option>
                             <option value="AK">Alaska</option>
                             <option value="AZ">Arizona</option>
@@ -193,21 +193,21 @@
                         * Zip Code:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_zipCode" name="direccion[zipCode]" maxlength="20" class="form-control input-sm" type="text">
+                        <input id="direccion_zipCode" name="direccion[zipCode]" maxlength="20" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         Security Access Code:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="direccion_securityAccessCode" name="direccion[securityAccessCode]" maxlength="255" class="form-control input-sm" type="text">
+                        <input id="direccion_securityAccessCode" name="direccion[securityAccessCode]" maxlength="255" class="form-control" type="text">
                     </div>
                     <div class="clearfix"></div>
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                         Save address:
                     </div>
                     <div class="col-md-6" style="margin-bottom: 4px;">
-                        <input id="opcionguardaraddress" name="direccion[opcionguardar]" class="form-control" value="1" type="checkbox">
+                        <input id="opcionguardaraddress" name="direccion[opcionguardar]" class="form-control input-sm" value="1" type="checkbox">
                     </div>
                     <div class="clearfix"></div>
                 </form>
@@ -232,21 +232,21 @@
                             * Number:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px;">
-                            <input id="tarjeta_numero" name="tarjeta[numero]" maxlength="20" class="form-control input-sm" type="text">
+                            <input id="tarjeta_numero" name="tarjeta[numero]" maxlength="20" class="form-control" type="text">
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                             * Name:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px;">
-                            <input id="tarjeta_nombre" name="tarjeta[nombre]" maxlength="200" class="form-control input-sm" type="text">
+                            <input id="tarjeta_nombre" name="tarjeta[nombre]" maxlength="200" class="form-control" type="text">
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                             * CVC:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px;">
-                            <input id="tarjeta_cvc" name="tarjeta[cvc]" required="required" maxlength="4" class="form-control input-sm" type="text">
+                            <input id="tarjeta_cvc" name="tarjeta[cvc]" required="required" maxlength="4" class="form-control" type="text">
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-md-5 text-right" style="margin-bottom: 4px;">
@@ -261,7 +261,7 @@
                             Save payment method:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px;">
-                            <input id="opcionguardarcard" name="tarjeta[payment]" class="form-control" value="1" type="checkbox">
+                            <input id="opcionguardarcard" name="tarjeta[payment]" class="form-control input-sm" value="1" type="checkbox">
                         </div>
                         <div class="clearfix"></div>
 

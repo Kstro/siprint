@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Orden;
+use DG\ImpresionBundle\Entity\Cliente;
 use DG\ImpresionBundle\Form\OrdenType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\HttpFoundation\Cookie;
