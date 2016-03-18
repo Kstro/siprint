@@ -81,12 +81,7 @@ class SecuredController extends Controller
      */
     public function logoutAction()
     {
-//        if(isset($_COOKIE['expressionsPrint'])){
-//            //Destruccion de la cookie
-//            
-//            unset($_COOKIE['expressionsPrint']);
-//            setcookie('expressionsPrint', null, -1, '/');
-//        }    
+        
     }   
     
     /**

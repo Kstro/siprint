@@ -33,6 +33,36 @@ class UserAccountController extends Controller{
            
         $promotion = $this->get('promotion_img')->searchPromotion();
         
+        if(isset($_COOKIE['expressionsPrint'])){
+            $user_cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                    'usuario'  => $usuario
+                                                                                   ));
+            
+            $registro = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                        'cookie'  => $_COOKIE['expressionsPrint']
+                                                                                       ));
+            
+            if($user_cart == NULL){
+                $registro->setUsuario($usuario);
+            } else {
+                $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $registro));
+                
+                foreach ($products as $key => $product) {
+                    $product->setOrden($user_cart); 
+                    $em->merge($product);
+                    $em->flush();
+                }
+            }                        
+            
+            $registro->setCookie(NULL);
+            $em->merge($registro);
+            $em->flush();
+            
+            //Destruccion de la cookie
+            unset($_COOKIE['expressionsPrint']);
+            setcookie('expressionsPrint', "", time()-3600, "/");
+        }   
+                
         return $this->render(':useraccount:myaccount.html.twig', array(
             'direccion' => $direccions,
             'promotion' => $promotion,

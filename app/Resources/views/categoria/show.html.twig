@@ -170,25 +170,30 @@
                 var total_price = $(".attributes-inf").length;
                 $('.printing-cost').children().children().html('<img style="width:35%; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
                 
+                var parametros = new Array();
+    
                 $(".attributes-inf").each(function(k, va) {
                     if($(this).val() != null) {
-                        acum++;
-                    }    
-                });
-                
-                $(".attributes-inf").each(function(k, va) {
-                    var aux = 0;
-                    if($(this).val() != null) {
-                        aux = $(this).val();
-                        $.post( "{{path('get_attributes_precio')}}", { id: aux }, function( det ) {
-                            total_pagar+= parseFloat(det.values);
-                            console.log(k);
-                            if(k +1 ==  acum){
-                                $('.printing-cost').children().children().html('$ ' + total_pagar.toFixed(2)); 
-                            }    
-                        });
+                        parametros.push($(this).val());
                     }
                 });
+                
+                var data = {request : parametros};
+                console.log(data);
+                $.ajax({
+                    data:  data,
+                    url:   '{{path('get_attribute_precio')}}',
+                    type:  'post',
+                    //beforeSend: function () {
+                    //        $("#resultado").html("Procesando, espere por favor...");
+                    //},
+                    success:  function (response) {
+                        $('.printing-cost').children().children().html('$ ' + response.precio.toFixed(2)); 
+                        console.log(response.precio);
+                    }
+            });
+                
+                console.log(parametros);
             });
             
         });
