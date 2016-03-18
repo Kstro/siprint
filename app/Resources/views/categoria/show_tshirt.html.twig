@@ -1,70 +1,4 @@
 {% extends ':Layout:layout.html.twig' %}
-
-{#{% block css -%}
-    {{parent()}}
-    <style>
-        .acc-title.lg > div:nth-child(2)> a:hover >i {
-            color: #000;
-            opacity:0.6;
-        }
-    </style>
-    
-{% endblock %}
-
-{% block section %}
-    Products & Services
-{% endblock %}
-
-{% block section2 %}
-    Products & Services
-{% endblock %}
-
-{% block sidebar %}
-    <aside id="sidebar_cate" class="col-sm-3 hidden-xs" style="margin-bottom: 100px;">
-        <h3 class="sidebar-title">Category</h3>
-        <ul id="cate_list" class="cate_list">
-            <li class="level0">
-                <a href="{{ path('products_list')}}" title="All products">
-                    <span>All products</span>
-                </a>
-            </li>
-            
-            {% for type in types %}
-                <li class="level0 parent">
-                    <a href="#" title="{{ type.nombre }}">
-                        <span>{{ type.nombre }}</span>
-                        <i class="fa fa-minus"></i><i class="fa fa-plus"></i>
-                    </a>
-                    <ul class="level0">
-                         {% for key, categorium in categorias %}
-                            {% if categorium.categoria.id == type.id %} 
-                                <li class="level1 nav-1-1 first item">
-                                    <a href="" title="{{ categorium.nombre }}" id="{{ categorium.id }}"  class="productLink">
-                                    <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="menu-{{ categorium.id }}">
-                                        {{ categorium.nombre }}
-                                        <span class="count-item">(22)</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-            
-        </ul>
-        <div class="category-left-banner">
-            <a href="#" title="category left banner">
-                {% block img_prom %}
-                    {% if promotion['promotion'] %}
-                        <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
-                    {% else %}    
-                        <img src="http://placehold.it/263x263" alt="promotions">
-                    {% endif %}    
-                {% endblock %}
-            </a>
-        </div>    
-    </aside>
-{% endblock %}#}
 {% block section %}
     T-Shirt Printing / {{ categorium.nombre }}
 {% endblock %}
@@ -75,14 +9,6 @@
 {% block sidebar %}{% endblock %}
 {% block contenido %}
     <div>
-        {#<div class="container-fluid">
-            <div class="row-fluid">
-                <div id="img-tshirt" style="margin-top: 10px; margin-bottom: 10px;">
-                    <img src="{{ asset('Resources/images/banner2.jpg') }}" style="width: 100%; background-size: cover; background-position: center;">
-                </div>
-            </div>
-        </div>
-        </br>#}
         <div class="container">
             <div class="row">
                     <div class="col-md-3">
@@ -162,20 +88,6 @@
                                         </div>  
                                     </div>  
                                     <hr>
-                                    {#<div class="row">
-                                        <div class="col-md-5" style="margin-top: 20px">
-                                            <div class="row">
-                                                <div class="col-md-11 col-md-offset-1">
-                                                    <p>Upload your design</p>
-                                                </div>    
-                                            </div>    
-                                        </div> 
-                                        <div class="col-md-7" style="margin-top: 20px">
-                                            <input type="file" name="file-design" id="file-design" />
-                                        </div>    
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <hr>#}
                                     <div class="row">
                                         <div class="col-md-4  col-md-offset-2 pull-center" style="margin-top: 15px">
                                             <a href="{{ path('dg_general_tshirt_printing') }}">
@@ -201,33 +113,38 @@
     <script type="text/javascript" src="{{ asset('Resources/js/jquery.blockUI.js') }}"></script>  
     <script src="{{ asset('Resources/js/validaciones/carrito_compras.js') }}"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function () {            
             validar();
             $(".attributes-inf").select2();
-            
+            //$(".attributes-inf select").val("");
+            {#var text1 = '';
+            $("select option").filter(function() {
+                //may want to use $.trim in here
+                return $(this).text() == text1; 
+            }).attr('selected', true);#}
+
             $(".attributes-inf" ).change(function() {
-                var total_pagar = 0;
-                var acum = 0;
                 var total_price = $(".attributes-inf").length;
                 $('.printing-cost').children().children().html('<img style="width:35%; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
-                
+                var parametros = new Array();
+    
                 $(".attributes-inf").each(function(k, va) {
                     if($(this).val() != null) {
-                        acum++;
-                    }    
+                        parametros.push($(this).val());
+                    }
                 });
                 
-                $(".attributes-inf").each(function(k, va) {
-                    var aux = 0;
-                    if($(this).val() != null) {
-                        aux = $(this).val();
-                        $.post( "{{path('get_attributes_precio')}}", { id: aux }, function( det ) {
-                            total_pagar+= parseFloat(det.values);
-                            console.log(k);
-                            if(k +1 ==  acum){
-                                $('.printing-cost').children().children().html('$ ' + total_pagar.toFixed(2)); 
-                            }    
-                        });
+                var data = {request : parametros};
+
+                $.ajax({
+                    data:  data,
+                    url:   '{{path('get_attribute_precio')}}',
+                    type:  'post',
+                    //beforeSend: function () {
+                    //        $("#resultado").html("Procesando, espere por favor...");
+                    //},
+                    success:  function (response) {
+                        $('.printing-cost').children().children().html('$ ' + response.precio.toFixed(2)); 
                     }
                 });
             });

@@ -306,6 +306,7 @@
                 var draw = '';
                 var total_attr = 0;
                 var code_promo = $( "#code-promo" ).val();
+                $('.printing-cost').children().html('$ 0.00');
                 $('.attributes-show').children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
                 
                 $.post( "{{path('get_products_store')}}", { id: id, code: code_promo }, function( data ) {
@@ -340,20 +341,40 @@
                             });
                             
                             acum_attr++;
-                            
                             if(acum_attr === total_attr) {
                                 $( ".show-attr" ).show();    
                                 $(".attributes-inf").select2();
                                 $(".attributes-inf" ).change(function() {
                                     var code_promo = $( "#code-promo" ).val();
-                                    
-                                    total_pagar = 0;
-                                    var acum = 0;
                                     var total_price = $(".attributes-inf").length;
-                                    
                                     $('.printing-cost').children().html('<img style="width:30px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
-                                    
+                                    var parametros = new Array();
+    
                                     $(".attributes-inf").each(function(k, va) {
+                                        if($(this).val() != null) {
+                                            parametros.push($(this).val());
+                                        }
+                                    });
+
+                                    var data = {
+                                                request : parametros,
+                                                promo : code_promo
+                                               };
+
+                                    $.ajax({
+                                        data:  data,
+                                        url:   '{{path('get_attributes_precio')}}',
+                                        type:  'post',
+                                        //beforeSend: function () {
+                                        //        $("#resultado").html("Procesando, espere por favor...");
+                                        //},
+                                        success:  function (response) {
+                                            var total = response.precio - response.porcentaje;
+                                            $('.printing-cost').children().html('$ ' + total.toFixed(2));
+                                            //$('.printing-cost').children().children().html('$ ' + response.precio.toFixed(2)); 
+                                        }
+                                    });
+                                    {#$(".attributes-inf").each(function(k, va) {
                                         var aux = 0;
                                         if($(this).val() !== null) {
                                             aux = $(this).val();
@@ -380,7 +401,7 @@
                                                 validar();   
                                         });
                                         
-                                    });
+                                    });#}
                                 });
                                 
                             }  

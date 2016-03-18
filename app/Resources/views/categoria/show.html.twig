@@ -165,11 +165,8 @@
             }).attr('selected', true);#}
 
             $(".attributes-inf" ).change(function() {
-                var total_pagar = 0;
-                var acum = 0;
                 var total_price = $(".attributes-inf").length;
                 $('.printing-cost').children().children().html('<img style="width:35%; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
-                
                 var parametros = new Array();
     
                 $(".attributes-inf").each(function(k, va) {
@@ -179,7 +176,7 @@
                 });
                 
                 var data = {request : parametros};
-                console.log(data);
+
                 $.ajax({
                     data:  data,
                     url:   '{{path('get_attribute_precio')}}',
@@ -189,11 +186,8 @@
                     //},
                     success:  function (response) {
                         $('.printing-cost').children().children().html('$ ' + response.precio.toFixed(2)); 
-                        console.log(response.precio);
                     }
-            });
-                
-                console.log(parametros);
+                });
             });
             
         });

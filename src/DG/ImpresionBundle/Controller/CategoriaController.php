@@ -998,59 +998,44 @@ class CategoriaController extends Controller
     *  
     * @Route("/attributes/getPrecio", name="get_attributes_precio")
     */
-    public function attributesValuesAction()
+    public function attributesValuesAction(Request $request)
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
-            $id = $this->get('request')->request->get('id');
-            $code = $this->get('request')->request->get('code');
-            
-            $em = $this->getDoctrine()->getManager();            
+            $em = $this->getDoctrine()->getManager();    
+            $data = $request->request->get('request');
+            $code = $request->request->get('code_promo');
             $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
-            //var_dump($promo);
             $porcentaje = 0;
+            $total = 0;
             
             if( $promo != NULL && $code != '' ){
                 $porcentaje = $promo->getPorcentaje();
             } 
             
-            if($id == 0){
-                $param[0] = 0;
-                $response = new JsonResponse();
-                $response->setData(array(
-                           'flag' => 0
-                    ));    
-                
-                return $response; 
-            } else {
-            
-                $em = $this->getDoctrine()->getManager();            
-                //$cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
-
+            foreach ($data as $key => $value) {
                 $rsm = new ResultSetMapping();
                 $sql = "select op.costo as precio "
                         . "from opcion_producto op "
                         . "where op.id = ? ";
 
                 $rsm->addScalarResult('precio','precio');
-
                 $query = $em->createNativeQuery($sql, $rsm);
-                $query->setParameter(1, $id);
+                $query->setParameter(1, $value);
                 $param = $query->getSingleResult();
-
-               // var_dump($param);
                 
-                $response = new JsonResponse();
-                $response->setData(array(
-                               'id'         => $id,
-                               'values'     => $param['precio'],
-                               'porcentaje' => $porcentaje,
-                               'flag'       => 1
-                        )); 
-
-                return $response; 
+                $total+=$param['precio'];
             }
             
+            $response = new JsonResponse();
+            $response->setData(array(
+                           'data'         => $data,
+                           'precio'     => $total,
+                           'porcentaje' => $porcentaje,
+                           'flag'       => 1
+                    )); 
+
+            return $response; 
         } else {    
             return new Response('0');              
         }  
