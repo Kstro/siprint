@@ -44,8 +44,13 @@ class UserAccountController extends Controller{
             
             if($user_cart == NULL){
                 $registro->setUsuario($usuario);
+                
+                $cliente = $em->getRepository('DGImpresionBundle:Cliente')->findOneBy(array('persona' => $usuario->getPersona()));
+                $registro->setCliente($cliente);
+                
             } else {
                 $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $registro));
+                $registro->setEstado('zz');
                 
                 foreach ($products as $key => $product) {
                     $product->setOrden($user_cart); 

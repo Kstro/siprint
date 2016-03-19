@@ -322,21 +322,21 @@ class OrdenController extends Controller
                                                                                     'cookie'  => $_COOKIE['expressionsPrint']
                                                                                    ));
         } else {
-//            $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
-//                                                                                    'usuario'  => $usuario
-//                                                                                   ));
+            $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                    'usuario'  => $usuario
+                                                                                   ));
             
-            $dql = "SELECT ca "
-                    . "FROM DGImpresionBundle:DetalleOrden do "
-                    . "INNER JOIN do.categoria ca ";
-                    //. "INNER JOIN do.orden or "
-                    //. "WHERE or.estado = :estado "
-                    //. "AND or.usuario = :usuario ";
+//            $dql = "SELECT ca "
+//                    . "FROM DGImpresionBundle:DetalleOrden do "
+//                    . "INNER JOIN do.categoria ca "
+//                    . "INNER JOIN do.orden or "
+//                    . "WHERE or.estado = :estado "
+//                    . "AND or.usuario = :usuario ";
 
-            $cart = $em->createQuery($dql)
-                       ->setParameters(array('estado' => 'ca'))
-                       ->setParameters(array('usuario' => $usuario))
-                       ->getResult();   
+//            $cart = $em->createQuery($dql)
+//                       ->setParameters(array('estado' => 'ca'))
+//                       ->setParameters(array('usuario' => $usuario))
+//                       ->getResult();   
         }
         
         
@@ -609,10 +609,7 @@ class OrdenController extends Controller
 
                 if($usuario != 'anon.') {
                     $orden->setUsuario($usuario);
-                    
-                    //$cliente = $em->getRepository('DGImpresionBundle:Cliente')->findOneBy(array('persona' => $usuario->getPersona()));
-                    //$orden->setCliente($cliente);
-                }
+                                    }
 
                 if($direccionEnvio != NULL) {
                     $orden->setDireccionEnvio($direccionEnvio);
@@ -645,6 +642,9 @@ class OrdenController extends Controller
             
             if($cart == NULL){
                 $orden = $orden->setUsuario($usuario);
+                
+                $cliente = $em->getRepository('DGImpresionBundle:Cliente')->findOneBy(array('persona' => $usuario->getPersona()));
+                $orden->setCliente($cliente);
                 
                 if($direccionEnvio != NULL) {
                     $orden->setDireccionEnvio($direccionEnvio);
@@ -856,6 +856,7 @@ class OrdenController extends Controller
     public function checkoutAction(Request $request, $orden)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $authorizationChecker = $this->get('security.authorization_checker');
         
         $em = $this->getDoctrine()->getManager();
         $registro = $em->getRepository('DGImpresionBundle:Orden')->find($orden);
@@ -864,11 +865,34 @@ class OrdenController extends Controller
         $tarjetas = $em->getRepository('DGImpresionBundle:Tarjeta')->findBy(array('usuario'=>$user->getId()));
         
         if(isset($_COOKIE['expressionsPrint'])){
-            //var_dump($_COOKIE['expressionsPrint']);
-            $registro->setCookie(NULL);
-            $registro->setUsuario($user);
-            $em->merge($registro);
-            $em->flush();
+            if(true === $authorizationChecker->isGranted('ROLE_USER')){
+                $user_cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+                                                                                    'usuario'  => $user
+                                                                                   ));
+            
+                                                                                   
+                
+                if($user_cart == NULL){
+                    $registro->setUsuario($user);
+
+                    $cliente = $em->getRepository('DGImpresionBundle:Cliente')->findOneBy(array('persona' => $user->getPersona()));
+                    $registro->setCliente($cliente);
+                    $em->merge($registro);
+                    $em->flush();
+                
+                } else {
+                    $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $registro));
+                    $registro->setEstado('zz');
+
+                    foreach ($products as $key => $product) {
+                        $product->setOrden($user_cart); 
+                        $em->merge($product);
+                        $em->flush();
+                    }
+                    
+                    $registro = $user_cart;
+                } 
+            }
             
             //Destruccion de la cookie
             unset($_COOKIE['expressionsPrint']);
