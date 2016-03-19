@@ -124,44 +124,63 @@ class OrdenController extends Controller
         
         if ($form->isSubmitted() && $form->isValid()) {
             $parameters = $request->request->all();
+           
+            if($parameters['code-promo'] != 0){
+                $promocion = $em->getRepository('DGImpresionBundle:Promocion')->find($parameters['code-promo']);
+                $orden->setPromocion($promocion);
+            }
             
             // Si se va a registrar a un cliente existente a la venta
             if($parameters['customer'] == 'cu-exist'){
-                $cliente = $em->getRepository('DGImpresionBundle:Persona')->find($parameters['orden']['cliente']);
+                $cliente = $em->getRepository('DGImpresionBundle:Cliente')->find($parameters['orden']['cliente']);
                 $orden->setCliente($cliente);
                 
                 // Si se va a registrar una direccion existente del cliente
-                if($parameters['address'] == 'ad-exist'){ 
-                    $direccion = $em->getRepository('DGImpresionBundle:Direccion')->find($parameters['orden']['direccionEnvio']);
-                    $orden->setDireccionEnvio($direccion);
-                    
-                // Si se va a registrar una nueva direccion del cliente
-                } else {
-                    $direccion = new \DG\ImpresionBundle\Entity\Direccion();
-                    
-                    $direccion->setName($parameters['direccion']['name']);
-                    $direccion->setLinea1($parameters['direccion']['linea1']);
-                    $direccion->setLinea2($parameters['direccion']['linea2']);
-                    $direccion->setCity($parameters['direccion']['city']);
-                    $direccion->setState($parameters['direccion']['state']);
-                    $direccion->setCountry($parameters['direccion']['country']);
-                    $direccion->setPhoneNumber($parameters['direccion']['phoneNumber']);
-                    $direccion->setZipCode($parameters['direccion']['zipCode']);
-                    $direccion->setSecurityAccessCode($parameters['direccion']['securityAccessCode']);
-                    $direccion->setDefaultDir(1);
-                    
-                    $em->persist($direccion);
-                    $em->flush();
-                    $orden->setDireccionEnvio($direccion);
+                if(isset($parameters['address'])){
+                    if($parameters['address'] == 'ad-exist'){ 
+                        $direccion = $em->getRepository('DGImpresionBundle:Direccion')->find($parameters['orden']['direccionEnvio']);
+                        $orden->setDireccionEnvio($direccion);
+
+                    // Si se va a registrar una nueva direccion del cliente
+                    } else {
+                        $direccion = new \DG\ImpresionBundle\Entity\Direccion();
+
+                        $direccion->setName($parameters['direccion']['name']);
+                        $direccion->setLinea1($parameters['direccion']['linea1']);
+                        $direccion->setLinea2($parameters['direccion']['linea2']);
+                        $direccion->setCity($parameters['direccion']['city']);
+                        $direccion->setState($parameters['direccion']['state']);
+                        $direccion->setCountry($parameters['direccion']['country']);
+                        $direccion->setPhoneNumber($parameters['direccion']['phoneNumber']);
+                        $direccion->setZipCode($parameters['direccion']['zipCode']);
+                        $direccion->setSecurityAccessCode($parameters['direccion']['securityAccessCode']);
+                        $direccion->setDefaultDir(1);
+
+                        $em->persist($direccion);
+                        $em->flush();
+                        $orden->setDireccionEnvio($direccion);
+                    }
                 }
-                
             // Si se va a registrar un nuevo cliente a la venta    
             } else {
-                $cliente = new \DG\ImpresionBundle\Entity\Persona();
-                $cliente->setNombres($parameters['cliente']['first_name']);
-                $cliente->setApellidos($parameters['cliente']['last_name']);
-                $cliente->setTelefono($parameters['cliente']['phone']);
+                $persona = new \DG\ImpresionBundle\Entity\Persona();
+                $persona->setNombres($parameters['cliente']['first_name']);
+                $persona->setApellidos($parameters['cliente']['last_name']);
+                $persona->setTelefono($parameters['cliente']['phone']);
+                $persona->setEstado(1);
+                $em->persist($persona);
+                $em->flush();
+                
+                $cliente = new \DG\ImpresionBundle\Entity\Cliente();
+                $cliente->setPersona($persona);
                 $cliente->setEstado(1);
+                $cliente->setTelefono($parameters['cliente']['phone-2']);
+                $cliente->setEmail($parameters['cliente']['email']);
+                $cliente->setOtro($parameters['cliente']['other']);
+                $em->persist($cliente);
+                $em->flush();
+                
+                $orden->setCliente($cliente);
                 
                 if(isset($direccion)){
                     $em->persist($direccion);
@@ -191,7 +210,7 @@ class OrdenController extends Controller
             $orden->setEstado('sas');
             
             if($parameters['code-promo'] != ''){
-                $promocion = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $parameters['code-promo']));
+                $promocion = $em->getRepository('DGImpresionBundle:Promocion')->find($parameters['code-promo']);
                 
                 if($promocion != NULL) { 
                     $orden->setPorcentaje($promocion->getPorcentaje());
@@ -303,9 +322,21 @@ class OrdenController extends Controller
                                                                                     'cookie'  => $_COOKIE['expressionsPrint']
                                                                                    ));
         } else {
-            $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
-                                                                                    'usuario'  => $usuario
-                                                                                   ));
+//            $cart = $em->getRepository('DGImpresionBundle:Orden')->findOneBy(array('estado'   => 'ca',
+//                                                                                    'usuario'  => $usuario
+//                                                                                   ));
+            
+            $dql = "SELECT ca "
+                    . "FROM DGImpresionBundle:DetalleOrden do "
+                    . "INNER JOIN do.categoria ca ";
+                    //. "INNER JOIN do.orden or "
+                    //. "WHERE or.estado = :estado "
+                    //. "AND or.usuario = :usuario ";
+
+            $cart = $em->createQuery($dql)
+                       ->setParameters(array('estado' => 'ca'))
+                       ->setParameters(array('usuario' => $usuario))
+                       ->getResult();   
         }
         
         
@@ -578,6 +609,9 @@ class OrdenController extends Controller
 
                 if($usuario != 'anon.') {
                     $orden->setUsuario($usuario);
+                    
+                    //$cliente = $em->getRepository('DGImpresionBundle:Cliente')->findOneBy(array('persona' => $usuario->getPersona()));
+                    //$orden->setCliente($cliente);
                 }
 
                 if($direccionEnvio != NULL) {
@@ -681,10 +715,6 @@ class OrdenController extends Controller
         $em->merge($detalleorden);
         $em->flush();
         
-        //$types = $em->getRepository('DGImpresionBundle:Categoria')->findBy(array('categoria' => NULL,
-        //                                                                         'estado'    => 1
-        //                                                                        ));
-
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NULL "
@@ -1123,12 +1153,7 @@ class OrdenController extends Controller
                 'flag' => -1,
             ));    
         }
-//        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findAll();
-//        $promotion = $this->get('promotion_img')->searchPromotion();
-
-        return $response; 
-
-    }
         
-    
+        return $response; 
+    }            
 }

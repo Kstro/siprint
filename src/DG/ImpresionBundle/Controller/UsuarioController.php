@@ -295,6 +295,7 @@ class UsuarioController extends Controller
                     
                     $cliente = new Cliente();
                     $cliente->setEstado(1);
+                    $cliente->setEmail($_POST['email']);
                     $cliente->setPersona($persona);
                     $em->persist($cliente);
                     $em->flush();

@@ -74,6 +74,18 @@
     </div>
     {% if is_granted('ROLE_USER') %}
         <div class="form-edit-info" style="padding-top: 20px;">
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1" >
+                    <span style="font-size: 20px;"><strong>Total sale: </strong>$ {{ totalOrden|number_format(2,'.',',') }}</span>
+                </div>
+                <div class="col-md-3" >
+                    <span style="font-size: 20px;"><strong>Tax (8.5%): </strong>$ {{ (totalOrden * 0.085)|number_format(2,'.',',') }}</span>
+                </div>    
+                <div class="col-md-4" >    
+                    <span style="font-size: 20px;"><strong>Total amount: </strong>$ {{ (totalOrden * 1.085)|number_format(2,'.',',') }}</span>
+                </div>
+            </div>
+            <hr>    
             <div class="col-md-5 text-right" style="margin-bottom: 45px;"><label>Shipping address: </label> </div>
             <div class="col-md-6" style="margin-bottom: 45px;">
                 <select id="selectDirecciones" class="form-control">
@@ -271,7 +283,7 @@
                             Total order $:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px; margin-top: 15px;">
-                            <input id="total" readonly value="{{totalOrden|number_format(2,'.',',')}}" name="amount[amount]" class="form-control" type="text">
+                            <input id="total" readonly value="{{ (totalOrden * 1.085 )|number_format(2,'.',',')}}" name="amount[amount]" class="form-control" type="text">
                         </div>
                         <div class="clearfix"></div>
 
@@ -805,7 +817,7 @@
             $('#stripe_view_credit_cart_expiration_month').hide();
             $('#stripe_view_credit_cart_expiration_year').hide();
             $('#payment-submit').addClass('btn btn-success');
-            $('#stripe_view_amount').val({{totalOrden*100}});
+            $('#stripe_view_amount').val({{totalOrden*100*1.085}});
             $('#stripe_view_order').val({{ordenId}});
 
 

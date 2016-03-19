@@ -70,10 +70,28 @@
                             <input id="last_name" name="cliente[last_name]" maxlength="200" class="form-control input-sm" type="text">
                         </div>
                         <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
-                            Phone:
+                            Phone 1:
                         </div>
                         <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
                             <input id="phone" name="cliente[phone]" maxlength="200" class="form-control input-sm" type="text">
+                        </div>
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            Email:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            <input id="email" name="cliente[email]" maxlength="200" class="form-control input-sm" type="text">
+                        </div>
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            Phone 2:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            <input id="phone-2" name="cliente[phone-2]" maxlength="200" class="form-control input-sm" type="text">
+                        </div>
+                        <div class="col-md-2 col-sm-2 text-right" style="margin-bottom: 4px;">
+                            Other:
+                        </div>
+                        <div class="col-md-4 col-sm-4" style="margin-bottom: 4px;">
+                            <input id="other" name="cliente[other]" maxlength="200" class="form-control input-sm" type="text">
                         </div>
                     </div>
                     <div class="clearfix"></div>   
@@ -357,9 +375,9 @@
                                     });
 
                                     var data = {
-                                                request : parametros,
-                                                promo : code_promo
-                                               };
+                                                   request : parametros,
+                                                   promo : code_promo
+                                              };
 
                                     $.ajax({
                                         data:  data,
@@ -369,41 +387,11 @@
                                         //        $("#resultado").html("Procesando, espere por favor...");
                                         //},
                                         success:  function (response) {
-                                            var total = response.precio - response.porcentaje;
+                                            var total = response.precio - ((response.precio * response.porcentaje)/100);
                                             $('.printing-cost').children().html('$ ' + total.toFixed(2));
-                                            //$('.printing-cost').children().children().html('$ ' + response.precio.toFixed(2)); 
                                         }
                                     });
-                                    {#$(".attributes-inf").each(function(k, va) {
-                                        var aux = 0;
-                                        if($(this).val() !== null) {
-                                            aux = $(this).val();
-                                        }
-                                        //console.log($(this).val());
-                                        $.post( "{{path('get_attributes_precio')}}", { id: aux, code: code_promo }, function( det ) {
-                                            //console.log(det);
-                                            acum++;
-                                            
-                                            if(det.flag === 0) {
-                                                total_pagar+= 0;
-                                            }
-                                            else {
-                                                total_pagar+= parseFloat(det.values);
-                                            } 
-                                            //total = total_pagar;
-                                            
-                                            total = total_pagar - ((det.porcentaje * total_pagar)/100);
-                                            //alert(total);
-                                            if(total_price === acum )
-                                                //alert(det.porcentaje);
-                                                $('.printing-cost').children().html('$ ' + total.toFixed(2));
-                                                //$('.printing-cost').children().html('$ ' + total_pagar.toFixed(2));
-                                                validar();   
-                                        });
-                                        
-                                    });#}
                                 });
-                                
                             }  
                         });
                         
@@ -414,10 +402,7 @@
                     });  
                     
                     draw+='<div class="clearfix"></div>';
-                 
-                    
                     document.getElementById('show-attr').innerHTML = draw;                        
-                    
                 }, "json"); // Fin de post 
             });
             

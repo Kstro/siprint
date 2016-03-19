@@ -41,8 +41,10 @@
             <thead>
                 <tr>
                     <th>Date</th>
-                    {#<th>Customer name</th>#}
-                    <th>Amount</th>
+                    <th>Customer name</th>
+                    <th>Total sales</th>
+                    <th>Tax</th>
+                    <th>Total amount</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -50,7 +52,7 @@
                 {% for sale in sales %}
                 <tr>
                     <td class="text-center">{% if sale.fechaOrden %}{{ sale.fechaOrden|date('F d, Y') }}{% endif %}</td>
-                    {#<td>{{ sale.cliente }}</td>#}
+                    <td>{{ sale.cliente }}</td>
                     <td class="text-right">
                         {% set monto = 0 %}
                         {% for design in sale.detalleOrden %}
@@ -60,6 +62,14 @@
                             {% set monto = monto - ((sale.promocion.porcentaje * monto) / 100 ) %}
                         {% endif %}
                         $ {{ monto|number_format('2','.',',') }}
+                    </td>
+                    <td class="text-right">
+                        {% set monto_tax = monto * 0.085 %}
+                        $ {{ monto_tax|number_format('2','.',',') }}
+                    </td>
+                    <td class="text-right">
+                        {% set monto_total = monto_tax + monto %}
+                        $ {{ monto_total|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">
                         {#<a  class="export"  href="" style="margin-top: 3px;">

@@ -1004,8 +1004,9 @@ class CategoriaController extends Controller
         if($isAjax){
             $em = $this->getDoctrine()->getManager();    
             $data = $request->request->get('request');
-            $code = $request->request->get('code_promo');
-            $promo = $em->getRepository('DGImpresionBundle:Promocion')->findOneBy(array('codigo' => $code));
+            $code = $request->request->get('promo');
+            
+            $promo = $em->getRepository('DGImpresionBundle:Promocion')->find($code);
             $porcentaje = 0;
             $total = 0;
             
