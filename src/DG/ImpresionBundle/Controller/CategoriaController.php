@@ -565,10 +565,46 @@ class CategoriaController extends Controller
         $editForm = $this->createForm('DG\ImpresionBundle\Form\CategoriaType', $categorium);
         $editForm->handleRequest($request);
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $rsm = new ResultSetMapping();
+        $sql = "select p.id as idParam, p.nombre as parametro "
+                . "from categoria_parametro cp inner join parametro p on cp.parametro = p.id "
+                . "where cp.categoria = ? ";
+
+        $rsm->addScalarResult('idParam','idParam');
+        $rsm->addScalarResult('parametro','parametro');
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter(1, $categorium->getId());
+        $atributes = $query->getResult();
+        
+        $opciones = array();
+        foreach ($atributes as $value) {
+            $rsm2 = new ResultSetMapping();
+            $sql = "select dp.parametro as parametro, dp.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
+                    . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
+                    . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
+                    . "where dp.parametro = ? and op.categoria = ? ";
+
+            $rsm2->addScalarResult('parametro','parametro');
+            $rsm2->addScalarResult('idValorParam','idValorParam');
+            $rsm2->addScalarResult('valorParam','valorParam');
+            $rsm2->addScalarResult('precio','precio');
+            $rsm2->addScalarResult('tipo','tipo');
+            $query2 = $em->createNativeQuery($sql, $rsm2);
+            $query2->setParameter(1, $value['idParam']);
+            $query2->setParameter(2, $categorium->getId());
+            $param = $query2->getResult(); 
+            array_push($opciones, $param);
+        }
+         
+        var_dump($opciones);
+        die();
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($categorium);
-            $em->flush();
+            //$em->persist($categorium);
+            //$em->flush();
             
             if($categorium->getFile()!=null){
                 $path = $this->container->getParameter('photo.promotion');
@@ -576,15 +612,17 @@ class CategoriaController extends Controller
                 $fecha = date('Y-m-d His');
                 $extension = $categorium->getFile()->getClientOriginalExtension();
                 $nombreArchivo = "promotion_".$fecha.".".$extension;
-                $em->persist($categorium);
-                $em->flush();
+                //$em->persist($categorium);
+                //$em->flush();
                 //var_dump($path.$nombreArchivo);
 
                 $categorium->setImagen($nombreArchivo);
                 $categorium->getFile()->move($path,$nombreArchivo);
-                $em->persist($categorium);
-                $em->flush();
+                //$em->persist($categorium);
+                //$em->flush();
                 
+                
+                    
                 if(isset($parameters['chk'])){
                     $detalle = 0;
                     foreach ($parameters['chk'] as $key => $value) {
@@ -618,7 +656,7 @@ class CategoriaController extends Controller
             return $this->redirectToRoute('categoria_index');
         }
 
-        $em = $this->getDoctrine()->getManager();
+//        $em = $this->getDoctrine()->getManager();
         
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Parametro p "
@@ -637,36 +675,6 @@ class CategoriaController extends Controller
         //   var_dump($attr_val);
         //$prod = $em->getRepository('DGImpresionBundle:Categoria')->find($categorium->getId());
         
-        $rsm = new ResultSetMapping();
-        $sql = "select p.id as idParam, p.nombre as parametro "
-                . "from categoria_parametro cp inner join parametro p on cp.parametro = p.id "
-                . "where cp.categoria = ? ";
-
-        $rsm->addScalarResult('idParam','idParam');
-        $rsm->addScalarResult('parametro','parametro');
-        $query = $em->createNativeQuery($sql, $rsm);
-        $query->setParameter(1, $categorium->getId());
-        $atributes = $query->getResult();
-        
-        $opciones = array();
-        foreach ($atributes as $value) {
-            $rsm2 = new ResultSetMapping();
-            $sql = "select dp.parametro as parametro, dp.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
-                    . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
-                    . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? and op.categoria = ? ";
-
-            $rsm2->addScalarResult('parametro','parametro');
-            $rsm2->addScalarResult('idValorParam','idValorParam');
-            $rsm2->addScalarResult('valorParam','valorParam');
-            $rsm2->addScalarResult('precio','precio');
-            $rsm2->addScalarResult('tipo','tipo');
-            $query2 = $em->createNativeQuery($sql, $rsm2);
-            $query2->setParameter(1, $value['idParam']);
-            $query2->setParameter(2, $categorium->getId());
-            $param = $query2->getResult(); 
-            array_push($opciones, $param);
-        }
         //var_dump($opciones);
         return $this->render('categoria/edit.html.twig', array(
             'categorium' => $categorium,

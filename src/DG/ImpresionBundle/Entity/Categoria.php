@@ -31,6 +31,13 @@ class Categoria
     private $nombre;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=1200, nullable=true)
+     */
+    private $descripcion;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean", nullable=false)
@@ -122,6 +129,30 @@ class Categoria
     public function getNombre()
     {
         return $this->nombre;
+    }
+    
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Categoria
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**

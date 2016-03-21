@@ -46,7 +46,7 @@
         <div class="db-address col-xs-12" style="margin-top: 20px;">
             <h4 class="acc-title">
                 <div class="col-md-3">
-                    Order # {{ord.id}}
+                    Order # ON{{ord.id}}
                 </div>
                 <div class="col-md-4 text-right">
                     {% for product in products %}
@@ -124,7 +124,7 @@
                                     <div class="short-description">
                                         {% for r in row.atributoProductoOrden %}
                                             <div style="cursor: default;" class=" fa fa-check-square-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
-                                                {{ r.detalleParametro }}
+                                                {{ r.opcionProducto.detalleParametro }}
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -277,10 +277,8 @@
             
             $('.opciones').click(function(){
                     var id = $(this).val();
-                    var url = Routing.generate('admin_reporte_invoice', {'id': id});
-                    window.open(url,'_blank');
-                
-                
+                    var url = Routing.generate('admin_reporte_invoice', {'id': id, 'tipo': 2});
+                    window.open(url,'_blank');                
                 });    
         });//Fin document ready        
     </script>

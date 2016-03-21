@@ -39,11 +39,20 @@
             </div>    
             <div class="clearfix"></div>#}
             <div class="name-pr">
-                <div class="col-md-3 col-xs-3 text-right" >
+                <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px; margin-top: 6px;">
                     Name:
                 </div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-6 col-xs-6" style="margin-bottom: 6px; margin-top: 6px;">
                     {{ form_widget(form.nombre) }}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="descripcion-pr">
+                <div class="col-md-3 col-xs-3 text-right" >
+                    description:
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    {{ form_widget(form.descripcion) }}
                 </div>
             </div>
             <div class="clearfix"></div>
