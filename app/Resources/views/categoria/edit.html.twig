@@ -1,8 +1,7 @@
-
+{% extends ':Layout:layout.html.twig' %}
 
 {% block css %}
-    
-    
+    {{parent()}}
     <style>
         .parametros input{
 {#            margin: 3%;#}
@@ -12,153 +11,176 @@
             margin-left:10px;
             margin-right:10px;
         }
-    </style>
-    
+    </style>    
 {% endblock %}
-    
-{% block body %}
-    
+{% block section %}
+    Products
+{% endblock %}
 
-    {{ form_start(edit_form, {'action': path('categoria_edit',{'id':categorium.id})}) }}
-    {{ form_errors(edit_form) }}
-        <div >
-            <div class="category-pr">
-                <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px; margin-top: 6px;">
-                    Category:
+{% block section2 %}
+    Products / Edit
+{% endblock %}
+
+{% block img_prom %}
+    {% if promotion['promotion'] %}
+        <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+    {% else %}    
+        <img src="http://placehold.it/263x263" alt="promotions">
+    {% endif %}    
+{% endblock %}    
+{% block contenido %}
+    <div id="resultado"></div>
+    <div class="acc-title lg">
+        <div class="col-md-5 pull-left">
+            <h3 class="" style="color:#FFF;">Categories and products</h3>
+        </div>
+    </div>
+    <div class="form-edit-info">
+        {{ form_start(edit_form, {'action': path('categoria_edit',{'id':categorium.id})}) }}
+        {{ form_errors(edit_form) }}
+        <div style="margin-top: 25px;">
+                <div class="category-pr">
+                    <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px; margin-top: 6px;">
+                        Category:
+                    </div>
+                    <div class="col-md-6 col-xs-6" style="margin-bottom: 6px; margin-top: 6px;">
+                        {{ form_widget(edit_form.categoria) }}
+                    </div>
+                </div>    
+                <div class="clearfix"></div>
+                <div class="name-pr">
+                    <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px; margin-top: 6px;">
+                        Name:
+                    </div>
+                    <div class="col-md-6 col-xs-6" style="margin-bottom: 6px; margin-top: 6px;">
+                        {{ form_widget(edit_form.nombre) }}
+                    </div>
                 </div>
-                <div class="col-md-6 col-xs-6" style="margin-bottom: 6px; margin-top: 6px;">
+                <div class="clearfix"></div>
+                <div class="descripcion-pr">
+                    <div class="col-md-3 col-xs-3 text-right" >
+                        Description:
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        {{ form_widget(edit_form.descripcion) }}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+
+                {#<div class="col-md-6 text-right">
+                    Tipo categoria:
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_widget(form.tipoCategoria) }}
+                </div>
+                #}
+
+
+                {#<div class="col-md-5 col-xs-5 text-right" style="margin-top: 20px;">
+                    Categoria:
+                </div>
+                <div class="col-md-7 col-xs-7" style="margin-top: 20px;">
                     {{ form_widget(edit_form.categoria) }}
                 </div>
-            </div>    
-            <div class="clearfix"></div>
-            <div class="name-pr">
-                <div class="col-md-3 col-xs-3 text-right" style="margin-bottom: 6px; margin-top: 6px;">
-                    Name:
+
+                <div class="clearfix"></div>    #}      
+                <div class="text-center photo-pr">
+                    <div class="col-md-3 text-right" style="margin-bottom: 4px;">
+                        Photo product:
+                    </div>   
+                    <div class="col-md-9 text-left" style=" margin-top: 10px;">
+                        {{ form_widget(edit_form.file) }}
+                    </div>
                 </div>
-                <div class="col-md-6 col-xs-6" style="margin-bottom: 6px; margin-top: 6px;">
-                    {{ form_widget(edit_form.nombre) }}
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="descripcion-pr">
-                <div class="col-md-3 col-xs-3 text-right" >
-                    description:
-                </div>
-                <div class="col-md-6 col-xs-6">
-                    {{ form_widget(edit_form.descripcion) }}
-                </div>
-            </div>
-            <div class="clearfix"></div>
-            
-            
-            {#<div class="col-md-6 text-right">
-                Tipo categoria:
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                {{ form_widget(form.tipoCategoria) }}
-            </div>
-            #}
-            
-            
-            {#<div class="col-md-5 col-xs-5 text-right" style="margin-top: 20px;">
-                Categoria:
-            </div>
-            <div class="col-md-7 col-xs-7" style="margin-top: 20px;">
-                {{ form_widget(edit_form.categoria) }}
-            </div>
-            
-            <div class="clearfix"></div>    #}      
-            <div class="text-center photo-pr">
-                <div class="col-md-3 text-right" style="margin-bottom: 4px;">
-                    Photo product:
-                </div>   
-                <div class="col-md-9 text-left" style=" margin-top: 10px;">
-                    {{ form_widget(edit_form.file) }}
-                </div>
-            </div>
-            <div class="clearfix"></div>    
-            <div class="attributes-pr">
-                <div class="col-md-12 text-center" style="margin-top: 20px;">
-                    <p><strong>Attributes:</strong></p>
+                <div class="clearfix"></div>    
+                <div class="attributes-pr" style="margin-top: 35px;">
+                    <hr>
+                    <div class="col-md-12 text-center" style="margin-bottom: 20px;">
+                        <p><strong>Attributes:</strong></p>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="col-md-11 col-xs-12 col-md-offset-1" style="margin-bottom: 20px;">
+                        <div class="row">
+                            {% for key, atributo in atributos %}
+
+                                <div class="col-md-4">
+                                    <p><strong>{{ atributo.nombre }}</strong></p>
+
+                                    {% for attr in attr_val %}
+                                        {% if attr.idpar == atributo.id %}
+                                            <div id="capa" class="row" style="margin-bottom: 3px;">
+                                                <div class="col-md-1">
+                                                    {% if key == 0 %}
+                                                        <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo-0" value="{{ attr.iddp }}">
+                                                    {% else %}    
+                                                        <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo" value="{{ attr.iddp }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>{{ attr.nomdp }}</label>
+                                                </div>
+
+                                                <div id="capa-text-{{ attr.iddp }}" class="col-md-4" style="display: none">
+                                                    <input type="text" id="costo-{{ attr.iddp }}" name="costo[{{ attr.iddp }}]" class="form-control costo-attr" placeholder="$">
+                                                </div>    
+                                            </div>
+                                        {% endif %}      
+                                    {% endfor %}      
+                                </div>
+                                {% if loop.index is divisibleby(3) %}
+                                    <div class="clearfix"></div>
+                                {% endif %}          
+                            {% endfor %}  
+                        </div>
+                    </div>
+                    {#<div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
+                        {{ form_widget(form.parametro) }}
+                    </div>#}
                 </div>
 
                 <div class="clearfix"></div>
-                <hr>
-                <div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
-                    <div class="row">
-                        {% for key, atributo in atributos %}
-                            
-                            <div class="col-md-4">
-                                <p><strong>{{ atributo.nombre }}</strong></p>
-                                
-                                {% for attr in attr_val %}
-                                    {% if attr.idpar == atributo.id %}
-                                        <div id="capa" class="row" style="margin-bottom: 3px;">
-                                            <div class="col-md-1">
-                                                {% if key == 0 %}
-                                                    <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo-0" value="{{ attr.iddp }}">
-                                                {% else %}    
-                                                    <input type="checkbox" id="chk-{{ attr.iddp }}" name="chk[]" class="valor-atributo" value="{{ attr.iddp }}">
-                                                {% endif %}
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>{{ attr.nomdp }}</label>
-                                            </div>
-                                            
-                                            <div id="capa-text-{{ attr.iddp }}" class="col-md-4" style="display: none">
-                                                <input type="text" id="costo-{{ attr.iddp }}" name="costo[{{ attr.iddp }}]" class="form-control costo-attr" placeholder="$">
-                                            </div>    
-                                        </div>
-                                    {% endif %}      
-                                {% endfor %}      
-                            </div>
-                            {% if loop.index is divisibleby(3) %}
-                                <div class="clearfix"></div>
-                            {% endif %}          
-                        {% endfor %}  
-                    </div>
-                </div>
+
                 {#<div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
-                    {{ form_widget(form.parametro) }}
+                    {{ form_widget(edit_form.parametro) }}
+
                 </div>#}
-            </div>
-            
-            <div class="clearfix"></div>
-            
-            {#<div class="col-md-12 col-xs-12" style="margin-top: 20px;margin-bottom: 20px;">
-                {{ form_widget(edit_form.parametro) }}
 
-            </div>#}
-            
-            {#<div class="clearfix"></div>#}
-            {#<div class="col-md-6 text-right">
-                Formato plantilla:
+                {#<div class="clearfix"></div>#}
+                {#<div class="col-md-6 text-right">
+                    Formato plantilla:
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_widget(form.formatoPlantilla) }}
+                </div>
+
+                <div class="clearfix"></div>#}
+
+                {#<div class="col-md-6 text-right">
+                    Detalle:
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_widget(form.detalleCategoria) }}
+                </div>#}
+
             </div>
-            <div class="col-xs-12 col-sm-4">
-                {{ form_widget(form.formatoPlantilla) }}
+
+            <hr>
+            <div>
+                <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
+                <input type="submit" value="Back" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
             </div>
-            
-            <div class="clearfix"></div>#}
-            
-            {#<div class="col-md-6 text-right">
-                Detalle:
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                {{ form_widget(form.detalleCategoria) }}
-            </div>#}
-            
-        </div>
-        
-            
+                
+
+        {{ form_end(edit_form) }}
+    </div>            
     
-        <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
-
-    {{ form_end(edit_form) }}
 
 {% endblock %}
-{% block javascripts %}
+{% block javascripts_step %}
+    {{parent()}}
    <script src="{{ asset('Resources/js/validaciones/categoria.js') }}"></script>
-
    <script>
         $(document).ready(function(){
             validar(); 
@@ -171,7 +193,7 @@
                     $('#costo-{{ opcion.idValorParam }}').val({{ opcion.precio }});
                 {% endfor %}        
             {% endfor %}
-                
+            $('#categoria_categoria').select2();   
             $('#categoria_nombre').
                     attr('data-bvalidator', 'required,required');
             {% if categorium.categoria is empty %}
