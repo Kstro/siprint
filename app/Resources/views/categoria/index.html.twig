@@ -93,7 +93,7 @@
                                 <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px; margin-left: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
                                     <i class="fa fa-times"></i>
                                 </a>  
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                <a class="btn btn-default text-center editar-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
                                     <i class="fa fa-edit"></i>
                                 </a>
 
@@ -145,10 +145,12 @@
                                 <a class="btn btn-default text-center delete-registro pull-right" data-toggle="tooltip"  data-container="body" title="Delete" style="margin-top: 3px;"  href="{{ path('delete_categoria', { 'id': categorium.id }) }}">
                                     <i class="fa fa-times"></i>
                                 </a>  
-                                <a class="btn btn-default text-center edit-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
+                                <a class="btn btn-default text-center editar-registro pull-right" data-toggle="tooltip"  data-container="body" title="Edit" style="margin-top: 3px;"  href="{{ path('categoria_edit', { 'id': categorium.id }) }}">
                                     <i class="fa fa-edit"></i>
                                 </a>
-
+                                 
+                                
+                            
                             </td>
                         </tr>
                     {% endfor %}

@@ -3,7 +3,7 @@ function validar(){
       attr('data-bvalidator', 'required,required');
       
     $('.costo-attr').
-      attr('data-bvalidator', 'min[0.01], required,required');  
+      attr('data-bvalidator', 'min[0], required,required');  
       
     $('.valor-atributo-0').
       attr('data-bvalidator', 'min[1], required, required');    

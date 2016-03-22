@@ -269,7 +269,6 @@ class CategoriaController extends Controller
                 $em->persist($categorium);
                 $em->flush();
                 
-                
                 //$em->merge($categorium);
                 //$em->flush();
             }
@@ -294,7 +293,8 @@ class CategoriaController extends Controller
                     $opcionProducto->setCosto($costo);
                     $opcionProducto->setCategoria($categorium);
                     $opcionProducto->setDetalleParametro($detalleParametro);
-
+                    $opcionProducto->setEstado(1);
+                    
                     $em->persist($opcionProducto);
                     $em->flush();
                 }
@@ -390,7 +390,8 @@ class CategoriaController extends Controller
                     $opcionProducto->setCosto($costo);
                     $opcionProducto->setCategoria($categorium);
                     $opcionProducto->setDetalleParametro($detalleParametro);
-
+                    $opcionProducto->setEstado(1);
+                    
                     $em->persist($opcionProducto);
                     $em->flush();
                 }
@@ -473,7 +474,7 @@ class CategoriaController extends Controller
             $sql = "select dp.parametro as parametro, op.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
                     . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? and op.categoria = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? and op.estado = 1";
 
             $rsm2->addScalarResult('parametro','parametro');
             $rsm2->addScalarResult('idValorParam','idValorParam');
@@ -531,7 +532,7 @@ class CategoriaController extends Controller
             $sql = "select distinct op.id as idValorParam, dp.parametro as parametro, dp.nombre as valorParam, op.costo as precio "
                     . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? and op.categoria = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? and op.estado = 1 ";
 
             $rsm2->addScalarResult('parametro','parametro');
             $rsm2->addScalarResult('idValorParam','idValorParam');
@@ -584,7 +585,7 @@ class CategoriaController extends Controller
             $sql = "select dp.parametro as parametro, dp.id as idValorParam, dp.nombre as valorParam, op.id as idop, op.costo as precio "
                     . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? and op.categoria = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? and op.estado = 1 ";
 
             $rsm2->addScalarResult('idop','idop');
             $rsm2->addScalarResult('parametro','parametro');
@@ -600,6 +601,8 @@ class CategoriaController extends Controller
         }
         
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $parameters = $request->request->all();
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($categorium);
             $em->flush();
@@ -612,60 +615,65 @@ class CategoriaController extends Controller
                 $nombreArchivo = "promotion_".$fecha.".".$extension;
                 $em->persist($categorium);
                 $em->flush();
-                //var_dump($path.$nombreArchivo);
-
+                
                 $categorium->setImagen($nombreArchivo);
                 $categorium->getFile()->move($path,$nombreArchivo);
                 $em->persist($categorium);
+                $em->flush();                
+            }
+            
+            foreach ($opciones as $key => $value) {
+                $parametro = $em->getRepository('DGImpresionBundle:Parametro')->find($value[0]['parametro']);
+                $catParametro = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findOneBy(array('parametro' => $parametro,
+                                                                                                         'categoria' => $categorium
+                                                                                                            ));
+                $em->remove($catParametro);
                 $em->flush();
+                $atributoOrden = array();
                 
-                foreach ($opciones as $key => $value) {
-                    $parametro = $em->getRepository('DGImpresionBundle:Parametro')->find($value[0]['parametro']);
-                    $catParametro = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findBy(array('parametro' => $parametro,
-                                                                                                             'categoria' => $categorium
-                                                                                                                ));
-                    $em->remove($catParametro);
-                    $em->flush();
+                foreach ($value as $key => $val) {
+                    $opcProducto = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($val['idop']);
+                    $atributoOrden = $em->getRepository('DGImpresionBundle:AtributoProductoOrden')->findBy(array('opcionProducto' => $opcProducto));
                     
-                    foreach ($value as $key => $val) {
-                        $opcProducto = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($val['idop']);
+                    if(!empty($atributoOrden)){
+                        $opcProducto->setEstado(0);
+                        $em->merge($opcProducto);
+                        $em->flush();                        
+                    } else {
                         $em->remove($opcProducto);
                         $em->flush();
-                    }
+                    }                  
                 }
-                    
-                if(isset($parameters['chk'])){
-                    $detalle = 0;
-                    foreach ($parameters['chk'] as $key => $value) {
-                        
-                        $categoriaParametro = new \DG\ImpresionBundle\Entity\CategoriaParametro;
-                        $opcionProducto = new \DG\ImpresionBundle\Entity\OpcionProducto;
-                        $costo = $parameters['costo'][$value];
-                        $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($value);
+            }
 
-                        if($detalle != $detalleParametro->getParametro()->getId()){
-                            $detalle = $detalleParametro->getParametro()->getId();
+            if(isset($parameters['chk'])){
+                $detalle = 0;
+                foreach ($parameters['chk'] as $key => $value) {
 
-                            $categoriaParametro->setCategoria($categorium);
-                            $categoriaParametro->setParametro($detalleParametro->getParametro());
-                            $em->persist($categoriaParametro);
-                            $em->flush();
-                        }
+                    $categoriaParametro = new \DG\ImpresionBundle\Entity\CategoriaParametro;
+                    $opcionProducto = new \DG\ImpresionBundle\Entity\OpcionProducto;
+                    $costo = $parameters['costo'][$value];
+                    $detalleParametro = $em->getRepository('DGImpresionBundle:DetalleParametro')->find($value);
 
-                        $opcionProducto->setCosto($costo);
-                        $opcionProducto->setCategoria($categorium);
-                        $opcionProducto->setDetalleParametro($detalleParametro);
+                    if($detalle != $detalleParametro->getParametro()->getId()){
+                        $detalle = $detalleParametro->getParametro()->getId();
 
-                        $em->persist($opcionProducto);
+                        $categoriaParametro->setCategoria($categorium);
+                        $categoriaParametro->setParametro($detalleParametro->getParametro());
+                        $em->persist($categoriaParametro);
                         $em->flush();
                     }
-                }
-                
-            }
-//            var_dump($categorium);
-//            die();
 
-//            return $this->redirectToRoute('categoria_edit', array('id' => $categorium->getId()));
+                    $opcionProducto->setCosto($costo);
+                    $opcionProducto->setCategoria($categorium);
+                    $opcionProducto->setDetalleParametro($detalleParametro);
+                    $opcionProducto->setEstado(1);
+
+                    $em->persist($opcionProducto);
+                    $em->flush();
+                }
+            }
+
             return $this->redirectToRoute('categoria_index');
         }
 
@@ -685,10 +693,10 @@ class CategoriaController extends Controller
         
         $attr_val = $em->createQuery($dql)
                    ->getResult();
-        //   var_dump($attr_val);
-        //$prod = $em->getRepository('DGImpresionBundle:Categoria')->find($categorium->getId());
         
-        //var_dump($opciones);
+        //$prod = $em->getRepository('DGImpresionBundle:Categoria')->find($categorium->getId());
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('categoria/edit.html.twig', array(
             'categorium' => $categorium,
             'opciones' => $opciones,
@@ -697,6 +705,7 @@ class CategoriaController extends Controller
             'atributos' => $atributos,
             'atributes' => $atributes,
             'attr_val' => $attr_val,
+            'promotion' => $promotion,
         ));
     }
 
@@ -989,7 +998,7 @@ class CategoriaController extends Controller
                     . "op.id as idValor "
                     . "from opcion_producto op inner join detalle_parametro dp on op.detalle_parametro = dp.id "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
-                    . "where dp.parametro = ? and op.categoria = ? ";
+                    . "where dp.parametro = ? and op.categoria = ? and op.estado = 1 ";
             
             $rsm->addScalarResult('idValor','idValor');
             $rsm->addScalarResult('parametro','parametro');
@@ -1039,7 +1048,7 @@ class CategoriaController extends Controller
                 $rsm = new ResultSetMapping();
                 $sql = "select op.costo as precio "
                         . "from opcion_producto op "
-                        . "where op.id = ? ";
+                        . "where op.id = ? and op.estado = 1 ";
 
                 $rsm->addScalarResult('precio','precio');
                 $query = $em->createNativeQuery($sql, $rsm);
@@ -1080,7 +1089,7 @@ class CategoriaController extends Controller
                 $rsm = new ResultSetMapping();
                 $sql = "select op.costo as precio "
                         . "from opcion_producto op "
-                        . "where op.id = ? ";
+                        . "where op.id = ? and op.estado = 1 ";
 
                 $rsm->addScalarResult('precio','precio');
 

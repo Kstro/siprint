@@ -27,6 +27,13 @@ class OpcionProducto
      * @ORM\Column(name="costo", type="float", nullable=false)
      */
     private $costo;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     */
+    private $estado;
 
     /**
      * @var \Categoria
@@ -82,6 +89,30 @@ class OpcionProducto
         return $this->costo;
     }
 
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return OpcionProducto
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+    
     /**
      * Set categoria
      *

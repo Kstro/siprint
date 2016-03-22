@@ -1,5 +1,4 @@
 
-
 {% block css -%}
     
     <style>
@@ -10,119 +9,101 @@
     </style>
 {% endblock %}
 
-
-
-
-
 {% block contenido %}
     
     <table class="listados table table-bordered table-hover" style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Client</th>
-                    <th>Date order</th>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Client</th>
+                <th>Date order</th>
 {#                    <th>State</th>#}
-                    <th>Stripe ID</th>
-                    
-                    <th>Refund</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for order in orders %}
-                <tr>
-                    <td> ON{{ order.id }}</td>
-                    <td>{{ order.usuario.persona }}</td>
-                    <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
+                <th>Stripe ID</th>
+
+                <th>Refund</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td> ON{{ order.id }}</td>
+                <td>{{ order.usuario.persona }}</td>
+                <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
 {#                    <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>#}
-                    <td class="text-right">
-                        
-                            {{order.idPago}}
-                            
-                    </td>
-                    <td class="text-right">$ {% if order.reembolso == '' %} 0.00 {%else%} {{order.reembolso|number_format('2','.',',')}} {% endif %}</td>
-                    <td>
-                        <div class=" pull-right">    
-                            <div class="col-md-2">
-                                <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
-                                    <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
-                                        <i class="fa fa-info-circle"></i>
-                                    </button>
-                                </a> 
-                            </div>
+                <td class="text-right">
+                    <a href="https://dashboard.stripe.com/test/payments/{{order.idPago}}" class="idpago acc-edit edit-registro text-right" title="Id Stripe"> {{order.idPago}} </a>
+                </td>
+                <td class="text-right">$ {% if order.reembolso == '' %} 0.00 {%else%} {{order.reembolso|number_format('2','.',',')}} {% endif %}</td>
+                <td>
+                    <div class=" pull-right">    
+                        <div class="col-md-2">
+                            <a class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_show', { 'id': order.id }) }}">
+                                <button id="info" data-toggle="tooltip" data-container="body" title="Information" class="btn " role="button">
+                                    <i class="fa fa-info-circle"></i>
+                                </button>
+                            </a> 
+                        </div>
+                        <div class="col-md-1">
+                            <a  class="export"  href="" style="margin-top: 3px;">
+                                <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </button>        
+                            </a>
+                        </div>
+                        {% if order.reembolso == 0 and order.estado == 'pa' %}
                             <div class="col-md-1">
-                                <a  class="export"  href="" style="margin-top: 3px;">
-                                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Invoice" class="btn opciones" role="button" value="{{ order.id }}">
-                                        <i class="fa fa-file-pdf-o"></i>
-                                    </button>        
+                                <a id="{{order.id}}" class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                    <button id="prOrder" data-toggle="tooltip" data-container="body" title="Print order" class="btn" role="button">
+                                        <i class="fa fa-print"></i>
+                                    </button>
                                 </a>
                             </div>
-                            {% if order.reembolso == 0 and order.estado == 'pa' %}
-                                <div class="col-md-1">
-                                    <a id="{{order.id}}" class="text-center edit-registro" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
-                                        <button id="prOrder" data-toggle="tooltip" data-container="body" title="Print order" class="btn" role="button">
-                                            <i class="fa fa-print"></i>
-                                        </button>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if order.reembolso == 0 and order.estado == 'cn' %}
-                                <div class="col-md-1">
-                                    <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
-                                        <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
-                                            <i class="fa fa-money"></i>
-                                        </button>
-                                    </a>
-                                </div>
-                            {% endif %}
-                            {% if order.estado=='pr' %}
-                                <div class="col-md-1">
-                                    <a id="{{order.id}}" class="text-center edit-registro" style="margin-top: 3px;"  href="">
-                                        <button id="spOrder" data-toggle="tooltip" data-container="body" title="Ship order" class="btn" role="button">
-                                            <i class="fa fa-truck"></i>
-                                        </button>
-                                    </a>
-                                </div>
-                            {% endif %}{#
-                                {% if order.estado=='cn' %}
-                                    <div class="col-md-1">
-                                        <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
-                                            <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
-                                                <i class="fa fa-info-circle"></i>
-                                            </button>
-                                        </a>
-                                    </div>
-                                {% endif %}
-                                
-                                {% if order.estado=='sp' %}
-                                    <div class="col-md-1">
-                                        <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
-                                            <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
-                                                <i class="fa fa-info-circle"></i>
-                                            </button>
-                                        </a>
-                                    </div>
-                                {% endif %}#}
-{#                            {% endif %}#}
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>                
+                        {% endif %}
+                        {% if order.reembolso == 0 and order.estado == 'cn' %}
+                            <div class="col-md-1">
+                                <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                    <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                        <i class="fa fa-money"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if order.estado=='pr' %}
+                            <div class="col-md-1">
+                                <a id="{{order.id}}" class="text-center edit-registro" style="margin-top: 3px;"  href="">
+                                    <button id="spOrder" data-toggle="tooltip" data-container="body" title="Ship order" class="btn" role="button">
+                                        <i class="fa fa-truck"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        {% endif %}{#
+                        {% if order.estado=='cn' %}
+                            <div class="col-md-1">
+                                <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                    <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                        <i class="fa fa-info-circle"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        {% if order.estado=='sp' %}
+                            <div class="col-md-1">
+                                <a class="text-center edit-registro opcionRefund" style="margin-top: 3px;"  href="{{ path('admin_orden_refund', { 'id': order.id }) }}">
+                                    <button id="info" data-toggle="tooltip" data-container="body" title="Refund" class="btn" role="button">
+                                        <i class="fa fa-info-circle"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        {% endif %}#}
+{#                      {% endif %}#}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>                
 {% endblock %}
 {% block javascripts_step %}
     

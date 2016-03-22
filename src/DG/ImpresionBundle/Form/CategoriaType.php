@@ -28,7 +28,7 @@ class CategoriaType extends AbstractType
                     'required'=>false,
                    'attr'=>array(
                     'class'=>'form-control'
-                    )))
+                    )))       
             ->add('descripcion', 'textarea', array(
                     'required'=>false,
                    'attr'=>array(
@@ -46,7 +46,7 @@ class CategoriaType extends AbstractType
                                 ;   
                         } ,
                     'attr'=>array(
-                        'class'=>'form-control input-sm'
+                        'class'=>'form-control'
                      )            
                     ))
 //            ->add('parametro','entity',array('required'=>false,

@@ -15,16 +15,20 @@ class PromotionsService {
     }
     
     public function searchPromotion(){
-        //$promoImg = new Promocion();
-        
         $promotions = $this->em->getRepository('DGImpresionBundle:Promocion')->findBy(array(),array('id'=>'DESC'));
-        //var_dump($promotions);
+        $flag = 0;
         
-        if(!empty($promotions )){
-            $idMax = $promotions[0]->getId();
-        
-            $random = rand(1,$idMax);
-            $prom= $this->em->getRepository('DGImpresionBundle:Promocion')->find($random);
+        if(!empty($promotions)){
+            while ($flag == 0){
+                $idMax = $promotions[0]->getId();
+
+                $random = rand(1,$idMax);
+                $prom= $this->em->getRepository('DGImpresionBundle:Promocion')->find($random);
+
+                if(!empty($prom)){
+                    $flag = 1;
+                }
+            }
         } else {
             $prom = NULL;
         }
@@ -54,8 +58,7 @@ class PromotionsService {
                 }
             }
         }
-        
-            
+         
         return array(
             'promo_rnd'=>$prom_random,
             'i_dpromo'=>$idRecuperados,
