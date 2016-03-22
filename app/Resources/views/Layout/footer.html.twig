@@ -18,25 +18,24 @@
                         </li>
                         <li>
                             <i class="fa fa-envelope-o"></i>
-                            <span><a href="mailto:support@netbaseteam.net" title="send mail to Cmsmart">Email</a></span>
+                            {% block email %}
+                                
+                            {% endblock %}
+                            
                         </li>
                     </ul>
                     <ul class="footer-social">
                         <li>
-                            <a href="#" title="Facebook">
-                                    <i class="fa fa-facebook"></i>
+                            <a href="https://www.facebook.com/expressionsprint" title="Facebook">
+                                    <i style="margin-top: 8px;" class="fa fa-facebook"></i>
                             </a>
                         </li>
                         <li>
-                            <a href="#" title="Twiter">
-                                <i class="fa fa-twitter"></i>
+                            <a href="https://www.instagram.com/expressionsprint">
+                                <i style="margin-top: 8px;" class="fa fa-instagram"></i>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" title="Google plus">
-                                <i class="fa fa-google-plus"></i>
-                            </a>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -44,9 +43,9 @@
                     <h2>Corporate</h2>
                     <div class="footer-content">
                             <ul>
-                                    <li>
+                                    {#<li>
                                             <a href="{{ path('dg_general_about')}}" title="About us">About</a>
-                                    </li>
+                                    </li>#}
                                     <li>
                                             <a href="{{ path('products_list')}}" title="Green">Products & Services</a>
                                     </li>
@@ -56,16 +55,16 @@
                                     <li>
                                             <a href="{{ path('dg_general_contact')}}" title="Non-profits and Government">Contact Us</a>
                                     </li>
-                                    <li>
+                                    {#<li>
                                             <a href="#" title="Terms of Service">Terms of Service</a>
                                     </li>
                                     <li>
                                             <a href="#" title="Privacy Policy">Privacy Policy</a>
-                                    </li>
+                                    </li>#}
                             </ul>
                     </div>
             </div>
-            <div class="col-md-3 col-sm-4 col-xs-12 support footer-col">
+            {#<div class="col-md-3 col-sm-4 col-xs-12 support footer-col">
                 <h2>Support</h2>
                 <div class="footer-content">
                     <ul>
@@ -75,7 +74,7 @@
                         {#<li>
                                 <a href="#" title="Design Guide">Design Guide</a>
                         </li>#}
-                        <li>
+                        {#<li>
                                 <a href="#" title="FAQ">FAQ</a>
                         </li>
                         <li>
@@ -86,7 +85,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div>#}
             <div class="col-md-3 col-xs-12 other-info footer-col hidden-sm">
                 <h2>Other Info</h2>
                 <div class="footer-content">
