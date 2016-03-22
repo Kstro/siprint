@@ -79,10 +79,10 @@
                     <span style="font-size: 20px;"><strong>Total sale: </strong>$ {{ totalOrden|number_format(2,'.',',') }}</span>
                 </div>
                 <div class="col-md-3" >
-                    <span style="font-size: 20px;"><strong>Tax (8.5%): </strong>$ {{ (totalOrden * 0.085)|number_format(2,'.',',') }}</span>
+                    <span style="font-size: 20px;"><strong>Tax (9.0%): </strong>$ {{ (totalOrden * 0.09)|number_format(2,'.',',') }}</span>
                 </div>    
                 <div class="col-md-4" >    
-                    <span style="font-size: 20px;"><strong>Total amount: </strong>$ {{ (totalOrden * 1.085)|number_format(2,'.',',') }}</span>
+                    <span style="font-size: 20px;"><strong>Total amount: </strong>$ {{ (totalOrden * 1.09)|number_format(2,'.',',') }}</span>
                 </div>
             </div>
             <hr>    
@@ -810,12 +810,12 @@
             }
     {#        $('#formCheckout').hide();#}
 
-            $('#stripe_view_card_new_card').hide();
+            {#$('#stripe_view_card_new_card').hide();
             $('#stripe_view_address_new_address').hide();
             $('#stripe_view_credit_cart').hide();
             $('#stripe_view_credit_cart_security').hide();
             $('#stripe_view_credit_cart_expiration_month').hide();
-            $('#stripe_view_credit_cart_expiration_year').hide();
+            $('#stripe_view_credit_cart_expiration_year').hide();#}
             $('#payment-submit').addClass('btn btn-success');
             $('#stripe_view_amount').val({{totalOrden*100*1.085}});
             $('#stripe_view_order').val({{ordenId}});
@@ -887,19 +887,19 @@
                 $('#stripe_view_card_save_card').prop('checked',num);
             });
 
-            $('#stripe_view_address_full_name').hide();
+            {#$('#stripe_view_address_full_name').hide();
             $('#stripe_view_address_phone_number').hide();
             $('#stripe_view_address_full_name').hide();
             $('#stripe_view_address_line1').hide();
             $('#stripe_view_address_line2').hide();
-            $('#stripe_view_address_city').hide();
+            $('#stripe_view_address_city').hide();#}
             $('#stripe_view_address_region').val($('#direccion_state').val());
             $('#stripe_view_address_region').hide();
             $('#stripe_view_address_country').val($('#direccion_country').val());
-            $('#stripe_view_address_country').hide();
+            {#$('#stripe_view_address_country').hide();
             $('#stripe_view_address_security_code').hide();
             $('#stripe_view_address_zip_code').hide();
-            $('#stripe_view_address_save_address').hide();
+            $('#stripe_view_address_save_address').hide();#}
 
     {#      Campos de pago  #}
             $(document).on('input','#tarjeta_numero',function(){
@@ -918,12 +918,12 @@
                 $('#stripe_view_card_cvc').val(cvc);
                 $('#stripe_view_credit_cart_security').val(cvc);
             });
-            $('#stripe_view_card_full_name').hide(); 
+            {#$('#stripe_view_card_full_name').hide(); 
             $('#stripe_view_card_number').hide(); 
             $('#stripe_view_card_cvc').hide(); 
             $('#stripe_view_card_fecha').hide();
 
-            $('#stripe_view_card_save_card').hide();
+            $('#stripe_view_card_save_card').hide();#}
 
             //$('#formnewcard').hide();
             //$('#formnewaddress').hide();
@@ -1013,7 +1013,7 @@
                           var total=totalSinPromo - ($('#total').val()*respuesta.porcentaje)/100;
 
                           $('#total').val(total.toFixed(2));
-                          $('#stripe_view_amount').val(total.toFixed(2)*100);
+                          $('#stripe_view_amount').val(total.toFixed(2)*100*1.09);
                         }
                         $('#promoCode').prop('disabled',false); 
                     }

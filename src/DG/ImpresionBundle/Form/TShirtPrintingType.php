@@ -29,6 +29,11 @@ class TShirtPrintingType extends AbstractType
                    'attr'=>array(
                     'class'=>'form-control'
                     )))
+            ->add('descripcion', 'textarea', array(
+                    'required'=>false,
+                   'attr'=>array(
+                    'class'=>'form-control'
+                    )))                  
 //            ->add('categoria','entity',array('required'=>false,
 //                    'empty_value'   => 'Select an option...',
 //                    'class'=>'DGImpresionBundle:Categoria',

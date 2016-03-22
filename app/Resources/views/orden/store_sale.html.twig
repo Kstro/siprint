@@ -64,7 +64,7 @@
                         $ {{ monto|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">
-                        {% set monto_tax = monto * 0.085 %}
+                        {% set monto_tax = monto * 0.09 %}
                         $ {{ monto_tax|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">
@@ -107,7 +107,7 @@
             
             $('.invoice').click(function(){
                 var id = $(this).val();
-                var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                var url = Routing.generate('admin_reporte_invoice', {'id': id, 'tipo': 1});
                 window.open(url,'_blank');
                 return false;
             });    

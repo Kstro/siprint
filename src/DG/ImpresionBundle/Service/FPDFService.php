@@ -13,7 +13,7 @@ class FPDFService {
         $this->pdf = $pdf;
     }
     
-    public function toPDF($orden)
+    public function toPDF($orden, $tipo)
     {
         $this->pdf->FPDF('P','mm','Letter');
 	$this->pdf->SetTopMargin(20);
@@ -21,7 +21,7 @@ class FPDFService {
         
         $this->pdf->AddPage();
         $this->pdf->SetFillColor(255);
-        
+        $this->pdf->SetTitle('Final Details for Order');
         $break = 0;
         
         $this->pdf->Ln(16);
@@ -40,7 +40,12 @@ class FPDFService {
         
         $this->pdf->SetX(46);
         $this->pdf->SetFont('Arial','',9);
-        $this->pdf->Cell(0, 10, $orden[0]->getOrden()->getId(), 0, 0);
+        
+        if($tipo == 1){
+            $this->pdf->Cell(0, 10, '#IN'.$orden[0]->getOrden()->getId(), 0, 0);
+        } else {
+            $this->pdf->Cell(0, 10, '#ON'.$orden[0]->getOrden()->getId(), 0, 0);
+        }    
         
         $total = 0;
         foreach ($orden as $key => $value) {
@@ -180,14 +185,14 @@ class FPDFService {
         $this->pdf->SetFont('Arial', '', 10);
         $this->pdf->setX(152);
         $this->pdf->Cell(0, 10, 'Tax applied', 0, 0);
-        $this->pdf->Cell(0, 10, '$ ' .number_format($monto_cancelar * 0.085, 2), 0, 0, 'R');
+        $this->pdf->Cell(0, 10, '$ ' .number_format($monto_cancelar * 0.09, 2), 0, 0, 'R');
         
         $this->pdf->Ln(12);
         $break+=12;
         $this->pdf->SetFont('Arial', 'B', 11);
         $this->pdf->setX(152);
         $this->pdf->Cell(0, 10, 'Total amount', 0, 0);
-        $this->pdf->Cell(0, 10, '$ ' . number_format($monto_cancelar + ($monto_cancelar * 0.085), 2), 0, 0, 'R');
+        $this->pdf->Cell(0, 10, '$ ' . number_format($monto_cancelar + ($monto_cancelar * 0.09), 2), 0, 0, 'R');
         
         $this->pdf->Line(20, $break + 20, 207, $break + 20);
         

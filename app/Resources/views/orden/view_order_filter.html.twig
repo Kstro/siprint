@@ -32,7 +32,7 @@
             <tbody>
             {% for order in orders %}
                 <tr>
-                    <td># {{ order.id }}</td>
+                    <td> ON{{ order.id }}</td>
                     <td>{{ order.usuario.persona }}</td>
                     <td class="text-center">{% if order.fechaOrden %}{{ order.fechaOrden|date('F d, Y') }}{% endif %}</td>
 {#                    <td class="text-center">{% if order.estado == 'pa' %} Paid {% endif %}</td>#}
@@ -147,7 +147,7 @@
         $(document).ready(function(){          
             $('.opciones').click(function(){
                 var id = $(this).val();
-                var url = Routing.generate('admin_reporte_invoice', {'id': id});
+                var url = Routing.generate('admin_reporte_invoice', {'id': id, 'tipo': 2});
                 window.open(url,'_blank');
                 return false;
             });    
