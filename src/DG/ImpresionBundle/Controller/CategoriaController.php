@@ -581,11 +581,12 @@ class CategoriaController extends Controller
         $opciones = array();
         foreach ($atributes as $value) {
             $rsm2 = new ResultSetMapping();
-            $sql = "select dp.parametro as parametro, dp.id as idValorParam, dp.nombre as valorParam, op.costo as precio "
+            $sql = "select dp.parametro as parametro, dp.id as idValorParam, dp.nombre as valorParam, op.id as idop, op.costo as precio "
                     . "from detalle_parametro dp inner join opcion_producto op on dp.id = op.detalle_parametro "
                     . "left outer join tipo_parametro tp on dp.tipo_parametro = tp.id "
                     . "where dp.parametro = ? and op.categoria = ? ";
 
+            $rsm2->addScalarResult('idop','idop');
             $rsm2->addScalarResult('parametro','parametro');
             $rsm2->addScalarResult('idValorParam','idValorParam');
             $rsm2->addScalarResult('valorParam','valorParam');
@@ -597,14 +598,11 @@ class CategoriaController extends Controller
             $param = $query2->getResult(); 
             array_push($opciones, $param);
         }
-         
-        var_dump($opciones);
-        die();
         
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            //$em->persist($categorium);
-            //$em->flush();
+            $em->persist($categorium);
+            $em->flush();
             
             if($categorium->getFile()!=null){
                 $path = $this->container->getParameter('photo.promotion');
@@ -612,16 +610,29 @@ class CategoriaController extends Controller
                 $fecha = date('Y-m-d His');
                 $extension = $categorium->getFile()->getClientOriginalExtension();
                 $nombreArchivo = "promotion_".$fecha.".".$extension;
-                //$em->persist($categorium);
-                //$em->flush();
+                $em->persist($categorium);
+                $em->flush();
                 //var_dump($path.$nombreArchivo);
 
                 $categorium->setImagen($nombreArchivo);
                 $categorium->getFile()->move($path,$nombreArchivo);
-                //$em->persist($categorium);
-                //$em->flush();
+                $em->persist($categorium);
+                $em->flush();
                 
-                
+                foreach ($opciones as $key => $value) {
+                    $parametro = $em->getRepository('DGImpresionBundle:Parametro')->find($value[0]['parametro']);
+                    $catParametro = $em->getRepository('DGImpresionBundle:CategoriaParametro')->findBy(array('parametro' => $parametro,
+                                                                                                             'categoria' => $categorium
+                                                                                                                ));
+                    $em->remove($catParametro);
+                    $em->flush();
+                    
+                    foreach ($value as $key => $val) {
+                        $opcProducto = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($val['idop']);
+                        $em->remove($opcProducto);
+                        $em->flush();
+                    }
+                }
                     
                 if(isset($parameters['chk'])){
                     $detalle = 0;
@@ -651,6 +662,8 @@ class CategoriaController extends Controller
                 }
                 
             }
+//            var_dump($categorium);
+//            die();
 
 //            return $this->redirectToRoute('categoria_edit', array('id' => $categorium->getId()));
             return $this->redirectToRoute('categoria_index');
