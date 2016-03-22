@@ -56,10 +56,10 @@
         }
         .error{
             border:1px solid #F00;
-            /*-webkit-box-shadow: 0px 0px 2px 0px rgba(255, 0, 0, 1);
+            -webkit-box-shadow: 0px 0px 2px 0px rgba(255, 0, 0, 1);
             -moz-box-shadow:    0px 0px 2px 0px rgba(255, 0, 0, 1);
             box-shadow:         0px 0px 2px 0px rgba(255, 0, 0, 1);
-            */
+            
         }
         
         #promoCode{
@@ -76,7 +76,7 @@
         <div class="form-edit-info" style="padding-top: 20px;">
             <div class="row">
                 <div class="col-md-3 col-md-offset-1" >
-                    <span style="font-size: 20px;"><strong>Total sale: </strong>$ {{ totalOrden|number_format(2,'.',',') }}</span>
+                    <span style="font-size: 20px;"><strong>Total order: </strong>$ {{ totalOrden|number_format(2,'.',',') }}</span>
                 </div>
                 <div class="col-md-3" >
                     <span style="font-size: 20px;"><strong>Tax (9.0%): </strong>$ {{ (totalOrden * 0.09)|number_format(2,'.',',') }}</span>
@@ -85,9 +85,9 @@
                     <span style="font-size: 20px;"><strong>Total amount: </strong>$ {{ (totalOrden * 1.09)|number_format(2,'.',',') }}</span>
                 </div>
             </div>
-            <hr>    
-            <div class="col-md-5 text-right" style="margin-bottom: 45px;"><label>Shipping address: </label> </div>
-            <div class="col-md-6" style="margin-bottom: 45px;">
+            <hr>  
+            <div class="col-md-5 text-right" style="margin-bottom: 45px; margin-top: 20px;"><label>Shipping address: </label> </div>
+            <div class="col-md-6" style="margin-bottom: 45px; margin-top: 20px;">
                 <select id="selectDirecciones" class="form-control">
                     <option value="0">New address...</option>
                 {% for dir in direcciones %}
@@ -97,6 +97,7 @@
             </div>        
             <div class="clearfix"></div>
             <div class="col-md-12">
+                <div id="formnewaddress">
                 <form name="payment-form" id="payment-form" method="post" action="http://localhost/siprint/web/app_dev.php/payment/stripe/execute" style="margin-top: -25px;">
                     <div class="col-md-5 text-right" style="margin-bottom: 4px;">
                             * Full Name:
@@ -224,6 +225,7 @@
                         <div class="clearfix"></div>
                     </form>
                 </div>
+                </div>
                 <div class="clearfix"></div>
 
                 <div class="col-md-5 text-right" style="margin-top:20px;margin-bottom:20px;"><label>Payment method: </label> </div>
@@ -280,10 +282,10 @@
 
                         </div>
                         <div class="col-md-5 text-right text-bold" style="margin-bottom: 4px; margin-top: 15px;">
-                            Total order $:
+                            Total amount $:
                         </div>
                         <div class="col-md-6" style="margin-bottom: 4px; margin-top: 15px;">
-                            <input id="total" readonly value="{{ (totalOrden * 1.085 )|number_format(2,'.',',')}}" name="amount[amount]" class="form-control" type="text">
+                            <input id="total" readonly value="{{ (totalOrden * 1.09 )|number_format(2,'.',',')}}" name="amount[amount]" class="form-control" type="text">
                         </div>
                         <div class="clearfix"></div>
 
@@ -326,7 +328,7 @@
                 </a>
             </div>
         </div>
-    {% endif %}            
+    {% endif %}
     {#</div>#}
     
     {#<div class="container-fluid" style="margin-top:10px;">        #}
@@ -769,7 +771,7 @@
             $('#promoCode').on('click',function(){
                 return false;
             });
-            $('#selectDirecciones').on('change',function(){
+            $(document).on('change','#selectDirecciones',function(){
                 var idDir=$(this).val();
                 var idTar=$('#selectTarjetas').val();
                 if(idDir==0){
@@ -810,14 +812,14 @@
             }
     {#        $('#formCheckout').hide();#}
 
-            {#$('#stripe_view_card_new_card').hide();
+            $('#stripe_view_card_new_card').hide();
             $('#stripe_view_address_new_address').hide();
             $('#stripe_view_credit_cart').hide();
             $('#stripe_view_credit_cart_security').hide();
             $('#stripe_view_credit_cart_expiration_month').hide();
-            $('#stripe_view_credit_cart_expiration_year').hide();#}
+            $('#stripe_view_credit_cart_expiration_year').hide();
             $('#payment-submit').addClass('btn btn-success');
-            $('#stripe_view_amount').val({{totalOrden*100*1.085}});
+            $('#stripe_view_amount').val({{totalOrden*100*1.09}});
             $('#stripe_view_order').val({{ordenId}});
 
 
@@ -887,19 +889,19 @@
                 $('#stripe_view_card_save_card').prop('checked',num);
             });
 
-            {#$('#stripe_view_address_full_name').hide();
+            $('#stripe_view_address_full_name').hide();
             $('#stripe_view_address_phone_number').hide();
             $('#stripe_view_address_full_name').hide();
             $('#stripe_view_address_line1').hide();
             $('#stripe_view_address_line2').hide();
-            $('#stripe_view_address_city').hide();#}
+            $('#stripe_view_address_city').hide();
             $('#stripe_view_address_region').val($('#direccion_state').val());
             $('#stripe_view_address_region').hide();
             $('#stripe_view_address_country').val($('#direccion_country').val());
-            {#$('#stripe_view_address_country').hide();
+            $('#stripe_view_address_country').hide();
             $('#stripe_view_address_security_code').hide();
             $('#stripe_view_address_zip_code').hide();
-            $('#stripe_view_address_save_address').hide();#}
+            $('#stripe_view_address_save_address').hide();
 
     {#      Campos de pago  #}
             $(document).on('input','#tarjeta_numero',function(){
@@ -918,43 +920,73 @@
                 $('#stripe_view_card_cvc').val(cvc);
                 $('#stripe_view_credit_cart_security').val(cvc);
             });
-            {#$('#stripe_view_card_full_name').hide(); 
+            $('#stripe_view_card_full_name').hide(); 
             $('#stripe_view_card_number').hide(); 
             $('#stripe_view_card_cvc').hide(); 
             $('#stripe_view_card_fecha').hide();
 
-            $('#stripe_view_card_save_card').hide();#}
+            $('#stripe_view_card_save_card').hide();
 
             //$('#formnewcard').hide();
             //$('#formnewaddress').hide();
 
             $('#payment-submit').on('click', function(){
                 var error=0;
-                if(
-                    $('#selectDirecciones').val()==0 && ($('#direccion_name').val()=='' || $('#direccion_phoneNumber').val()==''
-                    || $('#direccion_linea1').val()=='' || $('#direccion_linea2').val()=='' || $('#direccion_city').val()==''
-                    || $('#direccion_state').val()=='' || $('#direccion_country').val()=='' || $('#direccion_zipCode').val()=='' )){
-
-                    $('#direccion_name').addClass('error');
-                    $('#direccion_phoneNumber').addClass('error');
-                    $('#direccion_linea1').addClass('error');
-                    $('#direccion_linea2').addClass('error');
-                    $('#direccion_city').addClass('error');
-                    $('#direccion_state').addClass('error');
-                    $('#direccion_country').addClass('error');
-                    $('#direccion_zipCode').addClass('error');
-
-                    error++;
+                if($('#selectDirecciones').val()==0){
+                    if($('#direccion_name').val()==''){
+                        $('#direccion_name').addClass('error');
+                        error++;
+                    }
+                    if($('#direccion_phoneNumber').val()==''){
+                        $('#direccion_phoneNumber').addClass('error');
+                        error++
+                    }
+                    if($('#direccion_linea1').val()==''){
+                        $('#direccion_linea1').addClass('error');
+                        error++;
+                    }
+                    if($('#direccion_linea2').val()==''){
+                        $('#direccion_linea2').addClass('error');
+                    }        
+                    if($('#direccion_city').val()==''){
+                        $('#direccion_city').addClass('error');
+                        error++;
+                    }   
+                    if($('#direccion_state').val()==''){
+                        $('#direccion_state').addClass('error');
+                        error++;
+                    }
+                    if($('#direccion_state').val()==''){
+                        $('#direccion_state').addClass('error');
+                        error++;
+                    }
+                    if($('#direccion_country').val()==''){
+                        $('#direccion_country').addClass('error');
+                        error++;
+                    }        
+                    if($('#direccion_zipCode').val()==''){
+                        $('#direccion_zipCode').addClass('error');
+                        error++;
+                    }
                 }
-                if($('#selectTarjetas').val()==0 && ($('#tarjeta_numero').val()=='' || $('#tarjeta_nombre').val()==''
-                        || $('#tarjeta_cvc').val()=='' || $('#tarjeta_expiracion').val()=='')){
-                    //alert();
-                    $('#tarjeta_numero').addClass('error');
-                    $('#tarjeta_nombre').addClass('error');
-                    $('#tarjeta_cvc').addClass('error');
-                    $('#tarjeta_expiracion').addClass('error');
+                if($('#selectDirecciones').val()==0){
+                    if($('#tarjeta_numero').val()==''){
+                        $('#tarjeta_numero').addClass('error');
+                        error++;
+                    }
+                    if($('#tarjeta_nombre').val()==''){
+                        $('#tarjeta_nombre').addClass('error');
+                        error++;
 
-                    error++;
+                    }
+                    if($('#tarjeta_cvc').val()==''){
+                        $('#tarjeta_cvc').addClass('error');
+                        error++;
+                    }
+                    if($('#tarjeta_expiracion').val()==''){
+                        $('#tarjeta_expiracion').addClass('error');
+                        error++;
+                    }
                 }
                 if(error!=0){
                     return false;

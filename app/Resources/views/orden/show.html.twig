@@ -277,53 +277,6 @@
             });
         </script>    
     
-<script>
-    $(document).ready(function () {  
-            
-        
-        $(document).on('change','#selectTarjetas', function(){
-            console.log("cambio selectTarjetas");
-            
-            direccionId= $('#selectDirecciones').val();   
-            tarjetaId= $('#selectTarjetas').val();
-            console.log(direccionId + '-' + tarjetaId);
-            buscar(direccionId,tarjetaId);
-        });
-        $(document).on('change','#selectDirecciones', function(){
-            console.log("cambio selectDirecciones");
-            
-            direccionId= $('#selectDirecciones').val();
-            tarjetaId= $('#selectTarjetas').val();
-            
-            console.log(direccionId + '-' + tarjetaId)
-            buscar(direccionId,tarjetaId);
-            
-        });
-    });
-        function buscar(direccionId,tarjetaId){
-        
-            $.post( "{{path('get_pago')}}", { direccionId:direccionId,tarjetaId: tarjetaId }, function( data ) {
-                var par = new Array();
-                par = data.query;
-                
-                            // Si la plantilla contiene campos
-                if(data.numero !== 0) {
-                                //alert('0');
-                    $('#stripe_view_credit_cart').val(data.numero);
-                    $('#stripe_view_credit_cart_security').val(data.cvc);
-                    $('#stripe_view_credit_cart_expiration_month').val(parseInt(data.dia));
-                    $('#stripe_view_credit_cart_expiration_year').val(data.anio);
-    {#                            $(link).parent().parent().parent().parent().remove();#}
-    {#                            $(link).parent().parent().parent().parent().css('opacity','0.7');#}
-                }
-                else{
-                                //alert('1');
-                    $('#totalOrden').html(totalAnterior);
-                    $(link).html(mas);
-                }
-            }, "json");
-        }
-                 
-</script>
+
 
 {% endblock %}

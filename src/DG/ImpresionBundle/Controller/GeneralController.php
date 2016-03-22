@@ -125,7 +125,8 @@ class GeneralController extends Controller
         return $this->render(':General:tshirtPrinting.html.twig', array(
             'categorias' => $categorias,
             'promotion' => $promotion,
-            'registro'=>null
+            'registro'=>null,
+            'camisas'=>0,
         ));
     }
 }

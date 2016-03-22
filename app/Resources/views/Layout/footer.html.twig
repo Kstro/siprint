@@ -19,7 +19,11 @@
                         <li>
                             <i class="fa fa-envelope-o"></i>
                             {% block email %}
-                                
+                                {% if camisas is not defined %}
+                                    <span><a href="mailto:info@expressionsprint.com" title="Send email">info@expressionsprint.com</a></span>
+                                {% else %}
+                                    <span><a href="mailto:shirts@expressionsprint.com" title="Send email">shirts@expressionsprint.com</a></span>
+                                {% endif %}
                             {% endblock %}
                             
                         </li>
