@@ -812,12 +812,12 @@
             }
     {#        $('#formCheckout').hide();#}
 
-            {#$('#stripe_view_card_new_card').hide();
+            $('#stripe_view_card_new_card').hide();
             $('#stripe_view_address_new_address').hide();
             $('#stripe_view_credit_cart').hide();
             $('#stripe_view_credit_cart_security').hide();
             $('#stripe_view_credit_cart_expiration_month').hide();
-            $('#stripe_view_credit_cart_expiration_year').hide();#}
+            $('#stripe_view_credit_cart_expiration_year').hide();
             $('#payment-submit').addClass('btn btn-success');
             $('#stripe_view_amount').val({{(totalOrden*1.09)|number_format(2,'.',',')*100}});
             $('#stripe_view_order').val({{ordenId}});
@@ -969,7 +969,7 @@
                         error++;
                     }
                 }
-                if($('#selectDirecciones').val()==0){
+                if($('#selectTarjetas').val()==0){
                     if($('#tarjeta_numero').val()==''){
                         $('#tarjeta_numero').addClass('error');
                         error++;
