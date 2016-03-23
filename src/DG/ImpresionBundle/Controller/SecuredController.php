@@ -55,9 +55,11 @@ class SecuredController extends Controller
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
 
-        //ladybug_dump($error);
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return array(
             'last_username' => $lastUsername,
+            'promotion' => $promotion,
             'error' => $error,
             'mensaje'=>null,
 //            'usuario' => $usuario,

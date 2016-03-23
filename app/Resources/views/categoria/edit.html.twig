@@ -167,10 +167,19 @@
             </div>
 
             <hr>
-            <div>
+            <div class="row">
+                <div class="col-md-12" style="margin-top: 15px">
+                    {#<input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>#}
+                    <button type="submit" class="btn-nuevo btn pull-right" id = "edit-prod" name = "edit-prod" style="margin-left: 5px;"><span><i class="fa fa-pencil-square-o" style="color: #FFFFFF"></i></span> Edit</button>
+                    <a href="{{ path('categoria_index') }}">
+                    <button type="button" value="" class="btn-nuevo btn pull-right" style="background-color: #262626; color: #FFFFFF;" id = "orden-now" name= "orden-now"><span><i class="fa fa-chevron-left" style="color: #FFFFFF;"></i></span> Back</button>
+                    </a>
+                </div>    
+            </div>   
+            {#<div>
                 <input type="submit" value="Edit" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
                 <input type="submit" value="Back" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/>
-            </div>
+            </div>#}
                 
 
         {{ form_end(edit_form) }}

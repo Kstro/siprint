@@ -242,7 +242,7 @@
                 }
             };
             {% if mensaje == 0 %}
-                alertify.alert('Transaccion exitosa');
+                alertify.alert('Successful transaction');
             {% endif %}
             
 
@@ -250,16 +250,16 @@
                 var orderId= $(this).children().attr('id');
                 //alert(orderId);
 
-                alertify.confirm('Cancelar orden?').set('onok', function(closeEvent){
+                alertify.confirm('To cancel an order?').set('onok', function(closeEvent){
                     
                     $.post( "{{path('admin_view_orders_estado_cambiar')}}", { id: orderId, idEstado: 'cn' }, function( det ) {
                         //alert();
                         if(det.flag==0){
                             //$('#'+orderId).parent().parent().parent().parent().remove();
-                            alertify.alert("Orden cancelada");
+                            alertify.alert("Order canceled");
                         }
                         else{
-                            alertify.alert("Error, intente de nuevo");
+                            alertify.alert("Error, try again");
                             
                         }
                     });

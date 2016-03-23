@@ -185,7 +185,7 @@
                                     <div class="col-md-7 col-sm-7 text-right">
                                         <span style="font-size: 1.35em;  font-weight: bold;">Total order:</span>
                                     </div>
-                                    <div class="col-md-5 col-sm-5 printing-cost">
+                                    <div class="col-md-5 col-sm-5 total-order">
                                         <span style="font-size: 1.35em;  font-weight: bold;">$ 0.00</span>
                                     </div>
                                 </div>    
@@ -217,7 +217,7 @@
                         <div class="col-md-6 col-sm-6">
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 4px;">
-                                     Code promo:
+                                     Discount rate:
                                 </div>
                                 <div class="col-md-8 col-sm-8" id = "num" name ="num">
                                     <select id="code-promo" name="code-promo" class="form-control input-sm">
@@ -248,7 +248,7 @@
                                      Product:
                                 </div>
                                 <div class="col-md-8 col-sm-8"style="margin-bottom: 12px;">
-                                    <select id="selectDesigns" name="selectDesigns" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value);">
+                                    <select id="selectDesigns" name="selectDesigns" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value, 0);">
                                         <option value="0" disabled selected>Select an option ...</option>
                                     {% for cat in categorias %}
                                         <option value="{{cat.id}}"> 
@@ -267,11 +267,47 @@
                                 </div>
                             </div>        
                         </div>        
-                        <div class="col-md-6 col-sm-6 attributes-show">
-                            <div class="row show-attr" id="show-attr"></div>
+                        <div class="col-md-6 col-sm-6 attributes-show-0">
+                            <div class="row show-attr" id="show-attr-0"></div>
                         </div>    
-                    </div>        
+                    </div>    
+                                    
                 </div>
+                <hr>                   
+                <div class="" style="height: 35px; margin-top: 10px;">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="row">
+                                    <div class="col-md-7 col-sm-7 text-right">
+                                        <span style="font-size: 1.35em;  font-weight: bold;">Total order:</span>
+                                    </div>
+                                    <div class="col-md-5 col-sm-5 total-order">
+                                        <span style="font-size: 1.35em;  font-weight: bold;">$ 0.00</span>
+                                    </div>
+                                </div>    
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <div class="row">
+                                    <div class="col-md-7 col-sm-7 text-right">
+                                        <span style="font-size: 1.35em;  font-weight: bold;">Tax (9.0%):</span>
+                                    </div>
+                                    <div class="col-md-5 col-sm-5 tax-cost">
+                                        <span style="font-size: 1.35em;  font-weight: bold;">$ 0.00</span>
+                                    </div>
+                                </div>    
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <div class="row">
+                                    <div class="col-md-8 col-sm-8 text-right">
+                                        <span style="font-size: 1.5em;  font-weight: bold;">Total amount:</span>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 total-amount">
+                                        <span style="font-size: 1.5em;  font-weight: bold;">$ 0.00</span>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>    
+                    </div>                    
                 {#</div>#}
                 <hr>    
                 <div class="row">
@@ -292,6 +328,7 @@
     <script>
         var total = 0;
         var count = 1;
+        var total_orden = 0;
         $(document).ready(function(){
             validar();   
             $('#orden_direccionEnvio').hide();
@@ -343,13 +380,15 @@
                 var draw = '';
                 draw+='<div class="clearfix"></div>';
                 draw+='<hr>';
+                
                 draw+='<div class="col-md-6 col-sm-6" style="margin-bottom: 8px;">';
+                
                 draw+='<div class="row">';
                 draw+='<div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 12px;">';
                 draw+='Product';
                 draw+='</div>';
                 draw+='<div class="col-md-8 col-sm-8" style="margin-bottom: 12px;">';
-                draw+='<select name="selectDesigns" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value);">';
+                draw+='<select name="selectDesigns" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value, ' + count +');">';
                 draw+='<option value="0" disabled selected>Select an option ...</option>';
                 {% for cat in categorias %}
                     draw+='<option value="{{cat.id}}"> ';    
@@ -359,14 +398,23 @@
                 draw+='</select>';
                 draw+='</div>';
                 draw+='</div>';
-                {#draw+='<div class="row">';
-                draw='<div class="col-md-4 col-sm-4 text-right">';
+                
+                draw+='<div class="row">';
+                draw+='<div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 12px;">';
                 draw+='Upload file';
                 draw+='</div>';
-                draw+='</div>';#}
+                draw+='<div class="col-md-8 col-sm-8" style="margin-bottom: 12px;">';
+                draw+='<input type="file" name="file-design" id="file-design" />';
                 draw+='</div>';
-                //document.getElementById('design-prod').innerHTML = draw;                        
+                draw+='</div>';
                 
+                draw+='</div>';
+                
+                draw+='<div class="col-md-6 col-sm-6 attributes-show-' + count + '">';
+                draw+='<div class="row show-attr" id="show-attr-' + count + '"></div>';
+                draw+='</div>';
+                
+                count++;
                 $( "#design-prod" ).append(draw);
                 $(".selectDesigns").select2();
             });            
@@ -398,19 +446,19 @@
 	}
     </script>
     <script>
-        function mostrarParametros(id) {
-            //var id = $( "#selectDesigns" ).val();
+        function mostrarParametros(id, i) {
             var acum_attr = 0;
             var total_pagar = 0;
             var parametro = '';
             var draw = '';
             var total_attr = 0;
             var code_promo = $( "#code-promo" ).val();
-            $('.printing-cost').children().html('$ 0.00');
-            $('.attributes-show').children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
+            
+            $('.printing-cost-' + i ).children().html('$ 0.00');
+            $('#attributes-show' + i).children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
 
             $.post( "{{path('get_products_store')}}", { id: id, code: code_promo }, function( data ) {
-                $( ".show-attr" ).hide();
+                $( "#show-attr" + i ).hide();
                 total_attr = data.parametros.length;
                 $.each( data.parametros, function( key, value ) {
                     draw+='<div class="col-md-5" style="margin-bottom: 3px">';
@@ -427,7 +475,7 @@
 
                     draw+='</div>';
                     draw+='<div class="col-md-7" style="margin-bottom: 3px">';
-                    draw+='<select class="attributes-inf form-control" id="attributes-' + value.idParam + '" name="attributes-' + value.idParam + '">';
+                    draw+='<select class="attributes-inf form-control" id="attributes-' + i + '-' + value.idParam + '" name="attributes-' + value.idParam + '">';
                     draw+='<option value="0" disabled selected >Select an option ...</option>';
 
                     $.post( "{{path('get_attributes_info')}}", { id: value.idParam, cat: id }, function( val ) {
@@ -436,54 +484,72 @@
                                 //console.log(valor);
                                 var opcion = '<option value="' + valor.idValor + '">' + valor.valorParam + '</option>';
 
-                                $('#attributes-'+ value.idParam ).append(opcion);
+                                $('#attributes-' + i + '-' + value.idParam ).append(opcion);
                             }
                         });
 
                         acum_attr++;
+                        //console.log(value.idParam);
                         if(acum_attr === total_attr) {
-                            $( ".show-attr" ).show();    
+                            $( "#show-attr" + i ).show();    
                             $(".attributes-inf").select2();
-                            $(".attributes-inf" ).change(function() {
-                                var code_promo = $( "#code-promo" ).val();
-                                var total_price = $(".attributes-inf").length;
-                                $('.printing-cost').children().html('<img style="width:30px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
-                                var parametros = new Array();
+                        }
+                        
+                        $('#attributes-' + i + '-' + value.idParam ).change(function() {
+                            var code_promo = $( "#code-promo" ).val();
+                            var total_price = $(".attributes-inf").length;
+                            var total = 0;
+                            $('.printing-cost-' + i ).children().html('<img style="width:30px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
+                            var parametros = new Array();
 
-                                $(".attributes-inf").each(function(k, va) {
-                                    if($(this).val() != null) {
-                                        parametros.push($(this).val());
-                                    }
-                                });
-
-                                var data = {
-                                               request : parametros,
-                                               promo : code_promo
-                                          };
-
-                                $.ajax({
-                                    data:  data,
-                                    url:   '{{path('get_attributes_precio')}}',
-                                    type:  'post',
-                                    //beforeSend: function () {
-                                    //        $("#resultado").html("Procesando, espere por favor...");
-                                    //},
-                                    success:  function (response) {
-                                        var total = response.precio - ((response.precio * response.porcentaje)/100);
-                                        $('.printing-cost').children().html('$ ' + total.toFixed(2));
-                                    }
-                                });
+                            $(".attributes-inf").each(function(k, va) {
+                                if($(this).val() != null) {
+                                    parametros.push($(this).val());
+                                }
                             });
-                        }  
-                    });
 
+                            var data = {
+                                           request : parametros,
+                                           promo : code_promo
+                                      };
+
+                            $.ajax({
+                                data:  data,
+                                url:   '{{path('get_attributes_precio')}}',
+                                type:  'post',
+                                //beforeSend: function () {
+                                //        $("#resultado").html("Procesando, espere por favor...");
+                                //},
+                                success:  function (response) {
+                                    total = response.precio - ((response.precio * response.porcentaje)/100);
+                                    $('.printing-cost-' + i ).children().html('$ ' + total.toFixed(2));
+                                    
+                                    total_orden = total_orden + total;
+                                    
+                                    $('.total-order').children().html('$ ' + total_orden.toFixed(2));
+                                    $('.tax-cost').children().html('$ ' + (total_orden * 0.09).toFixed(2));
+                                    $('.total-amount').children().html('$ ' + (total_orden * 1.09).toFixed(2));
+                                }
+                            });
+                        });
+                        
+                    });
+                    
                     draw+='</select>';
                     draw+='</div>';
                     draw+='<div class="clearfix"></div>';
                 });  
-
+                
+                draw+='<div class="col-md-5" style="margin-top: 20px"></div>';
+                draw+='<div class="col-md-7" style="margin-top: 20px">';
+                draw+='<div class="row">';
+                draw+='<div class="col-md-6"><p>Product price:</p></div>';
+                draw+='<div class="col-md-6 printing-cost-'+ i +'"><p class="text-right"><strong>$ ' + total_pagar.toFixed(2) +'</strong></p></div>';
+                draw+='</div>';
+                draw+='</div>';
                 draw+='<div class="clearfix"></div>';
-                document.getElementById('show-attr').innerHTML = draw;                        
+                draw+='<div class="clearfix"></div>';
+                document.getElementById('show-attr-' + i).innerHTML = draw;                        
             }, "json"); // Fin de post 
         }
     </script>

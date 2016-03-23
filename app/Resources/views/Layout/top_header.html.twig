@@ -46,24 +46,26 @@
                             </div>
                             <ul>
                                 {% if is_granted('ROLE_USER') %}
-                                <li>
-                                    <a href="{{ path('dg_my_account')}}" title="My Account">
-                                        <span>My Account</span>
+                                    <a href="{{ path('dg_my_account')}}" title="My Account">    
+                                        <li>
+                                            <span>My Account</span>
+                                        </li>
                                     </a>
-                                </li>
                                 {% endif %}
+                                
                                 {% if is_granted('ROLE_ADMIN') %}
-                                <li>
                                     <a href="{{ path('admin_usuario_index')}}" title="Setting">
-                                        <span>Setting</span>
+                                        <li>
+                                            <span>Setting</span>
+                                        </li>
                                     </a>
-                                </li>
                                 {% endif %}
-                                <li>
-                                    <a href="{{ path('admin_secured_logout')}}" title="Log Out">
+                                
+                                <a href="{{ path('admin_secured_logout')}}" title="Log Out">
+                                    <li>
                                         <span>Log Out</span>
-                                    </a>
-                                </li>
+                                    </li>
+                                </a>
                             </ul>
                         </div>
                     {% else %}
