@@ -812,14 +812,14 @@
             }
     {#        $('#formCheckout').hide();#}
 
-            $('#stripe_view_card_new_card').hide();
+            {#$('#stripe_view_card_new_card').hide();
             $('#stripe_view_address_new_address').hide();
             $('#stripe_view_credit_cart').hide();
             $('#stripe_view_credit_cart_security').hide();
             $('#stripe_view_credit_cart_expiration_month').hide();
-            $('#stripe_view_credit_cart_expiration_year').hide();
+            $('#stripe_view_credit_cart_expiration_year').hide();#}
             $('#payment-submit').addClass('btn btn-success');
-            $('#stripe_view_amount').val({{totalOrden*100*1.09}});
+            $('#stripe_view_amount').val({{(totalOrden*1.09)|number_format(2,'.',',')*100}});
             $('#stripe_view_order').val({{ordenId}});
 
 
@@ -1045,7 +1045,7 @@
                           var total=totalSinPromo - ($('#total').val()*respuesta.porcentaje)/100;
 
                           $('#total').val(total.toFixed(2));
-                          $('#stripe_view_amount').val(total.toFixed(2)*100*1.09);
+                          $('#stripe_view_amount').val((total*1.09).toFixed(2)*100);
                         }
                         $('#promoCode').prop('disabled',false); 
                     }

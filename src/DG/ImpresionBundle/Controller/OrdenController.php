@@ -992,7 +992,8 @@ class OrdenController extends Controller
         
         
         //var_dump($card->getExpiracion()->format('m-Y'));
-        if(count($address)!=0 && count($card)!=0){
+//        if(count($address)!=0 && count($card)!=0){
+        if(count($card)!=0){
             
             $numero = $card->getNumero();
             $cvc = $card->getCvc();
