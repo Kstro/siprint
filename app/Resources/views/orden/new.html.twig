@@ -248,7 +248,7 @@
                                      Product:
                                 </div>
                                 <div class="col-md-8 col-sm-8"style="margin-bottom: 12px;">
-                                    <select id="selectDesigns" name="selectDesigns" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value, 0);">
+                                    <select id="selectDesigns" name="selectDesigns[0]" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value, 0);">
                                         <option value="0" disabled selected>Select an option ...</option>
                                     {% for cat in categorias %}
                                         <option value="{{cat.id}}"> 
@@ -263,7 +263,7 @@
                                     Upload file:
                                 </div>
                                 <div class="col-md-8 col-sm-8">
-                                    <input type="file" name="file-design" id="file-design" />
+                                    <input type="file" name="file-design[0]" id="file-design" />
                                 </div>
                             </div>        
                         </div>        
@@ -329,6 +329,8 @@
         var total = 0;
         var count = 1;
         var total_orden = 0;
+        var costo_unitario = new Array();
+        
         $(document).ready(function(){
             validar();   
             $('#orden_direccionEnvio').hide();
@@ -388,7 +390,7 @@
                 draw+='Product';
                 draw+='</div>';
                 draw+='<div class="col-md-8 col-sm-8" style="margin-bottom: 12px;">';
-                draw+='<select name="selectDesigns" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value, ' + count +');">';
+                draw+='<select name="selectDesigns[' + count + ']" class="form-control input-sm selectDesigns" onchange="mostrarParametros(this.value, ' + count +');">';
                 draw+='<option value="0" disabled selected>Select an option ...</option>';
                 {% for cat in categorias %}
                     draw+='<option value="{{cat.id}}"> ';    
@@ -404,7 +406,7 @@
                 draw+='Upload file';
                 draw+='</div>';
                 draw+='<div class="col-md-8 col-sm-8" style="margin-bottom: 12px;">';
-                draw+='<input type="file" name="file-design" id="file-design" />';
+                draw+='<input type="file" name="file-design[' + count + ']" id="file-design" />';
                 draw+='</div>';
                 draw+='</div>';
                 
@@ -454,6 +456,18 @@
             var total_attr = 0;
             var code_promo = $( "#code-promo" ).val();
             
+            if( costo_unitario[i] != undefined  ){
+                total_orden = total_orden - costo_unitario[i];
+                
+                $('.total-order').children().html('$ ' + total_orden.toFixed(2));
+                $('.tax-cost').children().html('$ ' + (total_orden * 0.09).toFixed(2));
+                $('.total-amount').children().html('$ ' + (total_orden * 1.09).toFixed(2));
+                
+                costo_unitario[i] = 0;
+            } else {
+                costo_unitario[i] = 0;
+            }
+            
             $('.printing-cost-' + i ).children().html('$ 0.00');
             $('#attributes-show' + i).children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
 
@@ -475,7 +489,7 @@
 
                     draw+='</div>';
                     draw+='<div class="col-md-7" style="margin-bottom: 3px">';
-                    draw+='<select class="attributes-inf form-control" id="attributes-' + i + '-' + value.idParam + '" name="attributes-' + value.idParam + '">';
+                    draw+='<select class="attributs-in attributes-inf-' + i + ' form-control" id="attributes-' + i + '-' + value.idParam + '" name="attributes-' + i + '-' + value.idParam + '">';
                     draw+='<option value="0" disabled selected >Select an option ...</option>';
 
                     $.post( "{{path('get_attributes_info')}}", { id: value.idParam, cat: id }, function( val ) {
@@ -489,25 +503,24 @@
                         });
 
                         acum_attr++;
-                        //console.log(value.idParam);
                         if(acum_attr === total_attr) {
                             $( "#show-attr" + i ).show();    
-                            $(".attributes-inf").select2();
+                            $(".attributs-in").select2();
                         }
                         
                         $('#attributes-' + i + '-' + value.idParam ).change(function() {
                             var code_promo = $( "#code-promo" ).val();
-                            var total_price = $(".attributes-inf").length;
+                            var total_price = $(".attributes-inf-" + i ).length;
                             var total = 0;
                             $('.printing-cost-' + i ).children().html('<img style="width:30px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}">');
                             var parametros = new Array();
 
-                            $(".attributes-inf").each(function(k, va) {
+                            $(".attributes-inf-" + i ).each(function(k, va) {
                                 if($(this).val() != null) {
                                     parametros.push($(this).val());
                                 }
                             });
-
+                            console.log(parametros);
                             var data = {
                                            request : parametros,
                                            promo : code_promo
@@ -521,11 +534,17 @@
                                 //        $("#resultado").html("Procesando, espere por favor...");
                                 //},
                                 success:  function (response) {
+                                    //console.log(response.precio);
                                     total = response.precio - ((response.precio * response.porcentaje)/100);
                                     $('.printing-cost-' + i ).children().html('$ ' + total.toFixed(2));
                                     
-                                    total_orden = total_orden + total;
+                                    if(costo_unitario[i] != 0){
+                                        total_orden = total_orden - costo_unitario[i];
+                                    }  
                                     
+                                    total_orden = total_orden + total;
+                                    costo_unitario[i] = total;
+                                        
                                     $('.total-order').children().html('$ ' + total_orden.toFixed(2));
                                     $('.tax-cost').children().html('$ ' + (total_orden * 0.09).toFixed(2));
                                     $('.total-amount').children().html('$ ' + (total_orden * 1.09).toFixed(2));

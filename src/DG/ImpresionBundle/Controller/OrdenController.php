@@ -124,7 +124,7 @@ class OrdenController extends Controller
         
         if ($form->isSubmitted() && $form->isValid()) {
             $parameters = $request->request->all();
-           
+    
             if($parameters['code-promo'] != 0){
                 $promocion = $em->getRepository('DGImpresionBundle:Promocion')->find($parameters['code-promo']);
                 $orden->setPromocion($promocion);
@@ -225,20 +225,17 @@ class OrdenController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($orden);
             $em->flush();
-
-//            $path = $this->container->getParameter('photo.promotion');
-            //$nombre_archivo = strtolower($_FILES["file-design"]["name"]);
-            //var_dump($parameters['file-design']);
             
-//            $aux = explode('.', $nombre_archivo);
-//            $extension = end($aux);
-//            $archivo_subir = 'Producto'.'_'.date("d-m-Y_H-i-s").'.'.$extension;
+            foreach($parameters['selectDesigns'] as $key => $prod){
+                $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
 
-            $detalleorden = new \DG\ImpresionBundle\Entity\DetalleOrden();
+                $product = $em->getRepository('DGImpresionBundle:Categoria')->find($prod);
+                $detalleorden->setArchivo($parameters['file-design'][$key]);
+                //move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
 
-            $product = $em->getRepository('DGImpresionBundle:Categoria')->find($parameters['selectDesigns']);
-            $detalleorden->setArchivo($parameters['file-design']);
-            //move_uploaded_file($_FILES['file-design']['tmp_name'], $path.$archivo_subir);
+                $detalleorden->setEstado('ad');
+                $detalleorden->setCategoria($product);
+                $detalleorden->setOrden($orden);
 
             $detalleorden->setEstado('ad');
             $detalleorden->setCategoria($product);
@@ -283,15 +280,31 @@ class OrdenController extends Controller
                 $atributo->setDetalleOrden($detalleorden);
                 $em->persist($atributo);
                 $em->flush();
-               
-                $total+=$atributo->getOpcionProducto()->getCosto();
-            }    
-        }
+                $total = 0;
+                
+                foreach($parameters as $i => $p){
+                    $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
 
-            $detalleorden->setMonto($total);
-            $em->merge($detalleorden);
-            $em->flush();
-            
+                    $val = explode("-", $i);
+                    
+                    if($val[0] == 'attributes' && $val[1] == $key ) {
+                        $opcion = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
+                        
+                        $atributo->setOpcionProducto($opcion);
+                        $atributo->setDetalleOrden($detalleorden);
+                        $em->persist($atributo);
+                        $em->flush();
+
+                        $total+=$atributo->getOpcionProducto()->getCosto();
+                        
+                    }    
+                }
+                //var_dump($total);
+                $detalleorden->setMonto($total);
+                $em->merge($detalleorden);
+                $em->flush();
+            }
+            //die();    
             return $this->redirectToRoute('admin_store_sale');
         }
 
