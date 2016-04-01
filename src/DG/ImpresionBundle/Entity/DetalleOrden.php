@@ -43,6 +43,13 @@ class DetalleOrden
     private $monto;
     
     /**
+     * @var float
+     *
+     * @ORM\Column(name="tax", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $tax;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="estado", type="string", length=3, nullable=false)
@@ -203,7 +210,29 @@ class DetalleOrden
         return $this->monto;
     }
     
-    
+    /**
+     * Set tax
+     *
+     * @param float $tax
+     *
+     * @return DetalleOrden
+     */
+    public function setTax($tax)
+    {
+        $this->tax = $tax;
+
+        return $this;
+    }
+
+    /**
+     * Get tax
+     *
+     * @return float
+     */
+    public function getTax()
+    {
+        return $this->tax;
+    }
     
     /**
      * Set atributoProductoOrden

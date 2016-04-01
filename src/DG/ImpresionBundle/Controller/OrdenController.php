@@ -244,6 +244,14 @@ class OrdenController extends Controller
             $detalleorden->setCategoria($product);
             $detalleorden->setOrden($orden);
 
+            if($product->getCategoria()->getId() != 38){
+                $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
+                $valor_tax = $tax->getValor();
+                $detalleorden->setTax($valor_tax);
+            } else {
+                $detalleorden->setTax(0);
+            } 
+            
             $em->persist($detalleorden);
             $em->flush();
             $total = 0;
@@ -691,6 +699,14 @@ class OrdenController extends Controller
         $detalleorden->setCategoria($product);
         $detalleorden->setOrden($orden);
         
+        if($product->getCategoria()->getId() != 38){
+            $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
+            $valor_tax = $tax->getValor();
+            $detalleorden->setTax($valor_tax);
+        } else {
+            $detalleorden->setTax(0);
+        }    
+            
         $em->persist($detalleorden);
         $em->flush();
         $total = 0;
@@ -710,7 +726,7 @@ class OrdenController extends Controller
                 $total+=$atributo->getOpcionProducto()->getCosto();
             }    
         }
-        
+                                           
         $detalleorden->setMonto($total);
         $em->merge($detalleorden);
         $em->flush();
