@@ -237,48 +237,7 @@ class OrdenController extends Controller
                 $detalleorden->setCategoria($product);
                 $detalleorden->setOrden($orden);
 
-            $detalleorden->setEstado('ad');
-            $detalleorden->setCategoria($product);
-            $detalleorden->setOrden($orden);
-
-            if($product->getCategoria()->getId() != 38){
-                $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
-                $valor_tax = $tax->getValor();
-                $detalleorden->setTax($valor_tax);
-            } else {
-                $detalleorden->setTax(0);
-            } 
-            
-            $em->persist($detalleorden);
-            $em->flush();
-            $total = 0;
-
-//            foreach($parameters as $key => $p){
-//                
-//                $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
-//                //var_dump($p);
-//                $val = explode("-", $key);
-//                if($val[0] == 'attributes') {
-//                    
-//                    $detalleParametro = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
-//                    $atributo->setOpcionProducto($detalleParametro);
-//                    $atributo->setDetalleOrden($detalleorden);
-//                    $em->persist($atributo);
-//                    $em->flush();
-//                    
-//                    $total+=$atributo->getDetalleParametro()->getValor();
-//                }    
-//            }
-            foreach($parameters as $key => $p){
-            $atributo = new \DG\ImpresionBundle\Entity\AtributoProductoOrden();
-            
-            $val = explode("-", $key);
-            if($val[0] == 'attributes') {
-                $opcion = $em->getRepository('DGImpresionBundle:OpcionProducto')->find($p);
-                
-                $atributo->setOpcionProducto($opcion);
-                $atributo->setDetalleOrden($detalleorden);
-                $em->persist($atributo);
+                $em->persist($detalleorden);
                 $em->flush();
                 $total = 0;
                 
