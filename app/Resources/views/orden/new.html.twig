@@ -193,7 +193,7 @@
                             <div class="col-md-3 col-sm-3">
                                 <div class="row">
                                     <div class="col-md-7 col-sm-7 text-right">
-                                        <span style="font-size: 1.35em;  font-weight: bold;">Tax (9.0%):</span>
+                                        <span style="font-size: 1.35em;  font-weight: bold;">Tax:</span>
                                     </div>
                                     <div class="col-md-5 col-sm-5 tax-cost">
                                         <span style="font-size: 1.35em;  font-weight: bold;">$ 0.00</span>
@@ -289,7 +289,7 @@
                             <div class="col-md-3 col-sm-3">
                                 <div class="row">
                                     <div class="col-md-7 col-sm-7 text-right">
-                                        <span style="font-size: 1.35em;  font-weight: bold;">Tax (9.0%):</span>
+                                        <span style="font-size: 1.35em;  font-weight: bold;">Tax:</span>
                                     </div>
                                     <div class="col-md-5 col-sm-5 tax-cost">
                                         <span style="font-size: 1.35em;  font-weight: bold;">$ 0.00</span>
@@ -329,7 +329,12 @@
         var total = 0;
         var count = 1;
         var total_orden = 0;
+        var tax = {{ tax.valor }};
+        var tax_total = 0;
+        var amount_total = 0;
         var costo_unitario = new Array();
+        var tax_unitario = new Array();
+        var precio_unitario = new Array();
         
         $(document).ready(function(){
             validar();   
@@ -458,17 +463,25 @@
             
             if( costo_unitario[i] != undefined  ){
                 total_orden = total_orden - costo_unitario[i];
+                tax_total = tax_total - tax_unitario[i];
+                amount_total = amount_total - precio_unitario[i];
                 
                 $('.total-order').children().html('$ ' + total_orden.toFixed(2));
-                $('.tax-cost').children().html('$ ' + (total_orden * 0.09).toFixed(2));
-                $('.total-amount').children().html('$ ' + (total_orden * 1.09).toFixed(2));
+                $('.tax-cost').children().html('$ ' + (tax_total).toFixed(2));
+                $('.total-amount').children().html('$ ' + (amount_total).toFixed(2));
                 
                 costo_unitario[i] = 0;
+                tax_unitario[i] = 0;
+                precio_unitario[i] = 0;
             } else {
                 costo_unitario[i] = 0;
+                tax_unitario[i] = 0;
+                precio_unitario[i] = 0;
             }
             
             $('.printing-cost-' + i ).children().html('$ 0.00');
+            $('.tax-product-' + i ).children().html('$ 0.00');
+            $('.product-total-' + i ).children().html('$ 0.00');
             $('#attributes-show' + i).children().html('<div class="col-md-3 col-md-offset-5 col-sm-3 col-sm-offset-5" style="margin-top: 10px"><img style="width:60px; position:inherit; float:right; " src="{{ asset('Resources/images/712.gif') }}"></div>');
 
             $.post( "{{path('get_products_store')}}", { id: id, code: code_promo }, function( data ) {
@@ -520,7 +533,7 @@
                                     parametros.push($(this).val());
                                 }
                             });
-                            console.log(parametros);
+                            //console.log(parametros);
                             var data = {
                                            request : parametros,
                                            promo : code_promo
@@ -534,20 +547,44 @@
                                 //        $("#resultado").html("Procesando, espere por favor...");
                                 //},
                                 success:  function (response) {
-                                    //console.log(response.precio);
+                                    console.log(val.producto);
                                     total = response.precio - ((response.precio * response.porcentaje)/100);
-                                    $('.printing-cost-' + i ).children().html('$ ' + total.toFixed(2));
+                                    $('.printing-cost-' + i ).children().html('<strong>$ ' + total.toFixed(2) + '</strong>');
+                                    
+                                    if(val.producto != 38){
+                                        $('.tax-product-' + i ).children().html('<strong>$ ' + (total * tax).toFixed(2) + '</strong>');
+                                        $('.product-total-' + i ).children().html('<strong>$ ' + (total + (total * tax)).toFixed(2) + '</strong>');
+                                    } else{
+                                        $('.tax-product-' + i ).children().html('<strong>$ ' + (total * 0).toFixed(2) + '</strong>');
+                                        $('.product-total-' + i ).children().html('<strong>$ ' + (total + (total * 0)).toFixed(2) + '</strong>');
+                                    }    
                                     
                                     if(costo_unitario[i] != 0){
                                         total_orden = total_orden - costo_unitario[i];
+                                        tax_total = tax_total - tax_unitario[i];
+                                        amount_total = amount_total - precio_unitario[i];
                                     }  
                                     
                                     total_orden = total_orden + total;
                                     costo_unitario[i] = total;
-                                        
+                                    
+                                    if(val.producto != 38){
+                                        tax_total = tax_total + (total * tax);
+                                        amount_total = total_orden + tax_total;
+                                    
+                                        tax_unitario[i] = total * tax;
+                                        precio_unitario[i] = total + (total * tax);
+                                    } else{
+                                        tax_total = tax_total + (total * 0);
+                                        amount_total = total_orden + tax_total;
+                                    
+                                        tax_unitario[i] = total * 0;
+                                        precio_unitario[i] = total + (total * 0);
+                                    }  
+        
                                     $('.total-order').children().html('$ ' + total_orden.toFixed(2));
-                                    $('.tax-cost').children().html('$ ' + (total_orden * 0.09).toFixed(2));
-                                    $('.total-amount').children().html('$ ' + (total_orden * 1.09).toFixed(2));
+                                    $('.tax-cost').children().html('$ ' + (tax_total).toFixed(2));
+                                    $('.total-amount').children().html('$ ' + (amount_total).toFixed(2));
                                 }
                             });
                         });
@@ -565,6 +602,17 @@
                 draw+='<div class="col-md-6"><p>Product price:</p></div>';
                 draw+='<div class="col-md-6 printing-cost-'+ i +'"><p class="text-right"><strong>$ ' + total_pagar.toFixed(2) +'</strong></p></div>';
                 draw+='</div>';
+                
+                draw+='<div class="row">';
+                draw+='<div class="col-md-6"><p>Tax (' + tax * 100 + '%):</p></div>';
+                draw+='<div class="col-md-6 tax-product-'+ i +'"><p class="text-right"><strong>$ ' + total_pagar.toFixed(2) +'</strong></p></div>';
+                draw+='</div>';
+                
+                draw+='<div class="row">';
+                draw+='<div class="col-md-6"><p>Product total:</p></div>';
+                draw+='<div class="col-md-6 product-total-'+ i +'"><p class="text-right"><strong>$ ' + total_pagar.toFixed(2) +'</strong></p></div>';
+                draw+='</div>';
+                
                 draw+='</div>';
                 draw+='<div class="clearfix"></div>';
                 draw+='<div class="clearfix"></div>';

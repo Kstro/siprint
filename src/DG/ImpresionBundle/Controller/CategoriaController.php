@@ -987,8 +987,8 @@ class CategoriaController extends Controller
             $prod = $this->get('request')->request->get('cat');
              
             $em = $this->getDoctrine()->getManager();            
-            $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($id);
-            
+            $cat = $em->getRepository('DGImpresionBundle:Categoria')->find($prod);
+            //var_dump($prod);
             $rsm = new ResultSetMapping();
             $sql = "select dp.parametro as parametro, "
                     . "dp.id as idValorParam, "
@@ -1014,7 +1014,8 @@ class CategoriaController extends Controller
             
             $response = new JsonResponse();
             $response->setData(array(
-                           'paramsVal' => $param
+                           'paramsVal' => $param, 
+                           'producto' => $cat->getCategoria()->getId() 
                     )); 
             
             return $response; 

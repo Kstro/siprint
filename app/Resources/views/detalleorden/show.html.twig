@@ -34,8 +34,8 @@
                     <ul>
                         {% for attribute in attributes %}
                             <li><i class="fa fa-check"></i> 
-                                <span style="font-size: 1.14em;  font-weight: bold;">{{ attribute.detalleParametro.parametro }}:</span>
-                                <span style="font-size: 1.14em;"> {{ attribute.detalleParametro.nombre }}.</span>
+                                <span style="font-size: 1.14em;  font-weight: bold;">{{ attribute.opcionProducto.detalleParametro.parametro }}:</span>
+                                <span style="font-size: 1.14em;"> {{ attribute.opcionProducto.detalleParametro.nombre }}.</span>
                             </li>
                         {% endfor %}
                     </ul>
@@ -60,35 +60,40 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-4  col-xs-12" style=" margin-top: 35px">
-                <h3 style="font-size: 1.3em; font-weight: bold;"> Download design </h3>
-                <hr>
-                <ul>
-                    <li><span class="avalue" style="font-size: 1em;">File: {{ detalleOrden.archivo }}</span></li>
-                </ul>
-                <br>
-                <a href="{{ asset('Photos/promotions/')}}{{ detalleOrden.archivo }}" download><button class="form-control"><i class="fa fa-download"></i> Download</button></a>
-            </div> 
+            
+            {% if detalleOrden.archivo %}        
+                <div class="col-sm-4  col-xs-12" style=" margin-top: 35px">
+                    <h3 style="font-size: 1.3em; font-weight: bold;"> Download design </h3>
+                    <hr>
+                    <ul>
+                        <li><span class="avalue" style="font-size: 1em;">File: {{ detalleOrden.archivo }}</span></li>
+                    </ul>
+                    <br>
+                    <a href="{{ asset('Photos/promotions/')}}{{ detalleOrden.archivo }}" download><button class="form-control"><i class="fa fa-download"></i> Download</button></a>
+                </div> 
+            {% endif %}    
+                
             <div class="clearfix"></div>   
             
-            <div class="col-sm-12 col-xs-12" style="margin-left: 55px; margin-bottom: 30px">
-                <hr style="width: 750px">
-                <div class="text-center col-sm-3 col-sm-offset-2 col-xs-9" style="margin-top: 15px;">
-                    <button type="button" class="form-control" value="{{ detalleOrden.id }}" id="accept-file" name="accept-file">
-                        <i class="fa fa-check"></i>
-                        Accept design
-                    </button>
-                </div>
-                <div class="text-center col-sm-3 col-xs-9" style="margin-top: 15px;">
-                    <a href="{{ path('admin_disapprovedesign_new', { 'id': detalleOrden.id }) }}" class="disapprove">
-                        <button value="{{ detalleOrden.id }}" class="form-control" id="disapprove-file" name="disapprove-file">
-                            <i class="fa fa-times"></i>
-                            Disapprove design
+            {% if detalleOrden.archivo %}        
+                <div class="col-sm-12 col-xs-12" style="margin-left: 55px; margin-bottom: 30px">
+                    <hr style="width: 750px">
+                    <div class="text-center col-sm-3 col-sm-offset-2 col-xs-9" style="margin-top: 15px;">
+                        <button type="button" class="form-control" value="{{ detalleOrden.id }}" id="accept-file" name="accept-file">
+                            <i class="fa fa-check"></i>
+                            Accept design
                         </button>
-                    </a>    
-                </div>
-            </div>    
-                
+                    </div>
+                    <div class="text-center col-sm-3 col-xs-9" style="margin-top: 15px;">
+                        <a href="{{ path('admin_disapprovedesign_new', { 'id': detalleOrden.id }) }}" class="disapprove">
+                            <button value="{{ detalleOrden.id }}" class="form-control" id="disapprove-file" name="disapprove-file">
+                                <i class="fa fa-times"></i>
+                                Disapprove design
+                            </button>
+                        </a>    
+                    </div>
+                </div>    
+            {% endif %}        
         </div>    
     </section>
 {% endblock %}

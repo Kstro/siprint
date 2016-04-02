@@ -55,8 +55,10 @@
                     <td>{{ sale.cliente }}</td>
                     <td class="text-right">
                         {% set monto = 0 %}
+                        {% set tax_total = 0 %}
                         {% for design in sale.detalleOrden %}
                             {% set monto = monto + design.monto %}
+                            {% set tax_total = tax_total + (design.monto * tax.valor) %}
                         {% endfor %}
                         {% if sale.promocion %}
                             {% set monto = monto - ((sale.promocion.porcentaje * monto) / 100 ) %}
@@ -64,11 +66,11 @@
                         $ {{ monto|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">
-                        {% set monto_tax = monto * 0.09 %}
-                        $ {{ monto_tax|number_format('2','.',',') }}
+                        {#{% set monto_tax = monto * 0.09 %}#}
+                        $ {{ tax_total|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">
-                        {% set monto_total = monto_tax + monto %}
+                        {% set monto_total = tax_total + monto %}
                         $ {{ monto_total|number_format('2','.',',') }}
                     </td>
                     <td class="text-right">

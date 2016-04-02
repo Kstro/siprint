@@ -26,10 +26,11 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
         $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden'   => $orden
                                                                               ));
                                                                              // var_dump($products);       
-        $pdf = $this->get('fpdf_printer')->toPDF($products, $tipo);
+        $pdf = $this->get('fpdf_printer')->toPDF($products, $tipo, $tax);
         
         //var_dump($pdf);
     }

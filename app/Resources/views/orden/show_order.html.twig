@@ -42,7 +42,7 @@
     {% if ord %}
         {% set total = 0 %}
         <div class="form-edit-info" style="padding-top: 20px;">
-            <div class="row">
+            <div class="row" style="margin-bottom: 30px;">
                 <div class="bs-address">
                     <div class="col-sm-10 col-sm-offset-1">
                         <h3 class="acc-sub-tit-i" style=" color: #25bce9; font-size: 1.19em;">
@@ -59,26 +59,39 @@
                                     <ul>
                                         
                                         {% if ord.usuario is not empty %}<li style="font-size: 1.14em;"><i class="fa fa-check"></i> Name: {{ ord.usuario.persona }}</li>{% endif %}
-                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: 
-                                            {% if ord.direccionEnvio %} 
-                                                {{ ord.direccionEnvio.linea1 }}
-                                                {% if ord.direccionEnvio.linea2 %} 
-                                                    {{ ord.direccionEnvio.linea2 }}
-                                                {% endif %}, 
-                                                {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
-                                            {% else %}
-                                                {% set direccion = ord.direccionEnvioGuardar|split(',') %}
-                                                {#{{ direccion[2] ~ ', ' ~ direccion[4] ~ ', ' ~ direccion[5] ~ ', ' ~ direccion[6] }}#}
-                                            {% endif %}
-                                        </li>
-                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Total amount: $ 
+                                        {% if ord.direccionEnvio %} 
+                                            <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Address: 
+                                                    {{ ord.direccionEnvio.linea1 }}
+                                                    {% if ord.direccionEnvio.linea2 %} 
+                                                        {{ ord.direccionEnvio.linea2 }}
+                                                    {% endif %}, 
+                                                    {{ ord.direccionEnvio.city }}, {{ ord.direccionEnvio.state }}. 
+                                            </li>
+                                        {% else %}
+                                            <li>{% set direccion = ord.direccionEnvioGuardar|split(',') %}</li>
+                                            {#{{ direccion[2] ~ ', ' ~ direccion[4] ~ ', ' ~ direccion[5] ~ ', ' ~ direccion[6] }}#}
+                                        {% endif %}
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Total order: $ 
                                             {% set total = 0 %}
+                                            {% set tax_total = 0 %}
                                             {% for product in products %}
                                                 {% if product.orden.id == ord.id %}
-                                                    {% set total=total+product.monto %}
+                                                    {% set total = total + product.monto %}
+                                                    
+                                                    {% if product.categoria.categoria.id != 38 %}
+                                                        {{ product.categoria.categoria.id }}
+                                                        {% set tax_total = tax_total + (product.monto * tax.valor) %}
+                                                    {% endif %}        
                                                 {% endif %}
                                             {% endfor%}
                                             {{total|number_format('2','.',',')}}        
+                                        </li>
+                                        <li style="font-size: 1.14em;"><i class="fa fa-check"></i> Total tax: $ 
+                                            {{tax_total|number_format('2','.',',')}}        
+                                        </li>
+                                        <li style="font-size: 1.21em; font-weight: bold;"><i class="fa fa-check">
+                                            </i> Total amount: $ 
+                                            {{(total + tax_total)|number_format('2','.',',')}}        
                                         </li>
                                     </ul>
                                     
@@ -89,7 +102,7 @@
                 </div>            
                 </div>
                 <div class="col-sm-10">
-                    <h3 class="acc-sub-tit-i" style=" color: #25bce9; font-size: 1.55em;">
+                    <h3 class="acc-sub-tit-i" style="color: #25bce9; font-size: 1.55em;">
                         <strong>
                         <i class="fa fa-bars"></i>
                         Detail order
@@ -114,18 +127,27 @@
                                             {#<a class="text-center pull-right borrarDetalle" style="margin-top: 3px; margin-left: 3px"  href="{{path('orden_delete',{id:row.id})}}" title="delete">
                                                 <i class="fa fa-times"></i>
                                             </a>  #}
-                                            <a class="text-center pull-right edit-registro" style="margin-top: 3px; margin-right: 3px"  href="{{path('admin_design_edit',{id: row.id})}}" title="edit information">
+                                            {#<a class="text-center pull-right edit-registro" style="margin-top: 3px; margin-right: 3px"  href="{{path('admin_design_edit',{id: row.id})}}" title="edit information">
                                                 <i class="fa fa-pencil-square-o"></i>
-                                            </a>  
+                                            </a>  #}
                                             <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_detalleorden_show',{id:row.id})}}" class="acc-edit pull-right" title="view detail">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </h3>
                                     </div>
-                                    <div class="price-box text-left" style="width: 100%; margin-bottom: 10px">
-                                        <span class="normal-price">$ {{row.monto|number_format('2','.',',')}}</span>
-                                        
+                                    <div class="price-box text-left" style="width: 100%; margin-bottom: 15px">
+                                        <div class="col-md-5">
+                                            <span style="font-weight: bold; font-size: 1.14em;">Product price:</span><span class="normal-price"> $ {{row.monto|number_format('2','.',',')}}</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {% if row.categoria.categoria.id != 38 %}
+                                                <span style="font-weight: bold; font-size: 1.14em;">Product tax:</span><span class="normal-price"> $ {{(row.monto * tax.valor)|number_format('2','.',',')}}</span>
+                                            {% else %}
+                                                <span style="font-weight: bold; font-size: 1.14em;">Product tax:</span><span class="normal-price"> $ {{(row.monto * 0)|number_format('2','.',',')}}</span>
+                                            {% endif %}            
+                                        </div>    
                                     </div>
+                                        
                                     <div class="short-description">
                                         {% for r in row.atributoProductoOrden %}
                                             <div style="cursor: default;" class=" fa fa-check-square-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
@@ -136,9 +158,11 @@
                                     
                                     
                                     <div class="short-description">
-                                        <div style="cursor: default; margin-top: 10px;" class="fa fa-file-image-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
-                                            <strong>Design: </strong>{#<a id="designU" href="{{ asset('Photos/promotions/')}}{{ row.archivo}}">#}{{ row.archivo}}{#</a>#}
-                                        </div>
+                                        {% if row.archivo %}  
+                                            <div style="cursor: default; margin-top: 10px;" class="fa fa-file-image-o col-md-6 text-left" style="padding-right: 15px; margin-top: 10px;">
+                                                <strong>Design: </strong>{#<a id="designU" href="{{ asset('Photos/promotions/')}}{{ row.archivo}}">#}{{ row.archivo}}{#</a>#}
+                                            </div>
+                                        {% endif %}            
                                     </div>
                                     
                                     

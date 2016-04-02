@@ -18,7 +18,7 @@ class ReportePDF  extends \FPDF_FPDF {
         $this->SetX(87);
         $this->SetFont('Arial','B',12);
         $this->Cell(180, 0, 'Final Details for Order');
-        $this->Line(20, 23, 207, 23);
+        $this->Line(20, 23, 197, 23);
          
         // Line break
        $this->Ln(0);

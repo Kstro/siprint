@@ -236,7 +236,15 @@ class OrdenController extends Controller
                 $detalleorden->setEstado('ad');
                 $detalleorden->setCategoria($product);
                 $detalleorden->setOrden($orden);
-
+                
+                if($product->getCategoria()->getId() != 38){
+                    $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
+                    $valor_tax = $tax->getValor();
+                    $detalleorden->setTax($valor_tax);
+                } else {
+                    $detalleorden->setTax(0);
+                }  
+                
                 $em->persist($detalleorden);
                 $em->flush();
                 $total = 0;
@@ -275,6 +283,7 @@ class OrdenController extends Controller
                    ->getResult();
         
         $promocions = $em->getRepository('DGImpresionBundle:Promocion')->findAll();
+        $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
         
         return $this->render('orden/new.html.twig', array(
             'orden' => $orden,
@@ -282,6 +291,7 @@ class OrdenController extends Controller
             'promociones' => $promocions,
             'form' => $form->createView(),
             'promotion' => $promotion,
+            'tax' => $tax,
         ));
     }
 
@@ -376,6 +386,7 @@ class OrdenController extends Controller
         //var_dump($sales);
         $usuario = $this->get('security.token_storage')->getToken()->getUser();
         $promotion = $this->get('promotion_img')->searchPromotion();
+        $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
         
         return $this->render('orden/store_sale.html.twig', array(
             'orden' => $orden,
@@ -383,7 +394,7 @@ class OrdenController extends Controller
             'form' => $form->createView(),
             'usuario' => $usuario,
             'promotion' => $promotion,
-            
+            'tax' => $tax,
         ));
     }
     
@@ -400,11 +411,13 @@ class OrdenController extends Controller
                                                                                 ));
         
         $promotion = $this->get('promotion_img')->searchPromotion();
+        $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
         
         return $this->render('orden/show_order.html.twig', array(
             'promotion' => $promotion,
             'ord' => $orden,
             'products' => $products,
+            'tax' => $tax,
         ));
     }
     
