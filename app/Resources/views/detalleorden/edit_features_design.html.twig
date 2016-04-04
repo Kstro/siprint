@@ -41,14 +41,14 @@
                     <div class="row" id="info-attributes"  style="margin-bottom: 15px">
                         {% for attr in detalleOrden.atributoProductoOrden %}
                             <div class="col-md-5" style="margin-bottom: 3px">
-                                <p>{{ attr.detalleParametro.parametro }}</p>
+                                <p>{{ attr.opcionProducto.detalleParametro.parametro }}</p>
                             </div>   
                             <div class="col-md-7" style="margin-bottom: 3px">
-                                <select class="attributes-inf form-control" id="{{ 'attributes-' ~ attr.detalleParametro.id  }}" name="{{ 'attributes-' ~ attr.detalleParametro.id  }}">
+                                <select class="attributes-inf form-control" id="{{ 'attributes-' ~ attr.opcionProducto.detalleParametro.id  }}" name="{{ 'attributes-' ~ attr.opcionProducto.detalleParametro.id  }}">
                                     <option value="0" disabled >Select an option ...</option>
                                     {% for feature in features %}
-                                        {% if feature.parametro.id == attr.detalleParametro.parametro.id %}
-                                            <option value="{{ feature.id }}"  {% if feature.id == attr.detalleParametro.id %} selected {% endif %}>{{ feature.nombre }}</option>
+                                        {% if feature.parametro.id == attr.opcionProducto.detalleParametro.parametro.id %}
+                                            <option value="{{ feature.id }}"  {% if feature.id == attr.opcionProducto.detalleParametro.id %} selected {% endif %}>{{ feature.nombre }}</option>
                                         {% endif %}            
                                     {% endfor %}        
                                 </select>

@@ -80,12 +80,18 @@
                             Order #ON{{ord.id}}
                         </div>
                         <div class="col-md-4 text-right" style="max-height:20px;">
+                            {% set total = 0 %}
+                            {% set tax_total = 0 %}
                             {% for product in products %}
                                 {% if product.orden.id == ord.id %}
-                                    {% set total=total+product.monto %}
+                                    {% set total = total + product.monto %}
+
+                                    {% if product.categoria.categoria.id != 38 %}
+                                        {% set tax_total = tax_total + (product.monto * tax.valor) %}
+                                    {% endif %}        
                                 {% endif %}
                             {% endfor%}
-                            <label style="font-size: 1.22em; color: #FFF">Total order:</label> <label id="totalOrden" style="width: 100px; max-height: 100%;position: relative;float:right; font-size: 1.3em;" class="text-bold">$ {{total|number_format('2','.',',')}}</label>
+                            <label style="font-size: 1.22em; color: #FFF">Total:</label> <label id="totalOrden" style="width: 100px; max-height: 100%;position: relative;float:right; font-size: 1.3em;" class="text-bold">$ {{(total + tax_total)|number_format('2','.',',')}}</label>
                         </div>
                         <div class="col-md-5 text-right">
                             <a id="{{ord.id}}" href="{{path('orden_checkout',{orden:ord.id})}}" class="check-out" style="text-decoration: none; color: #FFF;">Checkout</a>
@@ -113,17 +119,26 @@
                                             <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('orden_delete',{id:row.id})}}" class="acc-edit borrarDetalle pull-right" title="delete">
                                                 <i class="fa fa-times"></i>
                                             </a>
-                                            <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_edit_design',{id: row.id})}}" class="acc-edit pull-right" title="edit information">
+                                            {#<a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_edit_design',{id: row.id})}}" class="acc-edit pull-right" title="edit information">
                                                 <i class="fa fa-edit"></i>
-                                            </a>    
+                                            </a> #}   
                                             <a id="{{row.id}}" style="padding-right: 10px;" href="{{path('admin_detail_design_show',{id:row.id})}}" class="acc-edit pull-right" title="view detail">
                                                 <i class="fa fa-eye"></i>
                                             </a>     
                                         </h3>
                                     </div>
-                                    <div class="price-box text-left" style="width: 100%">
-                                        <span class="normal-price">$ {{row.monto|number_format('2','.',',')}}</span>
-                                        
+                                    <div class="price-box text-left" style="width: 100%; margin-bottom: 18px">
+                                       {# <span class="normal-price">$ {{row.monto|number_format('2','.',',')}}</span>#}
+                                        <div class="col-md-5">
+                                            <span style="font-weight: bold; font-size: 1.14em;">Product price:</span><span class="normal-price"> $ {{row.monto|number_format('2','.',',')}}</span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {% if row.categoria.categoria.id != 38 %}
+                                                <span style="font-weight: bold; font-size: 1.14em;">Product tax:</span><span class="normal-price"> $ {{(row.monto * tax.valor)|number_format('2','.',',')}}</span>
+                                            {% else %}
+                                                <span style="font-weight: bold; font-size: 1.14em;">Product tax:</span><span class="normal-price"> $ {{(row.monto * 0)|number_format('2','.',',')}}</span>
+                                            {% endif %}            
+                                        </div>
                                     </div>
                                     <div class="short-description">
                                         {% for r in row.atributoProductoOrden %}

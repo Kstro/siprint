@@ -73,16 +73,26 @@
         </div>        
     </div>
     {% if is_granted('ROLE_USER') %}
+        {% set tax_total = 0 %}
+        
+        {% for product in products %}
+            {% if product.orden.id == ord.id %}
+                {% if product.categoria.categoria.id != 38 %}
+                    {% set tax_total = tax_total + (product.monto * tax.valor) %}
+                {% endif %}        
+            {% endif %}
+        {% endfor%}
+        
         <div class="form-edit-info" style="padding-top: 20px;">
             <div class="row">
                 <div class="col-md-3 col-md-offset-1" >
                     <span style="font-size: 20px;"><strong>Total order: </strong>$ {{ totalOrden|number_format(2,'.',',') }}</span>
                 </div>
                 <div class="col-md-3" >
-                    <span style="font-size: 20px;"><strong>Tax (9.0%): </strong>$ {{ (totalOrden * 0.09)|number_format(2,'.',',') }}</span>
+                    <span style="font-size: 20px;"><strong>Tax ({{ tax.valor * 100 }}%): </strong>$ {{ tax_total|number_format(2,'.',',') }}</span>
                 </div>    
                 <div class="col-md-4" >    
-                    <span style="font-size: 20px;"><strong>Total amount: </strong>$ {{ (totalOrden * 1.09)|number_format(2,'.',',') }}</span>
+                    <span style="font-size: 20px;"><strong>Total amount: </strong>$ {{ (totalOrden + tax_total)|number_format(2,'.',',') }}</span>
                 </div>
             </div>
             <hr>  

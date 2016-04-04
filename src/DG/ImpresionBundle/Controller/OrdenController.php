@@ -357,7 +357,7 @@ class OrdenController extends Controller
         $categorias = $em->createQuery($dql)
                    ->getResult();
         
-        
+        $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
         
         return $this->render('orden/show.html.twig', array(
             'ord' => $cart,
@@ -365,6 +365,7 @@ class OrdenController extends Controller
             'promotion' => $promotion,
             'types' => $types,
             'categorias' => $categorias,
+            'tax' => $tax,
             'registro'=>null
         ));
     }
@@ -905,6 +906,10 @@ class OrdenController extends Controller
             $totalOrden=$totalOrden+$row->getMonto();
         }
         
+        $products = $em->getRepository('DGImpresionBundle:DetalleOrden')->findBy(array('orden' => $orden,
+                                                                                ));
+        
+        $tax = $em->getRepository('DGImpresionBundle:Tax')->find(1);
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render('orden/checkout.html.twig', array(
@@ -913,6 +918,8 @@ class OrdenController extends Controller
             'tarjetas'=>$tarjetas,
             'direcciones' => $direcciones,
             'totalOrden' => $totalOrden,
+            'products' => $products,
+            'tax' => $tax,
             'promotion' => $promotion,
         ));
     }
