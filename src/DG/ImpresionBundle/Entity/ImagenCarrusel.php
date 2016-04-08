@@ -108,7 +108,7 @@ class ImagenCarrusel
      *
      * @return ImagenCarrusel
      */
-    public function setCarrusel(DG\ImpresionBundle\Entity\Carrusel $carrusel = null)
+    public function setCarrusel(Carrusel $carrusel = null)
     {
         $this->carrusel = $carrusel;
 

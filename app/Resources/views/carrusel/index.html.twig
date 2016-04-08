@@ -1,41 +1,123 @@
-{% extends 'base.html.twig' %}
+{% extends ':Layout:layout.html.twig' %}
 
-{% block body %}
-    <h1>Carrusel list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for carrusel in carrusels %}
-            <tr>
-                <td><a href="{{ path('admin_carousel_show', { 'id': carrusel.id }) }}">{{ carrusel.id }}</a></td>
-                <td>{{ carrusel.nombre }}</td>
-                <td>{% if carrusel.estado %}Yes{% else %}No{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('admin_carousel_show', { 'id': carrusel.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_carousel_edit', { 'id': carrusel.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('admin_carousel_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+{% block css -%}
+    {{parent()}}
+    <style>
+        .acc-title.lg > div:nth-child(2)> a:hover >i {
+            color: #000;
+            opacity:0.6;
+        }
+    </style>
+    
 {% endblock %}
+
+{% block section %}
+    Management carousels
+{% endblock %}
+
+{% block section2 %}
+    Carousels
+{% endblock %}
+
+{% block img_prom %}
+    {% if promotion['promotion'] %}
+        <img src="{{ asset('Photos/promotions/')}}{{ promotion['promotion'].imagen }}" alt="{{ promotion['promotion'].nombre }}">
+    {% else %}    
+        <img src="http://placehold.it/263x263" alt="promotions">
+    {% endif %}    
+{% endblock %}
+
+{% block contenido %}
+    <section class="category grid col-sm-9 col-xs-12" id="contenidoProducto"> 
+        <div id="resultado"></div>
+        <div class="acc-title lg">
+            <div class="col-md-5 pull-left">
+                <h3 class="" style="color:#FFF;">Management carousels</h3>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-md-1 col-md-offset-2">
+                <strong>Carousel:</strong>
+            </div>
+            <div class="col-md-4">
+                <select id="carrusel" name="carrusel" class="form-control input-sm carrusel">
+                    <option value="0" selected>Select an option...</option>
+                </select>    
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel-body" id="editFormContainer" ></div>
+        </div>
+    </section>    
+{% endblock %}
+{% block javascripts_step %}
+    {{parent()}}
+    <script>
+        jQuery(document).ready(function() {
+            $('#carrusel').select2({
+                ajax: {
+                    url: "{{path('busqueda_carrusel_select')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                      return {
+                        q: params.term, 
+                        page: params.page
+                      };
+                    },
+                    processResults: function (data, params) {
+                        var select2Data = $.map(data.data, function (obj) {
+                            obj.id = obj.carruselid;
+                            obj.text = obj.nombre;
+
+                            return obj;
+                        });
+
+                        return {
+                            results: select2Data
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; }, 
+                minimumInputLength: 1,
+                templateResult: formatRepo, 
+                templateSelection: formatRepoSelection 
+            });
+            
+            $( "#carrusel" ).on( "change", function() {
+                var id = $(this).val();
+                var capa = document.getElementById('editFormContainer');
+                
+                $('#editFormContainer').load(id+"/edit");
+                $('#editFormContainer').show();
+                //capa.style.display = 'block';
+            });
+            
+            
+        });
+        
+        function formatRepo (data) {
+            if(data.nombre){
+                var markup = "<div class='select2-result-repository clearfix'>" +
+                             "<div class='select2-result-repository__meta'>" +
+                             "<div class='select2-result-repository__title'>" + data.nombre + "</div>" +
+                             "</div></div>";
+            } else {
+                var markup = "Select an option"; 
+            }
+
+            return markup;
+        }
+
+        function formatRepoSelection (data) {
+            if(data.nombre){
+                return data.nombre;
+            } else {
+                return "Select an option"; 
+            }    
+        }
+    </script>
+    
+{% endblock %}    

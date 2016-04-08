@@ -15,8 +15,12 @@ class ImagenCarruselType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('imagen')
-            ->add('carrusel')
+//            ->add('imagen')
+//            ->add('carrusel')
+                ->add('file',null, array('label'=>'Image','required'=>false,
+                    'attr'=>array('class'=>'imagen'
+                        
+                    ))) 
         ;
     }
     

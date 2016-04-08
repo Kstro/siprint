@@ -10,6 +10,7 @@ parameters:
     locale: en
     photo.promotion: %kernel.root_dir%/../web/Photos/promotions/
     photo.logo: %kernel.root_dir%/../web/Resources/images/
+    photo.carousel: %kernel.root_dir%/../web/Photos/Carousels/
 
 framework:
     #esi:             ~

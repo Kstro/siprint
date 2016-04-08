@@ -2,12 +2,14 @@
 
 namespace DG\ImpresionBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DG\ImpresionBundle\Entity\Carrusel;
 use DG\ImpresionBundle\Form\CarruselType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Carrusel controller.
@@ -27,9 +29,11 @@ class CarruselController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $carrusels = $em->getRepository('DGImpresionBundle:Carrusel')->findAll();
-
+        $promotion = $this->get('promotion_img')->searchPromotion();
+        
         return $this->render('carrusel/index.html.twig', array(
             'carrusels' => $carrusels,
+            'promotion' => $promotion,
         ));
     }
 
@@ -86,19 +90,59 @@ class CarruselController extends Controller
         $deleteForm = $this->createDeleteForm($carrusel);
         $editForm = $this->createForm('DG\ImpresionBundle\Form\CarruselType', $carrusel);
         $editForm->handleRequest($request);
-
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($carrusel);
-            $em->flush();
+            
+            $originalImagenes= new ArrayCollection();
+            $path  = $this->getRequest()->server->get('DOCUMENT_ROOT').'/siprint/web/Photos/Carousels/';
+            $path2 = $this->container->getParameter('photo.carousel');    
+            
+            // Create an ArrayCollection of the current Tag objects in the database
+            $i=0;
+            $originalImagenes = $carrusel->getPlacas();
+            foreach ($carrusel->getPlacas() as $row) {
+                
+                if($row->getFile()!=null){
+                    $file_path = $path.'/'.$row->getImagen();
+                    
+                    if(file_exists($file_path) && $row->getImagen()!="") unlink($file_path);
+                    
+                    $fecha = date('Y-m-d His');
+                    $extension = $row->getFile()->getClientOriginalExtension();
+                    $nombreArchivo = "carousel-".$i."-".$fecha.".".$extension;
 
-            return $this->redirectToRoute('admin_carousel_edit', array('id' => $carrusel->getId()));
+                    $row->setImagen($nombreArchivo);
+                    $row->getFile()->move($path2,$nombreArchivo);
+                    
+                    $em->persist($row);
+                    //$em->flush();
+                    $i++;
+                }            
+            }
+        
+            foreach ($originalImagenes as $row) {
+                $file_path = $path.'/'.$row->getImagen();
+                if (false === $carrusel->getPlacas()->contains($row)) {
+                    unlink($file_path);
+                    
+                    // if you wanted to delete the Tag entirely, you can also do that
+                    $em->remove($row);
+                    $em->flush();
+                }
+            }
+            
+            //$em->persist($carrusel);
+            $em->flush();
+            
+            return $this->redirect($this->generateUrl('admin_carousel_index'));
         }
 
         return $this->render('carrusel/edit.html.twig', array(
             'carrusel' => $carrusel,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'placas'=>$carrusel->getPlacas(),
         ));
     }
 
@@ -136,5 +180,28 @@ class CarruselController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+    * Ajax utilizado para buscar informacion de un carrusel
+    *  
+    * @Route("/busqueda-carrusel-select/data", name="busqueda_carrusel_select")
+    */
+    public function busquedaCarruselAction(Request $request)
+    {
+        $busqueda = $request->query->get('q');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT ca.id carruselid, ca.nombre "
+                        . "FROM DGImpresionBundle:Carrusel ca "
+                        . "WHERE upper(ca.nombre) LIKE upper(:busqueda) "
+                        . "ORDER BY ca.nombre ASC ";
+        
+        $carrusel['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>"%".$busqueda."%"))
+                ->setMaxResults( 10 )
+                ->getResult();
+        
+        return new Response(json_encode($carrusel));
     }
 }

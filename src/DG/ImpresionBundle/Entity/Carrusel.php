@@ -3,6 +3,9 @@
 namespace DG\ImpresionBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Carrusel
@@ -28,6 +31,10 @@ class Carrusel
      */
     private $nombre;
 
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
     
     /**
      * @var boolean
@@ -93,6 +100,55 @@ class Carrusel
     public function getEstado()
     {
         return $this->estado;
+    }
+    
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+     
+     /**
+     * @ORM\OneToMany(targetEntity="ImagenCarrusel", mappedBy="carrusel", cascade={"persist", "remove"})
+     */
+    protected $placas;
+    
+    public function __construct()
+    {
+        $this->placas = new ArrayCollection();
+    }           
+    
+    public function getPlacas()
+    {
+        return $this->placas;
+    }
+    
+    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
+    {
+        $this->placas = $placas;
+        
+        foreach ($placas as $placa) {
+            $placa->setCarrusel($this);
+        }
+    }
+    
+    public function removePlaca(ImagenCarrusel $placa)
+    {
+        $this->placas->removeElement($placa);
     }
     
     public function __toString() 

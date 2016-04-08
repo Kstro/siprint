@@ -1,21 +1,144 @@
-{% extends 'base.html.twig' %}
-
 {% block body %}
-    <h1>Carrusel edit</h1>
-
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('admin_carousel_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    {% set lon = edit_form.placas|length %}
+    <hr>
+    <div class="row">
+        <div class="text-center">
+            <span style="color: #828282; margin-top: 70px; font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 20px;">Edit pictures</span>
+            <div style="width: 60px; border-top: 2px solid #09F; margin-left: auto; margin-right: auto; margin-top: 10px;"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel-body">
+            {{ form_start(edit_form, {'action': path('admin_carousel_edit',{'id':carrusel.id})}) }}
+                {{ form_errors(edit_form) }}
+                <div class="row">  
+                    <div class="clearfix"></div>
+                    <div id="listadoa">
+                        <div class="listado col-md-12">          
+                            <div class="collection" data-prototype="{% filter escape %}  {% include 'DGImpresionBundle:Prototype:fotos.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                                {% for key, imagen in edit_form.placas %}
+                                    <div class="col-md-6">
+                                        <div class="panel-body">
+                                            <img class="archivo" itemprop="thumbnail" src="{{ asset('Photos/Carousels/')}}{{placas[key].imagen}}" alt="dummy image">
+                                            {{ form_row(imagen) }} 
+                                        </div>
+                                    </div>
+                                {#{% else %}
+                                    <div class="col-md-4">
+                                        <div class="panel-body">
+                                            <img src="http://placehold.it/1200x100" alt="promotions"> 
+                                        </div>
+                                    </div>#}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12"> 
+                    <div class="text-center"><input type="submit" value="Edit carousel" style="margin-bottom: 10px;" class="btn-nuevo btn pull-right"/></div>
+                </div>            
+            {{ form_end(edit_form) }}        
+        </div>
+        
+        
+    </div>
+     
 {% endblock %}
+{% block javascrip %}
+    <script type="text/javascript" src="{{ asset('Resources/js/jquery/jquery-1.11.3.min.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
+
+    <script src="{{asset('http://snapwidget.com/js/snapwidget.js')}}"></script>
+    <!-- jQuery (Necesario para que los Plugins de Bootstrap) -->
+     
+    <script>
+        var cont = 0;
+        
+        // Get the ul that holds the collection of tags
+        var collectionHolder = $('div.collection');
+
+        // setup an "add a tag" link
+        var $addTagLink = $('<div class="col-md-12"  style="height:50px; margin-top: 30px;"><a href="#" class="add_collection_link btn btn-primary ">Add</a></div>');
+        var $removeTagLink = $('<a href="#" class="btn btn-danger">Delete</a>');
+
+        var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
+        var $delLinkLi = $('.foto').append($removeTagLink);
+
+        function mostrarImagen(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(input).parent().parent().parent().siblings('img').attr('src', e.target.result);
+                    $(input).parent().parent().parent().parent().parent().parent().siblings('img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        jQuery(document).ready(function() {
+            $(document).on("change",".imagen", function() {
+                mostrarImagen(this);
+            });
+
+            collectionHolder.find('.panel-body').each(function() {
+                addTagFormDeleteLink($(this));
+                $('.link').css('margin-top','5px');
+            });
+
+            // add the "add a tag" anchor and li to the tags ul
+            collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            collectionHolder.data('index', collectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm(collectionHolder, $newLinkLi);
+                // $('.btn_radio').attr('name', 'rol_predet');
+            });
+        });
+
+
+        function addTagForm(collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = collectionHolder.data('prototype');
+
+            // get the new index
+            var index = collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<div class="col-md-6"><img style="margin-top:23px" class="archivo" src="http://placehold.it/1980x550"></div>').append(newForm);
+            $newLinkLi.before($newFormLi);
+
+
+
+            // add a delete link to the new form
+            addTagFormDeleteLink($newFormLi);
+
+        }
+
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<div class="col-md-1" ><a class="link btn btn-danger" href="#">Delete</a></div>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                $tagFormLi.remove();
+            });
+        }
+    </script>
+{% endblock %} 
