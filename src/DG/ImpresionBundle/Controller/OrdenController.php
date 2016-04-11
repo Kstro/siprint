@@ -277,7 +277,7 @@ class OrdenController extends Controller
 
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Categoria p "
-                . "WHERE p.categoria IS NOT NULL AND p.estado = 1 ";
+                . "WHERE p.categoria IS NOT NULL AND p.estado = 1 AND p.categoria <> 1 ";
         
         $categorias = $em->createQuery($dql)
                    ->getResult();

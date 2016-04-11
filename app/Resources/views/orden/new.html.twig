@@ -258,7 +258,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" id="file-upload" style="display: none;">
                                 <div class="col-md-4 col-sm-4 text-right">
                                     Upload file:
                                 </div>
@@ -406,7 +406,7 @@
                 draw+='</div>';
                 draw+='</div>';
                 
-                draw+='<div class="row">';
+                draw+='<div class="row" id="file-upload" style="display: none;">';
                 draw+='<div class="col-md-4 col-sm-4 text-right" style="margin-bottom: 12px;">';
                 draw+='Upload file';
                 draw+='</div>';
@@ -487,6 +487,15 @@
             $.post( "{{path('get_products_store')}}", { id: id, code: code_promo }, function( data ) {
                 $( "#show-attr" + i ).hide();
                 total_attr = data.parametros.length;
+                
+                if(data.categoriaId != 38){
+                    var capa = document.getElementById('file-upload');
+                    capa.style.display = 'block';
+                } else {
+                    var capa = document.getElementById('file-upload');
+                    capa.style.display = 'none';
+                }
+                
                 $.each( data.parametros, function( key, value ) {
                     draw+='<div class="col-md-5" style="margin-bottom: 3px">';
                     parametro = value.parametro;

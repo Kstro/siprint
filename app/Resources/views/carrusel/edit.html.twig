@@ -1,3 +1,6 @@
+<style>
+    div.placas > div > div> div > label{display: none;}
+</style>
 {% block body %}
     {% set lon = edit_form.placas|length %}
     <hr>
@@ -15,7 +18,7 @@
                     <div class="clearfix"></div>
                     <div id="listadoa">
                         <div class="listado col-md-12">          
-                            <div class="collection" data-prototype="{% filter escape %}  {% include 'DGImpresionBundle:Prototype:fotos.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                            <div class="collection placas" data-prototype="{% filter escape %}  {% include 'DGImpresionBundle:Prototype:fotos.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                 {% for key, imagen in edit_form.placas %}
                                     <div class="col-md-6">
                                         <div class="panel-body">

@@ -55,10 +55,11 @@ class CategoriaController extends Controller
                 . "FROM DGImpresionBundle:Categoria p "
                 . "WHERE p.categoria IS NULL "
                 . "AND p.id <> :tshirt "
+                . "AND p.id <> :custom "
                 . "AND p.estado = 1 ";
         
         $types = $em->createQuery($dql)
-                   ->setParameters(array('tshirt' => 38))
+                   ->setParameters(array('tshirt' => 38, 'custom' => 1))
                    ->getResult();
         
         $dql = "SELECT p "
@@ -681,7 +682,7 @@ class CategoriaController extends Controller
         
         $dql = "SELECT p "
                 . "FROM DGImpresionBundle:Parametro p "
-                . "WHERE p.id <> 1 AND p.id <> 2 AND p.estado = 1";
+                . "WHERE p.estado = 1";
         
         $atributos = $em->createQuery($dql)
                    ->getResult();
@@ -689,7 +690,7 @@ class CategoriaController extends Controller
         $dql = "SELECT dp.id iddp, dp.nombre nomdp, p.id idpar, p.nombre nompar "
                 . "FROM DGImpresionBundle:DetalleParametro dp "
                 . "INNER JOIN dp.parametro p "
-                . "WHERE p.id <> 1 AND p.id <> 2 AND p.estado = 1";
+                . "WHERE p.estado = 1";
         
         $attr_val = $em->createQuery($dql)
                    ->getResult();
@@ -964,6 +965,7 @@ class CategoriaController extends Controller
                                 'nombre' => $cat->getNombre(),
                                 'imagen' => $cat->getImagen(),
                                 'categoria' => $cat->getCategoria()->getNombre(),
+                                'categoriaId' => $cat->getCategoria()->getId(),
                                 'parametros' => $param,
                                 'porcentaje' => $porcentaje
                     )); 

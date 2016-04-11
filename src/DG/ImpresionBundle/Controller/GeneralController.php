@@ -28,6 +28,7 @@ class GeneralController extends Controller
                 . "WHERE p.categoria IS NOT NULL "
                 . "AND p.estado = 1 "
                 . "AND p.categoria <> 38 "
+                . "AND p.categoria <> 1 "
                 . "ORDER BY p.id DESC ";
         
         $products = $em->createQuery($dql)
@@ -62,8 +63,18 @@ class GeneralController extends Controller
             }
         }
         
+        $dql2 = "SELECT ca.nombre, img.id, img.imagen "
+                        . "FROM DGImpresionBundle:ImagenCarrusel img "
+                        . "INNER JOIN img.carrusel ca "
+                        . "WHERE ca.nombre = :busqueda ";
+        
+        $carrusel = $em->createQuery($dql2)
+                ->setParameters(array('busqueda'=> 'Carousel homepage'))
+                ->getResult();
+        
         return $this->render('General/index.html.twig', array(
             'prom_random' => $prom_random,
+            'carrusel'   => $carrusel,
             'idRecuperados' => $idRecuperados
         ));
     }
@@ -120,13 +131,23 @@ class GeneralController extends Controller
                    ->setParameters(array('tshirt' => 38))
                    ->getResult();
         
+        $dql2 = "SELECT ca.nombre, img.id, img.imagen "
+                        . "FROM DGImpresionBundle:ImagenCarrusel img "
+                        . "INNER JOIN img.carrusel ca "
+                        . "WHERE ca.nombre = :busqueda ";
+        
+        $carrusel = $em->createQuery($dql2)
+                ->setParameters(array('busqueda'=> 'Carousel T-shirt shop page'))
+                ->getResult();
+        
         $promotion = $this->get('promotion_img')->searchPromotion();
         
         return $this->render(':General:tshirtPrinting.html.twig', array(
             'categorias' => $categorias,
-            'promotion' => $promotion,
-            'registro'=>null,
-            'camisas'=>0,
+            'promotion'  => $promotion,
+            'registro'   => null,
+            'camisas'    => 0,
+            'carrusel'   => $carrusel
         ));
     }
 }

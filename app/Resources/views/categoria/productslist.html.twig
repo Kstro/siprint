@@ -98,23 +98,24 @@
                 <ul>
                     {#{% if categorias %}#}
                     {% for categorium in categorias %}
-                        <li class="pro-item col-md-4 col-sm-6 col-xs-12">
-                            <div class="img-product" style="height: 225px;">
-                                <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="prod-{{ categorium.id }}">
-                                    <img src="{{ asset('Photos/promotions/')}}{{ categorium.imagen }}" alt="{{ categorium.nombre }}">
-                                </a>    
-                            </div> 
-                            <div class="product-info">
-                                <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="prod-{{ categorium.id }}">{{ categorium.nombre }}</a>
-                            </div>
-                        </li>
-                        {% if loop.index is divisibleby(3) %}
-                            <div class="clearfix"></div>
-                        {% endif %} 
-                        
+                        {% if categorium.categoria.id != 1 %}
+                            <li class="pro-item col-md-4 col-sm-6 col-xs-12">
+                                <div class="img-product" style="height: 225px;">
+                                    <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="prod-{{ categorium.id }}">
+                                        <img src="{{ asset('Photos/promotions/')}}{{ categorium.imagen }}" alt="{{ categorium.nombre }}">
+                                    </a>    
+                                </div> 
+                                <div class="product-info">
+                                    <a href="{{ path('categoria_show', { 'id': categorium.id }) }}" title="{{ categorium.nombre }}" class="product-name" id="prod-{{ categorium.id }}">{{ categorium.nombre }}</a>
+                                </div>
+                            </li>
+                            {% if loop.index is divisibleby(3) %}
+                                <div class="clearfix"></div>
+                            {% endif %} 
+                         
+                        {% endif %}
                     {% else %}
                         <p class="text-center" style="font-size: 1.5em; font-weight: bold;">No products found</p>
-                    {#{% endif %} #}
                     {% endfor %}
                 </ul>
             {% endif %}    
